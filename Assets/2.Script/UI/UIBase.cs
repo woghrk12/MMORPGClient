@@ -1,8 +1,9 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
+[RequireComponent(typeof(UIEventHandler))]
 public class UIBase : MonoBehaviour
 {
     #region Variables
@@ -10,6 +11,29 @@ public class UIBase : MonoBehaviour
     protected Dictionary<Type, UnityEngine.Object[]> objectDictionary = new();
 
     #endregion Variables
+
+    public static void AddUIEvent(GameObject go, Action<PointerEventData> action, EUIEvent eventType = EUIEvent.CLICK)
+    {
+        UIEventHandler handler = Utility.GetOrAddComponent<UIEventHandler>(go);
+
+        switch (eventType)
+        {
+            case EUIEvent.CLICK:
+                handler.ClickHandler -= action;
+                handler.ClickHandler += action;
+                break;
+
+            case EUIEvent.BEGIN_DRAG:
+                handler.BeginDragHandler -= action;
+                handler.BeginDragHandler += action;
+                break;
+
+            case EUIEvent.DRAG:
+                handler.DragHandler -= action;
+                handler.DragHandler += action;
+                break;
+        }
+    }
 
     protected void Bind<T>(Type type) where T : UnityEngine.Object
     {

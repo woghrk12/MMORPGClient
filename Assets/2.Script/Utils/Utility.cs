@@ -51,5 +51,15 @@ public class Utility
         return false;
     }
 
+    public static T GetOrAddComponent<T>(GameObject go) where T : Component
+    {
+        if (!go.TryGetComponent(out T component))
+        {
+            go.AddComponent<T>();
+        }
+
+        return component;
+    }
+
     #endregion Methods
 }
