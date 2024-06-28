@@ -116,5 +116,26 @@ public class UIManager
 
     #endregion Popup UI
 
+    #region Sub Item
+
+    public T MakeSubItem<T>(Transform parent = null, string name = null) where T : UIBase
+    {
+        if (string.IsNullOrEmpty(name))
+        {
+            name = typeof(T).Name;
+        }
+
+        GameObject go = Managers.Resource.Instantiate($"UI/SubItem/{name}");
+
+        if (!ReferenceEquals(parent, null))
+        {
+            go.transform.SetParent(parent);
+        }
+
+        return go.GetOrAddComponent<T>();
+    }
+
+    #endregion Sub Item
+
     #endregion Methods
 }
