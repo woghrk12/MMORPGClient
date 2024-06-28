@@ -14,7 +14,7 @@ public class UIBase : MonoBehaviour
 
     public static void AddUIEvent(GameObject go, Action<PointerEventData> action, EUIEvent eventType = EUIEvent.CLICK)
     {
-        UIEventHandler handler = Utility.GetOrAddComponent<UIEventHandler>(go);
+        UIEventHandler handler = go.GetOrAddComponent<UIEventHandler>();
 
         switch (eventType)
         {
