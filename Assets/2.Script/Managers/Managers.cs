@@ -8,6 +8,7 @@ public class Managers : MonoBehaviour
 
     private ResourceManager resource = new();
     private SceneManager scene = new();
+    private SoundManager sound = new();
     private UIManager ui = new();
 
     #endregion Variables
@@ -27,6 +28,8 @@ public class Managers : MonoBehaviour
     public static ResourceManager Resource => Instance.resource;
 
     public static SceneManager Scene => Instance.scene;
+
+    public static SoundManager Sound => Instance.sound;
 
     public static UIManager UI => Instance.ui;
 
@@ -58,6 +61,8 @@ public class Managers : MonoBehaviour
             DontDestroyOnLoad(go);
             instance = go.GetComponent<Managers>();
         }
+
+        instance.sound.Init();
     }
 
     #endregion Methods
