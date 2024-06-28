@@ -21,9 +21,14 @@ public class SceneManager
 
     public void LoadScene(EScene type)
     {
-        CurrentScene.Clear();
+        Managers.Clear();
 
         UnitySceneManager.LoadScene(GetSceneName(type));
+    }
+
+    public void Clear()
+    {
+        CurrentScene?.Clear();
     }
 
     private string GetSceneName(EScene type)

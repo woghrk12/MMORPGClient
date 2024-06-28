@@ -43,6 +43,12 @@ public class UIManager
         canvas.sortingOrder = isSort ? sortingOrder++ : 0;
     }
 
+    public void Clear()
+    {
+        CloseAllPopupUI();
+        CloseSceneUI();
+    }
+
     #region Scene UI
 
     public T ShowSceneUI<T>(string name = null) where T : UIScene
@@ -60,6 +66,14 @@ public class UIManager
         go.transform.SetParent(Root.transform);
 
         return sceneUI;
+    }
+
+    public void CloseSceneUI()
+    {
+        if (ReferenceEquals(sceneUI, null)) return;
+
+        Managers.Resource.Destory(sceneUI.gameObject);
+        sceneUI = null;
     }
 
     #endregion Scene UI
