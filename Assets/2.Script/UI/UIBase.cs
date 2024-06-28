@@ -12,7 +12,7 @@ public class UIBase : MonoBehaviour
 
     #endregion Variables
 
-    public static void AddUIEvent(GameObject go, Action<PointerEventData> action, EUIEvent eventType = EUIEvent.CLICK)
+    public static void BindEvent(GameObject go, Action<PointerEventData> action, EUIEvent eventType = EUIEvent.CLICK)
     {
         UIEventHandler handler = go.GetOrAddComponent<UIEventHandler>();
 

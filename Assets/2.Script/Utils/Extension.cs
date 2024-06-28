@@ -9,8 +9,8 @@ public static class Extension
         return Utility.GetOrAddComponent<T>(go);
     }
 
-    public static void AddUIEvent(this GameObject go, Action<PointerEventData> action, EUIEvent eventType = EUIEvent.CLICK)
+    public static void BindEvent(this GameObject go, Action<PointerEventData> action, EUIEvent eventType = EUIEvent.CLICK)
     {
-        UIBase.AddUIEvent(go, action, eventType);
+        UIBase.BindEvent(go, action, eventType);
     }
 }
