@@ -6,7 +6,7 @@ public class UIScene : UIBase
 {
     #region Methods
 
-    public virtual void Init()
+    protected virtual void Init()
     { 
         Managers.UI.SetCanvas(gameObject, false);
     }

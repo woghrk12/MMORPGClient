@@ -6,7 +6,7 @@ public class UIPopup : UIBase
 {
     #region Methods
 
-    public virtual void Init()
+    protected virtual void Init()
     { 
         Managers.UI.SetCanvas(gameObject);
     }
