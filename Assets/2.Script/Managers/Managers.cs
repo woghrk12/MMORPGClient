@@ -7,6 +7,7 @@ public class Managers : MonoBehaviour
     private static Managers instance = null;
 
     private ResourceManager resource = new();
+    private UIManager ui = new();
 
     #endregion Variables
 
@@ -23,6 +24,8 @@ public class Managers : MonoBehaviour
     }
 
     public static ResourceManager Resource => Instance.resource;
+
+    public static UIManager UI => Instance.ui;
 
     #endregion Properties
 
