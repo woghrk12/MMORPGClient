@@ -66,6 +66,7 @@ public class Managers : MonoBehaviour
         }
 
         instance.sound.Init();
+        instance.pool.Init();
     }
 
     public static void Clear()
@@ -73,6 +74,7 @@ public class Managers : MonoBehaviour
         Scene.Clear();
         Sound.Clear();
         UI.Clear();
+        Pool.Clear();
     }
 
     #endregion Methods
