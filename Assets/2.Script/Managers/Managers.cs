@@ -6,6 +6,7 @@ public class Managers : MonoBehaviour
 
     private static Managers instance = null;
 
+    private DataManager data = new();
     private PoolManager pool = new();
     private ResourceManager resource = new();
     private SceneManager scene = new();
@@ -25,6 +26,8 @@ public class Managers : MonoBehaviour
             return instance;
         }
     }
+
+    public static DataManager Data => Instance.data;
 
     public static PoolManager Pool => Instance.pool;
 
