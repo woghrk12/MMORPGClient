@@ -89,6 +89,11 @@ public class PlayerController : MonoBehaviour
         UpdatePosition();
     }
 
+    private void LateUpdate()
+    {
+        Camera.main.transform.position = new Vector3(transform.position.x, transform.position.y, -10f);
+    }
+
     #endregion Unity Events
 
     #region Methods
