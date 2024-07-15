@@ -6,6 +6,7 @@ using UnityEngine.EventSystems;
 public enum EScene
 { 
     UNKNOWN,
+    GAME,
 }
 
 public abstract class BaseScene : MonoBehaviour
@@ -15,6 +16,15 @@ public abstract class BaseScene : MonoBehaviour
     public EScene SceneType { protected set; get; } = EScene.UNKNOWN;
 
     #endregion Properties
+
+    #region Unity Events
+
+    private void Awake()
+    {
+        Init();
+    }
+
+    #endregion Unity Events
 
     #region Methods
 

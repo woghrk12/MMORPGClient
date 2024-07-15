@@ -19,8 +19,6 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private float moveSpeed = 0f;
 
-    [SerializeField] private Grid grid = null;
-
     private Vector3Int cellPos = Vector3Int.zero;
     private EMoveDirection moveDirection = EMoveDirection.NONE;
     private bool isMoving = false;
@@ -76,7 +74,7 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        Vector3 pos = grid.CellToWorld(cellPos) + new Vector3(0.5f, 0.5f, 0);
+        Vector3 pos = Managers.Map.CurrentGrid.CellToWorld(cellPos) + new Vector3(0.5f, 0.5f, 0);
         transform.position = pos;
     }
 
@@ -153,7 +151,7 @@ public class PlayerController : MonoBehaviour
     {
         if (isMoving == false) return;
 
-        Vector3 destPos = grid.CellToWorld(cellPos) + new Vector3(0.5f, 0.5f, 0);
+        Vector3 destPos = Managers.Map.CurrentGrid.CellToWorld(cellPos) + new Vector3(0.5f, 0.5f, 0);
 
         if ((destPos - transform.position).sqrMagnitude < (moveSpeed * Time.fixedDeltaTime) * (moveSpeed * Time.fixedDeltaTime))
         {
