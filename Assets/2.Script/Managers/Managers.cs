@@ -13,6 +13,8 @@ public class Managers : MonoBehaviour
     private SoundManager sound = new();
     private UIManager ui = new();
 
+    private MapManager map = new();
+
     #endregion Variables
 
     #region Properties
@@ -38,6 +40,8 @@ public class Managers : MonoBehaviour
     public static SoundManager Sound => Instance.sound;
 
     public static UIManager UI => Instance.ui;
+
+    public static MapManager Map => Instance.map;
 
     #endregion Properties
 
