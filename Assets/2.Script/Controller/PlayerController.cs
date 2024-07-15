@@ -128,28 +128,31 @@ public class PlayerController : MonoBehaviour
     {
         if (isMoving == true) return;
 
+        Vector3Int cellPos = this.cellPos;
+
         switch (MoveDirection)
         {
             case EMoveDirection.UP:
                 cellPos += Vector3Int.up;
-                isMoving = true;
                 break;
 
             case EMoveDirection.DOWN:
                 cellPos += Vector3Int.down;
-                isMoving = true;
                 break;
 
             case EMoveDirection.LEFT:
                 cellPos += Vector3Int.left;
-                isMoving = true;
                 break;
 
             case EMoveDirection.RIGHT:
                 cellPos += Vector3Int.right;
-                isMoving = true;
                 break;
         }
+
+        if (Managers.Map.CheckCanMove(cellPos) == false) return;
+
+        this.cellPos = cellPos;
+        isMoving = true;
     }
 
     private void UpdatePosition()

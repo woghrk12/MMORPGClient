@@ -1,14 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public class MapManager
 {
     #region Variables
 
-    public Grid CurrentGrid { private set; get; } = null;
+    private bool[,] isBlocked = null;
 
     #endregion Variables
+
+    #region Properties
+
+    public Grid CurrentGrid { private set; get; } = null;
+
+    public int MinX { private set; get; } = 0;
+    public int MaxX { private set; get; } = 0;
+    public int MinY { private set; get; } = 0;
+    public int MaxY { private set; get; } = 0;
+
+    #endregion Properties
 
     #region Methods
 
@@ -25,6 +37,27 @@ public class MapManager
         }
 
         CurrentGrid = go.GetComponent<Grid>();
+
+        TextAsset textAsset = Managers.Resource.Load<TextAsset>($"Data/Map/{mapName}");
+        StringReader reader = new(textAsset.text);
+
+        MinX = int.Parse(reader.ReadLine());
+        MaxX = int.Parse(reader.ReadLine());
+        MinY = int.Parse(reader.ReadLine());
+        MaxY = int.Parse(reader.ReadLine());
+
+        int width = MaxX - MinX + 1;
+        int height = MaxY - MinY + 1;
+
+        isBlocked = new bool[height, width];
+        for (int y = 0; y < height; y++)
+        {
+            string line = reader.ReadLine();
+            for (int x = 0; x < width; x++)
+            {
+                isBlocked[y, x] = (line[x] == '1' ? true : false);
+            }
+        }
     }
 
     public void DestroyMap()
@@ -35,6 +68,14 @@ public class MapManager
 
         GameObject.Destroy(map);
         CurrentGrid = null;
+    }
+
+    public bool CheckCanMove(Vector3Int cellPos)
+    {
+        if (cellPos.x < MinX || cellPos.x > MaxX) return false;
+        if (cellPos.y < MinY || cellPos.y > MaxY) return false;
+
+        return isBlocked[MaxY - cellPos.y, cellPos.x - MinX] == false;
     }
 
     #endregion Methods
