@@ -35,9 +35,10 @@ public class Utility
     /// </summary>
     /// <typeparam name="T">The type of the child object to find, which must be derived from UnityEngine.Object.</typeparam>
     /// <param name="go">The GameObject to search within.</param>
+    /// <param name="component">The found child object of type T, or null if no such object is found.</param>
     /// <param name="name">The name of the child object to find. If null, the first object of type T is returned.</param>
     /// <param name="isRecursive">If true, the search will include all children and their descendants; otherwise, only direct children will be searched.</param>
-    /// <returns>The found child object of type T, or null if no such object is found.</returns>
+    /// <returns>True if a child object of type T is found; otherwise, false.</returns>
     public static bool FindChild<T>(GameObject go, out T component, string name = null, bool isRecursive = false) where T : Object
     {
         if (ReferenceEquals(go, null))
