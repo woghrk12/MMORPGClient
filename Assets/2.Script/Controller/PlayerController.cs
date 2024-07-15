@@ -15,6 +15,8 @@ public class PlayerController : MonoBehaviour
 {
     #region Variables
 
+    private Animator animator = null;
+
     [SerializeField] private float moveSpeed = 0f;
 
     [SerializeField] private Grid grid = null;
@@ -25,7 +27,52 @@ public class PlayerController : MonoBehaviour
 
     #endregion Variables
 
+    #region Properties
+
+    public EMoveDirection MoveDirection
+    {
+        private set
+        {
+            if (moveDirection == value) return;
+
+            switch (value)
+            {
+                case EMoveDirection.UP:
+                    animator.Play("Move");
+                    break;
+
+                case EMoveDirection.DOWN:
+                    animator.Play("Move");
+                    break;
+
+                case EMoveDirection.LEFT:
+                    animator.Play("Move");
+                    transform.localScale = new Vector3(-1f, 1f, 1f);
+                    break;
+
+                case EMoveDirection.RIGHT:
+                    animator.Play("Move");
+                    transform.localScale = new Vector3(1f, 1f, 1f);
+                    break;
+
+                case EMoveDirection.NONE:
+                    animator.Play("Idle");
+                    break;
+            }
+
+            moveDirection = value;
+        }
+        get => moveDirection;
+    }
+
+    #endregion Properties
+
     #region Unity Events
+
+    private void Awake()
+    {
+        animator = GetComponent<Animator>();
+    }
 
     private void Start()
     {
@@ -54,23 +101,23 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKey(KeyCode.W))
         {
-            moveDirection = EMoveDirection.UP;
+            MoveDirection = EMoveDirection.UP;
         }
         else if (Input.GetKey(KeyCode.S))
         {
-            moveDirection = EMoveDirection.DOWN;
+            MoveDirection = EMoveDirection.DOWN;
         }
         else if (Input.GetKey(KeyCode.A))
         {
-            moveDirection = EMoveDirection.LEFT;
+            MoveDirection = EMoveDirection.LEFT;
         }
         else if (Input.GetKey(KeyCode.D))
         {
-            moveDirection = EMoveDirection.RIGHT;
+            MoveDirection = EMoveDirection.RIGHT;
         }
         else
         {
-            moveDirection = EMoveDirection.NONE;
+            MoveDirection = EMoveDirection.NONE;
         }
     }
 
@@ -78,7 +125,7 @@ public class PlayerController : MonoBehaviour
     {
         if (isMoving == true) return;
 
-        switch (moveDirection)
+        switch (MoveDirection)
         {
             case EMoveDirection.UP:
                 cellPos += Vector3Int.up;
@@ -115,7 +162,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            switch (moveDirection)
+            switch (MoveDirection)
             {
                 case EMoveDirection.UP:
                     transform.position += moveSpeed * Time.fixedDeltaTime * Vector3.up;
