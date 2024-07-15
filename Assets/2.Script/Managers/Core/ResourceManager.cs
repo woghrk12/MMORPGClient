@@ -9,15 +9,11 @@ public class ResourceManager
         if (typeof(T) == typeof(GameObject))
         {
             int index = path.LastIndexOf('/');
+            string name = index >= 0 ? path.Substring(index + 1) : path;
 
-            if (index >= 0)
-            {
-                path = path.Substring(index + 1);
-            }
+            GameObject go = Managers.Pool.GetOriginal(name);
 
-            GameObject go = Managers.Pool.GetOriginal(path);
-
-            if (!ReferenceEquals(go, null))
+            if (ReferenceEquals(go, null) == false)
             {
                 return go as T;
             }
