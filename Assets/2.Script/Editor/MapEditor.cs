@@ -35,7 +35,7 @@ public class MapEditor
 
                 for (int y = yMax; y >= yMin; y--)
                 {
-                    for (int x = xMax; x >= xMin; x--)
+                    for (int x = xMin; x <= xMax; x++)
                     {
                         TileBase tile = tilemap.GetTile(new Vector3Int(x, y, 0));
 
@@ -46,6 +46,8 @@ public class MapEditor
                 }
             }
         }
+
+        Debug.Log("Map data generation complete.");
     }
 
 #endif
