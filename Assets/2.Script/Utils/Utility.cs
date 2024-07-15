@@ -5,6 +5,32 @@ public class Utility
     #region Methods
 
     /// <summary>
+    /// Find a child Gameobject within the given GameObject.
+    /// </summary>
+    /// <param name="go">The GameObject to search within.</param>
+    /// <param name="child">The found child GameObject, or null if no such object is found.</param>
+    /// <param name="name">The name of the child object to find. If null, the first child GameObject is returned.</param>
+    /// <param name="isRecursive">If true, the search will include all children and their descendants; otherwise, only direct children will be searched.</param>
+    /// <returns>True if a child GameObject is found; otherwise, false.</returns>
+    public static bool FindChild(GameObject go, out GameObject child, string name = null, bool isRecursive = false)
+    {
+        if (ReferenceEquals(go, null) == true)
+        {
+            child = null;
+            return false;
+        }
+
+        if (FindChild(go, out Transform component, name, isRecursive) == true)
+        {
+            child = component.gameObject;
+            return true;
+        }
+
+        child = null;
+        return false;
+    }
+
+    /// <summary>
     /// Find a child object of a specified type within the given GameObject.
     /// </summary>
     /// <typeparam name="T">The type of the child object to find, which must be derived from UnityEngine.Object.</typeparam>
