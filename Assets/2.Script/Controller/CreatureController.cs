@@ -11,6 +11,14 @@ public enum EMoveDirection
     RIGHT
 }
 
+public enum ECreatureState
+{ 
+    IDLE = 0,
+    MOVE,
+    ATTACK,
+    DEAD,
+}
+
 public class CreatureController : MonoBehaviour
 {
     #region Variables
@@ -21,7 +29,8 @@ public class CreatureController : MonoBehaviour
 
     protected Vector3Int cellPos = Vector3Int.zero;
     protected EMoveDirection moveDirection = EMoveDirection.NONE;
-    protected bool isMoving = false;
+
+    protected ECreatureState state = ECreatureState.IDLE;
 
     #endregion Variables
 
@@ -63,6 +72,17 @@ public class CreatureController : MonoBehaviour
         get => moveDirection;
     }
 
+    public ECreatureState State
+    {
+        protected set
+        {
+            if (state == value) return;
+
+            state = value;
+        }
+        get => state;
+    }
+
     #endregion Properties
 
     #region Unity Events
@@ -94,7 +114,8 @@ public class CreatureController : MonoBehaviour
 
     private void UpdateMoveState()
     {
-        if (isMoving == true) return;
+        if (State != ECreatureState.IDLE) return;
+        if (MoveDirection == EMoveDirection.NONE) return;
 
         Vector3Int cellPos = this.cellPos;
 
@@ -120,19 +141,19 @@ public class CreatureController : MonoBehaviour
         if (Managers.Map.CheckCanMove(cellPos) == false) return;
 
         this.cellPos = cellPos;
-        isMoving = true;
+        State = ECreatureState.MOVE;
     }
 
     private void UpdatePosition()
     {
-        if (isMoving == false) return;
+        if (State != ECreatureState.MOVE) return;
 
         Vector3 destPos = Managers.Map.CurrentGrid.CellToWorld(cellPos) + new Vector3(0.5f, 0.5f, 0);
 
         if ((destPos - transform.position).sqrMagnitude < (moveSpeed * Time.fixedDeltaTime) * (moveSpeed * Time.fixedDeltaTime))
         {
             transform.position = destPos;
-            isMoving = false;
+            State = ECreatureState.IDLE;
         }
         else
         {
@@ -140,22 +161,18 @@ public class CreatureController : MonoBehaviour
             {
                 case EMoveDirection.UP:
                     transform.position += moveSpeed * Time.fixedDeltaTime * Vector3.up;
-                    isMoving = true;
                     break;
 
                 case EMoveDirection.DOWN:
                     transform.position += moveSpeed * Time.fixedDeltaTime * Vector3.down;
-                    isMoving = true;
                     break;
 
                 case EMoveDirection.LEFT:
                     transform.position += moveSpeed * Time.fixedDeltaTime * Vector3.left;
-                    isMoving = true;
                     break;
 
                 case EMoveDirection.RIGHT:
                     transform.position += moveSpeed * Time.fixedDeltaTime * Vector3.right;
-                    isMoving = true;
                     break;
             }
         }

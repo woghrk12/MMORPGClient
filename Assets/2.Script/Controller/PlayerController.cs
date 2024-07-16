@@ -32,7 +32,7 @@ public class PlayerController : CreatureController
 
     private void GetInputDirection()
     {
-        if (isMoving == true) return;
+        if (State == ECreatureState.MOVE) return;
 
         if (Input.GetKey(KeyCode.W))
         {
