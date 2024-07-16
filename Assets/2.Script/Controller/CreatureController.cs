@@ -16,6 +16,7 @@ public enum ECreatureState
     IDLE = 0,
     MOVE,
     ATTACK,
+    SKILL,
     DEAD,
 }
 
@@ -44,30 +45,18 @@ public class CreatureController : MonoBehaviour
 
             switch (value)
             {
-                case EMoveDirection.UP:
-                    animator.Play("Move");
-                    break;
-
-                case EMoveDirection.DOWN:
-                    animator.Play("Move");
-                    break;
-
                 case EMoveDirection.LEFT:
-                    animator.Play("Move");
                     transform.localScale = new Vector3(-1f, 1f, 1f);
                     break;
 
                 case EMoveDirection.RIGHT:
-                    animator.Play("Move");
                     transform.localScale = new Vector3(1f, 1f, 1f);
-                    break;
-
-                case EMoveDirection.NONE:
-                    animator.Play("Idle");
                     break;
             }
 
             moveDirection = value;
+
+            UpdateAnimation();
         }
         get => moveDirection;
     }
@@ -79,6 +68,8 @@ public class CreatureController : MonoBehaviour
             if (state == value) return;
 
             state = value;
+
+            UpdateAnimation();
         }
         get => state;
     }
@@ -111,6 +102,30 @@ public class CreatureController : MonoBehaviour
     #endregion Unity Events
 
     #region Methods
+
+    private void UpdateAnimation()
+    {
+        if (state == ECreatureState.IDLE)
+        {
+            animator.Play("Idle");
+        }
+        else if (state == ECreatureState.MOVE)
+        {
+            animator.Play("Move");
+        }
+        else if (state == ECreatureState.ATTACK)
+        {
+            animator.Play("Attack");
+        }
+        else if (state == ECreatureState.SKILL)
+        {
+            animator.Play("Skill");
+        }
+        else
+        {
+            animator.Play("Die");
+        }
+    }
 
     private void UpdateMoveState()
     {
