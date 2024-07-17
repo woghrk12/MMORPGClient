@@ -32,27 +32,25 @@ public class PlayerController : CreatureController
 
     private void GetInputDirection()
     {
-        if (State == ECreatureState.MOVE) return;
-
         if (Input.GetKey(KeyCode.W))
         {
-            MoveDirection = EMoveDirection.UP;
+            moveDirection = EMoveDirection.UP;
         }
         else if (Input.GetKey(KeyCode.S))
         {
-            MoveDirection = EMoveDirection.DOWN;
+            moveDirection = EMoveDirection.DOWN;
         }
         else if (Input.GetKey(KeyCode.A))
         {
-            MoveDirection = EMoveDirection.LEFT;
+            moveDirection = EMoveDirection.LEFT;
         }
         else if (Input.GetKey(KeyCode.D))
         {
-            MoveDirection = EMoveDirection.RIGHT;
+            moveDirection = EMoveDirection.RIGHT;
         }
         else
         {
-            MoveDirection = EMoveDirection.NONE;
+            moveDirection = EMoveDirection.NONE;
         }
     }
 

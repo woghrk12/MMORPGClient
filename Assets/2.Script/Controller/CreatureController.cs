@@ -37,30 +37,6 @@ public class CreatureController : MonoBehaviour
 
     #region Properties
 
-    public EMoveDirection MoveDirection
-    {
-        protected set
-        {
-            if (moveDirection == value) return;
-
-            switch (value)
-            {
-                case EMoveDirection.LEFT:
-                    transform.localScale = new Vector3(-1f, 1f, 1f);
-                    break;
-
-                case EMoveDirection.RIGHT:
-                    transform.localScale = new Vector3(1f, 1f, 1f);
-                    break;
-            }
-
-            moveDirection = value;
-
-            UpdateAnimation();
-        }
-        get => moveDirection;
-    }
-
     public ECreatureState State
     {
         protected set
@@ -130,11 +106,11 @@ public class CreatureController : MonoBehaviour
     private void UpdateMoveState()
     {
         if (State != ECreatureState.IDLE) return;
-        if (MoveDirection == EMoveDirection.NONE) return;
+        if (moveDirection == EMoveDirection.NONE) return;
 
         Vector3Int cellPos = this.cellPos;
 
-        switch (MoveDirection)
+        switch (moveDirection)
         {
             case EMoveDirection.UP:
                 cellPos += Vector3Int.up;
@@ -146,17 +122,24 @@ public class CreatureController : MonoBehaviour
 
             case EMoveDirection.LEFT:
                 cellPos += Vector3Int.left;
+                transform.localScale = new Vector3(-1f, 1f, 1f);
                 break;
 
             case EMoveDirection.RIGHT:
                 cellPos += Vector3Int.right;
+                transform.localScale = new Vector3(1f, 1f, 1f);
                 break;
         }
 
-        if (Managers.Map.CheckCanMove(cellPos) == false) return;
-
-        this.cellPos = cellPos;
-        State = ECreatureState.MOVE;
+        if (Managers.Map.CheckCanMove(cellPos) == true)
+        {
+            this.cellPos = cellPos;
+            State = ECreatureState.MOVE;
+        }
+        else
+        {
+            UpdateAnimation();
+        }
     }
 
     private void UpdatePosition()
@@ -164,32 +147,22 @@ public class CreatureController : MonoBehaviour
         if (State != ECreatureState.MOVE) return;
 
         Vector3 destPos = Managers.Map.CurrentGrid.CellToWorld(cellPos) + new Vector3(0.5f, 0.5f, 0);
+        Vector3 moveVector = destPos - transform.position;
 
-        if ((destPos - transform.position).sqrMagnitude < (moveSpeed * Time.fixedDeltaTime) * (moveSpeed * Time.fixedDeltaTime))
+        if (moveVector.sqrMagnitude < (moveSpeed * Time.fixedDeltaTime) * (moveSpeed * Time.fixedDeltaTime))
         {
             transform.position = destPos;
-            State = ECreatureState.IDLE;
+            state = ECreatureState.IDLE;
+
+            if (moveDirection == EMoveDirection.NONE)
+            {
+                UpdateAnimation();
+            }
         }
         else
         {
-            switch (MoveDirection)
-            {
-                case EMoveDirection.UP:
-                    transform.position += moveSpeed * Time.fixedDeltaTime * Vector3.up;
-                    break;
-
-                case EMoveDirection.DOWN:
-                    transform.position += moveSpeed * Time.fixedDeltaTime * Vector3.down;
-                    break;
-
-                case EMoveDirection.LEFT:
-                    transform.position += moveSpeed * Time.fixedDeltaTime * Vector3.left;
-                    break;
-
-                case EMoveDirection.RIGHT:
-                    transform.position += moveSpeed * Time.fixedDeltaTime * Vector3.right;
-                    break;
-            }
+            transform.position += moveSpeed * Time.fixedDeltaTime * moveVector.normalized;
+            State = ECreatureState.MOVE;
         }
     }
 
