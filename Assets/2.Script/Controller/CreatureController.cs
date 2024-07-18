@@ -83,26 +83,7 @@ public class CreatureController : MonoBehaviour
 
     private void UpdateAnimation()
     {
-        if (state == ECreatureState.IDLE)
-        {
-            animator.Play("Idle");
-        }
-        else if (state == ECreatureState.MOVE)
-        {
-            animator.Play("Move");
-        }
-        else if (state == ECreatureState.ATTACK)
-        {
-            animator.Play("Attack");
-        }
-        else if (state == ECreatureState.SKILL)
-        {
-            animator.Play("Skill");
-        }
-        else
-        {
-            animator.Play("Die");
-        }
+        animator.SetBool(AnimatorKey.Creature.IS_MOVE_HASH, state == ECreatureState.MOVE);
     }
 
     private void UpdateMoveState()
