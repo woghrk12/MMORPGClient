@@ -28,9 +28,6 @@ public class CreatureController : MonoBehaviour
 
     [SerializeField] protected float moveSpeed = 0f;
 
-    protected EMoveDirection moveDirection = EMoveDirection.NONE;
-    protected EMoveDirection lastMoveDirection = EMoveDirection.RIGHT;
-
     protected ECreatureState state = ECreatureState.IDLE;
     protected bool isActing = false;
 
@@ -52,6 +49,9 @@ public class CreatureController : MonoBehaviour
         }
         get => state;
     }
+
+    public EMoveDirection MoveDirection { set; get; } = EMoveDirection.NONE;
+    public EMoveDirection LastMoveDirection { set; get; } = EMoveDirection.RIGHT;
 
     #endregion Properties
 
@@ -86,7 +86,7 @@ public class CreatureController : MonoBehaviour
     {
         Vector3Int cellPos = CellPos;
 
-        switch (lastMoveDirection)
+        switch (LastMoveDirection)
         {
             case EMoveDirection.UP:
                 cellPos += Vector3Int.up;
@@ -108,7 +108,7 @@ public class CreatureController : MonoBehaviour
         return cellPos;
     }
 
-    private void UpdateAnimation()
+    protected virtual void UpdateAnimation()
     {
         animator.SetBool(AnimatorKey.Creature.IS_MOVE_HASH, state == ECreatureState.MOVE);
 
@@ -118,14 +118,14 @@ public class CreatureController : MonoBehaviour
         }
     }
 
-    private void UpdateMoveState()
+    protected virtual void UpdateMoveState()
     {
         if (isActing == true) return;
-        if (moveDirection == EMoveDirection.NONE) return;
+        if (MoveDirection == EMoveDirection.NONE) return;
 
         Vector3Int cellPos = CellPos;
 
-        switch (moveDirection)
+        switch (MoveDirection)
         {
             case EMoveDirection.UP:
                 cellPos += Vector3Int.up;
@@ -147,7 +147,7 @@ public class CreatureController : MonoBehaviour
         }
 
         State = ECreatureState.MOVE;
-        lastMoveDirection = moveDirection;
+        LastMoveDirection = MoveDirection;
 
         if (Managers.Map.CheckCanMove(cellPos) == true && ReferenceEquals(Managers.Obj.Find(cellPos), null) == true)
         {
@@ -168,7 +168,7 @@ public class CreatureController : MonoBehaviour
             transform.position = destPos;
             isActing = false;
 
-            if (moveDirection == EMoveDirection.NONE)
+            if (MoveDirection == EMoveDirection.NONE)
             {
                 State = ECreatureState.IDLE;
             }

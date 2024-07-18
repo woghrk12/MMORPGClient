@@ -33,27 +33,37 @@ public class PlayerController : CreatureController
 
     #region Methods
 
+    protected override void UpdateAnimation()
+    {
+        base.UpdateAnimation();
+
+        if (state == ECreatureState.SKILL)
+        {
+            animator.SetTrigger(AnimatorKey.Creature.DO_SKILL_HASH);
+        }
+    }
+
     private void GetInputDirection()
     {
         if (Input.GetKey(KeyCode.W))
         {
-            moveDirection = EMoveDirection.UP;
+            MoveDirection = EMoveDirection.UP;
         }
         else if (Input.GetKey(KeyCode.S))
         {
-            moveDirection = EMoveDirection.DOWN;
+            MoveDirection = EMoveDirection.DOWN;
         }
         else if (Input.GetKey(KeyCode.A))
         {
-            moveDirection = EMoveDirection.LEFT;
+            MoveDirection = EMoveDirection.LEFT;
         }
         else if (Input.GetKey(KeyCode.D))
         {
-            moveDirection = EMoveDirection.RIGHT;
+            MoveDirection = EMoveDirection.RIGHT;
         }
         else
         {
-            moveDirection = EMoveDirection.NONE;
+            MoveDirection = EMoveDirection.NONE;
         }
     }
 
@@ -63,7 +73,8 @@ public class PlayerController : CreatureController
 
         if (Input.GetKey(KeyCode.Space))
         {
-            coSkill = StartCoroutine(StartBaseAttack());
+            //coSkill = StartCoroutine(StartBaseAttack());
+            coSkill = StartCoroutine(StartSkillAttack());
         }
     }
 
@@ -79,6 +90,24 @@ public class PlayerController : CreatureController
         }
 
         yield return new WaitForSeconds(0.5f);
+
+        State = ECreatureState.IDLE;
+        isActing = false;
+
+        coSkill = null;
+    }
+
+    private IEnumerator StartSkillAttack()
+    {
+        State = ECreatureState.SKILL;
+        isActing = true;
+
+        GameObject go = Managers.Resource.Instantiate("Creature/BigSwordHero3_Skill1");
+        ProjectileController controller = go.GetComponent<ProjectileController>();
+        controller.MoveDirection = LastMoveDirection;
+        controller.CellPos = CellPos;
+
+        yield return new WaitForSeconds(0.3f);
 
         State = ECreatureState.IDLE;
         isActing = false;
