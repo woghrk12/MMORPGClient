@@ -38,7 +38,7 @@ public class CreatureController : MonoBehaviour
 
     #region Properties
 
-    public Vector3Int CellPos { protected set; get; } = Vector3Int.zero;
+    public Vector3Int CellPos { set; get; } = Vector3Int.zero;
 
     public ECreatureState State
     {
