@@ -31,6 +31,7 @@ public class CreatureController : MonoBehaviour
     protected EMoveDirection moveDirection = EMoveDirection.NONE;
 
     protected ECreatureState state = ECreatureState.IDLE;
+    protected bool isActing = false;
 
     #endregion Variables
 
@@ -106,7 +107,7 @@ public class CreatureController : MonoBehaviour
 
     private void UpdateMoveState()
     {
-        if (State != ECreatureState.IDLE) return;
+        if (isActing == true) return;
         if (moveDirection == EMoveDirection.NONE) return;
 
         Vector3Int cellPos = CellPos;
@@ -137,6 +138,7 @@ public class CreatureController : MonoBehaviour
         if (Managers.Map.CheckCanMove(cellPos) == true && ReferenceEquals(Managers.Obj.Find(cellPos), null) == true)
         {
             CellPos = cellPos;
+            isActing = true;
         }
     }
 
@@ -150,11 +152,11 @@ public class CreatureController : MonoBehaviour
         if (moveVector.sqrMagnitude < (moveSpeed * Time.fixedDeltaTime) * (moveSpeed * Time.fixedDeltaTime))
         {
             transform.position = destPos;
-            state = ECreatureState.IDLE;
+            isActing = false;
 
             if (moveDirection == EMoveDirection.NONE)
             {
-                UpdateAnimation();
+                State = ECreatureState.IDLE;
             }
         }
         else
