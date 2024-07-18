@@ -14,6 +14,7 @@ public class Managers : MonoBehaviour
     private UIManager ui = new();
 
     private MapManager map = new();
+    private ObjectManager obj = new();
 
     #endregion Variables
 
@@ -42,6 +43,8 @@ public class Managers : MonoBehaviour
     public static UIManager UI => Instance.ui;
 
     public static MapManager Map => Instance.map;
+
+    public static ObjectManager Obj => Instance.obj;
 
     #endregion Properties
 

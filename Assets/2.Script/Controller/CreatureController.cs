@@ -28,7 +28,6 @@ public class CreatureController : MonoBehaviour
 
     [SerializeField] protected float moveSpeed = 0f;
 
-    protected Vector3Int cellPos = Vector3Int.zero;
     protected EMoveDirection moveDirection = EMoveDirection.NONE;
 
     protected ECreatureState state = ECreatureState.IDLE;
@@ -36,6 +35,8 @@ public class CreatureController : MonoBehaviour
     #endregion Variables
 
     #region Properties
+
+    public Vector3Int CellPos { protected set; get; } = Vector3Int.zero;
 
     public ECreatureState State
     {
@@ -61,7 +62,7 @@ public class CreatureController : MonoBehaviour
 
     protected virtual void Start()
     {
-        Vector3 pos = Managers.Map.CurrentGrid.CellToWorld(cellPos) + new Vector3(0.5f, 0.5f, 0);
+        Vector3 pos = Managers.Map.CurrentGrid.CellToWorld(CellPos) + new Vector3(0.5f, 0.5f, 0);
         transform.position = pos;
     }
 
@@ -108,7 +109,7 @@ public class CreatureController : MonoBehaviour
         if (State != ECreatureState.IDLE) return;
         if (moveDirection == EMoveDirection.NONE) return;
 
-        Vector3Int cellPos = this.cellPos;
+        Vector3Int cellPos = CellPos;
 
         switch (moveDirection)
         {
@@ -131,14 +132,11 @@ public class CreatureController : MonoBehaviour
                 break;
         }
 
-        if (Managers.Map.CheckCanMove(cellPos) == true)
+        State = ECreatureState.MOVE;
+
+        if (Managers.Map.CheckCanMove(cellPos) == true && ReferenceEquals(Managers.Obj.Find(cellPos), null) == true)
         {
-            this.cellPos = cellPos;
-            State = ECreatureState.MOVE;
-        }
-        else
-        {
-            UpdateAnimation();
+            CellPos = cellPos;
         }
     }
 
@@ -146,7 +144,7 @@ public class CreatureController : MonoBehaviour
     {
         if (State != ECreatureState.MOVE) return;
 
-        Vector3 destPos = Managers.Map.CurrentGrid.CellToWorld(cellPos) + new Vector3(0.5f, 0.5f, 0);
+        Vector3 destPos = Managers.Map.CurrentGrid.CellToWorld(CellPos) + new Vector3(0.5f, 0.5f, 0);
         Vector3 moveVector = destPos - transform.position;
 
         if (moveVector.sqrMagnitude < (moveSpeed * Time.fixedDeltaTime) * (moveSpeed * Time.fixedDeltaTime))

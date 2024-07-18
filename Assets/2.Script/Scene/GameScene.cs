@@ -12,6 +12,10 @@ public class GameScene : BaseScene
 
         SceneType = EScene.GAME;
 
+        GameObject player = Managers.Resource.Instantiate("Creature/Player");
+        player.name = "Player";
+        Managers.Obj.Add(player);
+
         Managers.Map.LoadMap(1);
     }
 
