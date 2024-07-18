@@ -6,6 +6,8 @@ public class PlayerController : CreatureController
 {
     #region Variables
 
+    private Coroutine coSkill = null;
+
     #endregion Variables
 
     #region Properties
@@ -16,6 +18,7 @@ public class PlayerController : CreatureController
 
     protected override void Update()
     {
+        GetAttackInput();
         GetInputDirection();
 
         base.Update();
@@ -52,6 +55,35 @@ public class PlayerController : CreatureController
         {
             moveDirection = EMoveDirection.NONE;
         }
+    }
+
+    private void GetAttackInput()
+    {
+        if (isActing == true) return;
+
+        if (Input.GetKey(KeyCode.Space))
+        {
+            coSkill = StartCoroutine(StartBaseAttack());
+        }
+    }
+
+    private IEnumerator StartBaseAttack()
+    {
+        State = ECreatureState.ATTACK;
+        isActing = true;
+
+        GameObject go = Managers.Obj.Find(GetFrontCellPos());
+        if (go != null)
+        {
+            Debug.Log(go.name);
+        }
+
+        yield return new WaitForSeconds(0.5f);
+
+        State = ECreatureState.IDLE;
+        isActing = false;
+
+        coSkill = null;
     }
 
     #endregion Methods

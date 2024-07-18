@@ -29,6 +29,7 @@ public class CreatureController : MonoBehaviour
     [SerializeField] protected float moveSpeed = 0f;
 
     protected EMoveDirection moveDirection = EMoveDirection.NONE;
+    protected EMoveDirection lastMoveDirection = EMoveDirection.RIGHT;
 
     protected ECreatureState state = ECreatureState.IDLE;
     protected bool isActing = false;
@@ -81,9 +82,40 @@ public class CreatureController : MonoBehaviour
 
     #region Methods
 
+    public Vector3Int GetFrontCellPos()
+    {
+        Vector3Int cellPos = CellPos;
+
+        switch (lastMoveDirection)
+        {
+            case EMoveDirection.UP:
+                cellPos += Vector3Int.up;
+                break;
+
+            case EMoveDirection.DOWN:
+                cellPos += Vector3Int.down;
+                break;
+
+            case EMoveDirection.LEFT:
+                cellPos += Vector3Int.left;
+                break;
+
+            case EMoveDirection.RIGHT:
+                cellPos += Vector3Int.right;
+                break;
+        }
+
+        return cellPos;
+    }
+
     private void UpdateAnimation()
     {
         animator.SetBool(AnimatorKey.Creature.IS_MOVE_HASH, state == ECreatureState.MOVE);
+
+        if (state == ECreatureState.ATTACK)
+        {
+            animator.SetTrigger(AnimatorKey.Creature.DO_ATTACK_HASH);
+        }
     }
 
     private void UpdateMoveState()
@@ -115,6 +147,7 @@ public class CreatureController : MonoBehaviour
         }
 
         State = ECreatureState.MOVE;
+        lastMoveDirection = moveDirection;
 
         if (Managers.Map.CheckCanMove(cellPos) == true && ReferenceEquals(Managers.Obj.Find(cellPos), null) == true)
         {
