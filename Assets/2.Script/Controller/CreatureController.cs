@@ -29,7 +29,6 @@ public class CreatureController : MonoBehaviour
     [SerializeField] protected float moveSpeed = 0f;
 
     protected ECreatureState state = ECreatureState.IDLE;
-    protected bool isActing = false;
 
     #endregion Variables
 
@@ -70,17 +69,61 @@ public class CreatureController : MonoBehaviour
 
     protected virtual void Update()
     {
-        UpdateMoveState();
-    }
+        switch (State)
+        {
+            case ECreatureState.IDLE:
+                UpdateIdleState();
+                break;
 
-    protected virtual void FixedUpdate()
-    {
-        UpdatePosition();
+            case ECreatureState.MOVE:
+                UpdateMoveState();
+                break;
+
+            case ECreatureState.ATTACK:
+                UpdateAttackState();
+                break;
+
+            case ECreatureState.SKILL:
+                UpdateSkillState();
+                break;
+
+            case ECreatureState.DEAD:
+                UpdateDeadState();
+                break;
+        }
     }
 
     #endregion Unity Events
 
     #region Methods
+
+    #region States
+
+    protected virtual void UpdateIdleState() { }
+
+    protected virtual void UpdateMoveState() 
+    {
+        Vector3 destPos = Managers.Map.CurrentGrid.CellToWorld(CellPos) + new Vector3(0.5f, 0.5f, 0);
+        Vector3 moveVector = destPos - transform.position;
+
+        if (moveVector.sqrMagnitude < (moveSpeed * Time.deltaTime) * (moveSpeed * Time.deltaTime))
+        {
+            transform.position = destPos;
+            MoveToNextPos();
+        }
+        else
+        {
+            transform.position += moveSpeed * Time.deltaTime * moveVector.normalized;
+        }
+    }
+
+    protected virtual void UpdateAttackState() { }
+
+    protected virtual void UpdateSkillState() { }
+
+    protected virtual void UpdateDeadState() { }
+
+    #endregion States
 
     public Vector3Int GetFrontCellPos()
     {
@@ -118,10 +161,13 @@ public class CreatureController : MonoBehaviour
         }
     }
 
-    protected virtual void UpdateMoveState()
+    protected virtual void MoveToNextPos()
     {
-        if (isActing == true) return;
-        if (MoveDirection == EMoveDirection.NONE) return;
+        if (MoveDirection == EMoveDirection.NONE)
+        {
+            State = ECreatureState.IDLE;
+            return;
+        }
 
         Vector3Int cellPos = CellPos;
 
@@ -146,37 +192,11 @@ public class CreatureController : MonoBehaviour
                 break;
         }
 
-        State = ECreatureState.MOVE;
         LastMoveDirection = MoveDirection;
 
         if (Managers.Map.CheckCanMove(cellPos) == true && ReferenceEquals(Managers.Obj.Find(cellPos), null) == true)
         {
             CellPos = cellPos;
-            isActing = true;
-        }
-    }
-
-    private void UpdatePosition()
-    {
-        if (State != ECreatureState.MOVE) return;
-
-        Vector3 destPos = Managers.Map.CurrentGrid.CellToWorld(CellPos) + new Vector3(0.5f, 0.5f, 0);
-        Vector3 moveVector = destPos - transform.position;
-
-        if (moveVector.sqrMagnitude < (moveSpeed * Time.fixedDeltaTime) * (moveSpeed * Time.fixedDeltaTime))
-        {
-            transform.position = destPos;
-            isActing = false;
-
-            if (MoveDirection == EMoveDirection.NONE)
-            {
-                State = ECreatureState.IDLE;
-            }
-        }
-        else
-        {
-            transform.position += moveSpeed * Time.fixedDeltaTime * moveVector.normalized;
-            State = ECreatureState.MOVE;
         }
     }
 

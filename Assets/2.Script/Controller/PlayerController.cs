@@ -18,7 +18,6 @@ public class PlayerController : CreatureController
 
     protected override void Update()
     {
-        GetAttackInput();
         GetInputDirection();
 
         base.Update();
@@ -32,6 +31,25 @@ public class PlayerController : CreatureController
     #endregion Unity Events
 
     #region Methods
+
+    #region States
+
+    protected override void UpdateIdleState()
+    {
+        if (MoveDirection != EMoveDirection.NONE)
+        {
+            State = ECreatureState.MOVE;
+            return;
+        }
+
+        if (Input.GetKey(KeyCode.Space))
+        {
+            //coSkill = StartCoroutine(StartBaseAttack());
+            coSkill = StartCoroutine(StartSkillAttack());
+        }
+    }
+
+    #endregion States
 
     protected override void UpdateAnimation()
     {
@@ -67,21 +85,9 @@ public class PlayerController : CreatureController
         }
     }
 
-    private void GetAttackInput()
-    {
-        if (isActing == true) return;
-
-        if (Input.GetKey(KeyCode.Space))
-        {
-            //coSkill = StartCoroutine(StartBaseAttack());
-            coSkill = StartCoroutine(StartSkillAttack());
-        }
-    }
-
     private IEnumerator StartBaseAttack()
     {
         State = ECreatureState.ATTACK;
-        isActing = true;
 
         GameObject go = Managers.Obj.Find(GetFrontCellPos());
         if (ReferenceEquals(go, null) == false && go.TryGetComponent(out CreatureController controller) == true)
@@ -92,7 +98,6 @@ public class PlayerController : CreatureController
         yield return new WaitForSeconds(0.5f);
 
         State = ECreatureState.IDLE;
-        isActing = false;
 
         coSkill = null;
     }
@@ -100,7 +105,6 @@ public class PlayerController : CreatureController
     private IEnumerator StartSkillAttack()
     {
         State = ECreatureState.SKILL;
-        isActing = true;
 
         GameObject go = Managers.Resource.Instantiate("Creature/BigSwordHero3_Skill1");
         ProjectileController controller = go.GetComponent<ProjectileController>();
@@ -110,7 +114,6 @@ public class PlayerController : CreatureController
         yield return new WaitForSeconds(0.3f);
 
         State = ECreatureState.IDLE;
-        isActing = false;
 
         coSkill = null;
     }
