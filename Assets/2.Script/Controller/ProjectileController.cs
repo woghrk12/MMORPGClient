@@ -17,9 +17,33 @@ public class ProjectileController : CreatureController
 
     #region Methods
 
-    #region States 
+    public void SetProjectile(EMoveDirection moveDirection)
+    {
+        MoveDirection = moveDirection;
 
-    protected override void UpdateMoveState()
+        switch (MoveDirection)
+        {
+            case EMoveDirection.UP:
+                transform.rotation = Quaternion.Euler(0f, 0f, 90f);
+                break;
+
+            case EMoveDirection.DOWN:
+                transform.rotation = Quaternion.Euler(0f, 0f, -90f);
+                break;
+
+            case EMoveDirection.LEFT:
+                transform.localScale = new Vector3(-1f, 1f, 1f);
+                break;
+
+            case EMoveDirection.RIGHT:
+                transform.localScale = new Vector3(1f, 1f, 1f);
+                break;
+        }
+    }
+
+    protected override void UpdateAnimation() { }
+
+    protected override void MoveToNextPos()
     {
         Vector3Int cellPos = CellPos;
 
@@ -65,34 +89,6 @@ public class ProjectileController : CreatureController
             Managers.Resource.Destory(gameObject);
         }
     }
-
-    #endregion States
-
-    public void SetProjectile(EMoveDirection moveDirection)
-    {
-        MoveDirection = moveDirection;
-
-        switch (MoveDirection)
-        {
-            case EMoveDirection.UP:
-                transform.rotation = Quaternion.Euler(0f, 0f, 90f);
-                break;
-
-            case EMoveDirection.DOWN:
-                transform.rotation = Quaternion.Euler(0f, 0f, -90f);
-                break;
-
-            case EMoveDirection.LEFT:
-                transform.localScale = new Vector3(-1f, 1f, 1f);
-                break;
-
-            case EMoveDirection.RIGHT:
-                transform.localScale = new Vector3(1f, 1f, 1f);
-                break;
-        }
-    }
-
-    protected override void UpdateAnimation() { }
 
     #endregion Methods
 }
