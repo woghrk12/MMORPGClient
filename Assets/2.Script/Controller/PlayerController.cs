@@ -84,9 +84,9 @@ public class PlayerController : CreatureController
         isActing = true;
 
         GameObject go = Managers.Obj.Find(GetFrontCellPos());
-        if (go != null)
+        if (ReferenceEquals(go, null) == false && go.TryGetComponent(out CreatureController controller) == true)
         {
-            Debug.Log(go.name);
+            controller.OnDamaged();
         }
 
         yield return new WaitForSeconds(0.5f);

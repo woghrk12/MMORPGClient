@@ -180,5 +180,11 @@ public class CreatureController : MonoBehaviour
         }
     }
 
+    #region Events
+
+    public virtual void OnDamaged() { }
+
+    #endregion Events
+
     #endregion Methods
 }

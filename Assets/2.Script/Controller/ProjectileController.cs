@@ -73,7 +73,11 @@ public class ProjectileController : CreatureController
             }
             else
             {
-                Debug.Log(go.name);
+                if (go.TryGetComponent(out CreatureController controller) == true)
+                {
+                    controller.OnDamaged();
+                }
+
                 Managers.Resource.Destory(gameObject);
             }
         }
