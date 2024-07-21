@@ -108,7 +108,7 @@ public class PlayerController : CreatureController
 
         GameObject go = Managers.Resource.Instantiate("Creature/BigSwordHero3_Skill1");
         ProjectileController controller = go.GetComponent<ProjectileController>();
-        controller.MoveDirection = LastMoveDirection;
+        controller.SetProjectile(LastMoveDirection);
         controller.CellPos = CellPos;
 
         yield return new WaitForSeconds(0.3f);

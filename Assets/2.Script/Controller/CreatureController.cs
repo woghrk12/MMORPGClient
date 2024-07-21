@@ -49,8 +49,8 @@ public class CreatureController : MonoBehaviour
         get => state;
     }
 
-    public EMoveDirection MoveDirection { set; get; } = EMoveDirection.NONE;
-    public EMoveDirection LastMoveDirection { set; get; } = EMoveDirection.RIGHT;
+    public EMoveDirection MoveDirection { protected set; get; } = EMoveDirection.NONE;
+    public EMoveDirection LastMoveDirection { protected set; get; } = EMoveDirection.RIGHT;
 
     #endregion Properties
 

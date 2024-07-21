@@ -10,35 +10,17 @@ public class ProjectileController : CreatureController
     {
         base.Start();
 
-        switch (MoveDirection)
-        {
-            case EMoveDirection.UP:
-                transform.rotation = Quaternion.Euler(0f, 0f, 90f);
-                break;
-
-            case EMoveDirection.DOWN:
-                transform.rotation = Quaternion.Euler(0f, 0f, -90f);
-                break;
-
-            case EMoveDirection.LEFT:
-                transform.localScale = new Vector3(-1f, 1f, 1f);
-                break;
-
-            case EMoveDirection.RIGHT:
-                transform.localScale = new Vector3(1f, 1f, 1f);
-                break;
-        }
+        State = ECreatureState.MOVE;
     }
 
     #endregion Unity Events
 
     #region Methods
 
+    #region States 
+
     protected override void UpdateMoveState()
     {
-        if (isActing == true) return;
-        if (MoveDirection == EMoveDirection.NONE) return;
-
         Vector3Int cellPos = CellPos;
 
         switch (MoveDirection)
@@ -60,8 +42,6 @@ public class ProjectileController : CreatureController
                 break;
         }
 
-        State = ECreatureState.MOVE;
-
         if (Managers.Map.CheckCanMove(cellPos) == true)
         {
             GameObject go = Managers.Obj.Find(cellPos);
@@ -69,7 +49,6 @@ public class ProjectileController : CreatureController
             if (ReferenceEquals(go, null) == true)
             {
                 CellPos = cellPos;
-                isActing = true;
             }
             else
             {
@@ -84,6 +63,32 @@ public class ProjectileController : CreatureController
         else
         {
             Managers.Resource.Destory(gameObject);
+        }
+    }
+
+    #endregion States
+
+    public void SetProjectile(EMoveDirection moveDirection)
+    {
+        MoveDirection = moveDirection;
+
+        switch (MoveDirection)
+        {
+            case EMoveDirection.UP:
+                transform.rotation = Quaternion.Euler(0f, 0f, 90f);
+                break;
+
+            case EMoveDirection.DOWN:
+                transform.rotation = Quaternion.Euler(0f, 0f, -90f);
+                break;
+
+            case EMoveDirection.LEFT:
+                transform.localScale = new Vector3(-1f, 1f, 1f);
+                break;
+
+            case EMoveDirection.RIGHT:
+                transform.localScale = new Vector3(1f, 1f, 1f);
+                break;
         }
     }
 
