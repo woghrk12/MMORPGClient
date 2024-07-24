@@ -88,5 +88,25 @@ public class Utility
         return component;
     }
 
+    public static int CalculateDistance(Pos a, Pos b)
+    {
+        int dx = a.X > b.X ? a.X - b.X : b.X - a.X;
+        int dy = a.Y > b.Y ? a.Y - b.Y : b.Y - a.Y;
+        int e1 = dx > dy ? dx - dy : dy - dx;
+        int e2 = dx < dy ? dx : dy;
+
+        return e1 * 10 + e2 * 14;
+    }
+
+    public static int CalculateDistance(Vector3Int a, Vector3Int b)
+    {
+        int dx = a.x > b.x ? a.x - b.x : b.x - a.x;
+        int dy = a.y > b.y ? a.y - b.y : b.y - a.y;
+        int e1 = dx > dy ? dx - dy : dy - dx;
+        int e2 = dx < dy ? dx : dy;
+
+        return e1 * 10 + e2 * 14;
+    }
+
     #endregion Methods
 }
