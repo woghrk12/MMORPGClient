@@ -1,4 +1,4 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -34,6 +34,20 @@ public class ObjectManager
             if (go.TryGetComponent(out CreatureController controller) == false) continue;
             if (controller.CellPos != cellPos) continue;
          
+            return go;
+        }
+
+        return null;
+    }
+
+    public GameObject Find(Func<GameObject, bool> condition)
+    {
+        if (ReferenceEquals(condition, null) == true) return null;
+
+        foreach (GameObject go in objectList)
+        {
+            if (condition.Invoke(go) == false) continue;
+
             return go;
         }
 

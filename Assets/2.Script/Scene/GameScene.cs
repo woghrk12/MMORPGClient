@@ -11,17 +11,16 @@ public class GameScene : BaseScene
         base.Init();
 
         SceneType = EScene.GAME;
-
         GameObject player = Managers.Resource.Instantiate("Creature/Player");
         player.name = "Player";
         Managers.Obj.Add(player);
 
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 1; i++)
         {
             GameObject monster = Managers.Resource.Instantiate("Creature/Monster");
             monster.name = $"Monster_{i}";
 
-            Vector3Int pos = new Vector3Int() { x = Random.Range(-10, 10), y = Random.Range(-10, 10) };
+            Vector3Int pos = new Vector3Int() { x = 0, y = 5 };
             MonsterController controller = monster.GetComponent<MonsterController>();
             controller.CellPos = pos;
 

@@ -36,7 +36,7 @@ public class CreatureController : MonoBehaviour
 
     public Vector3Int CellPos { set; get; } = Vector3Int.zero;
 
-    public ECreatureState State
+    public virtual ECreatureState State
     {
         protected set
         {

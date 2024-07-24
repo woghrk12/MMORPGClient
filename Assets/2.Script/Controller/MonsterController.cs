@@ -7,9 +7,40 @@ public class MonsterController : CreatureController
     #region Variables
 
     private Coroutine coPatrol = null;
+    private Coroutine coSearch = null;
     private Vector3Int destCellPos = Vector3Int.zero;
 
+    private PlayerController target = null;
+    [SerializeField] private int searchRange = 5;
+
     #endregion Variables
+
+    #region Properties
+
+    public override ECreatureState State
+    {
+        protected set
+        {
+            if (state == value) return;
+
+            base.State = value;
+
+            if (ReferenceEquals(coPatrol, null) == false)
+            {
+                StopCoroutine(coPatrol);
+                coPatrol = null;
+            }
+
+            if (ReferenceEquals(coSearch, null) == false)
+            {
+                StopCoroutine(coSearch);
+                coSearch = null;
+            }
+        }
+        get => state;
+    }
+
+    #endregion Properties
 
     #region Methods
 
@@ -17,20 +48,56 @@ public class MonsterController : CreatureController
 
     protected override void UpdateIdleState()
     {
-        if (ReferenceEquals(coPatrol, null) == false) return;
+        if (ReferenceEquals(coPatrol, null) == true)
+        {
+            coPatrol = StartCoroutine(PatrolCo());
+        }
 
-        coPatrol = StartCoroutine(PatrolCo());
+        if (ReferenceEquals(coSearch, null) == true)
+        {
+            coSearch = StartCoroutine(SearchCo());
+        }
     }
 
     #endregion States
 
     protected override void MoveToNextPos()
     {
-        Vector3Int moveVector = destCellPos - CellPos;
+        Vector3Int destCellPos = this.destCellPos;
+        if (ReferenceEquals(target, null) == false)
+        {
+            if (Utility.CalculateDistance(target.CellPos, CellPos) <= searchRange)
+            {
+                destCellPos = target.CellPos;
+            }
+            else
+            {
+                target = null;
+                State = ECreatureState.IDLE;
+                return;
+            }
+        }
+
+        if (CellPos == destCellPos)
+        {
+            target = null;
+            State = ECreatureState.IDLE;
+            return;
+        }
+
+        if (Managers.Map.FindPath(CellPos, destCellPos, out List<Vector3Int> path) == false)
+        {
+            State = ECreatureState.IDLE;
+            return;
+        }
+
+        Vector3Int nextPos = path[1];
+        Vector3Int moveVector = nextPos - CellPos;
 
         if (moveVector.x != 0)
         {
             MoveDirection = moveVector.x > 0 ? EMoveDirection.RIGHT : EMoveDirection.LEFT;
+            transform.localScale = new Vector3(moveVector.x > 0 ? 1f : -1f, 1f, 1f);
         }
         else if (moveVector.y != 0)
         {
@@ -43,32 +110,9 @@ public class MonsterController : CreatureController
             return;
         }
 
-        Vector3Int cellPos = CellPos;
-
-        switch (MoveDirection)
+        if (Managers.Map.CheckCanMove(nextPos) == true && ReferenceEquals(Managers.Obj.Find(nextPos), null) == true)
         {
-            case EMoveDirection.UP:
-                cellPos += Vector3Int.up;
-                break;
-
-            case EMoveDirection.DOWN:
-                cellPos += Vector3Int.down;
-                break;
-
-            case EMoveDirection.LEFT:
-                cellPos += Vector3Int.left;
-                transform.localScale = new Vector3(-1f, 1f, 1f);
-                break;
-
-            case EMoveDirection.RIGHT:
-                cellPos += Vector3Int.right;
-                transform.localScale = new Vector3(1f, 1f, 1f);
-                break;
-        }
-
-        if (Managers.Map.CheckCanMove(cellPos) == true && ReferenceEquals(Managers.Obj.Find(cellPos), null) == true)
-        {
-            CellPos = cellPos;
+            CellPos = nextPos;
         }
         else
         {
@@ -89,17 +133,34 @@ public class MonsterController : CreatureController
 
             destCellPos = randPos;
             State = ECreatureState.MOVE;
-            coPatrol = null;
             yield break;
         }
 
-        if (ReferenceEquals(coPatrol, null) == false)
-        {
-            StopCoroutine(coPatrol);
-            coPatrol = null;
-        }
-
         State = ECreatureState.IDLE;
+    }
+
+    private IEnumerator SearchCo()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(1f);
+
+            // If the target player object is null
+            if (ReferenceEquals(target, null) == true)
+            {
+                // Find a player object within range
+                target = Managers.Obj.Find((go) =>
+                {
+                    if (go.TryGetComponent(out PlayerController controller) == false) return false;
+                    if ((controller.CellPos - CellPos).sqrMagnitude > searchRange * searchRange) return false;
+
+                    return true;
+                })?.GetComponent<PlayerController>();
+
+                // Nevertheless, if the object does not exist, proceed to the next loop
+                if (ReferenceEquals(target, null) == true) continue;
+            }
+        }
     }
 
     #region Events
