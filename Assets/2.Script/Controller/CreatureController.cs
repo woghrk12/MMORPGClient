@@ -170,6 +170,20 @@ public class CreatureController : MonoBehaviour
         return cellPos;
     }
 
+    public EMoveDirection GetDirFromVec(Vector3Int vector)
+    {
+        if (vector.x != 0)
+        {
+            return vector.x > 0 ? EMoveDirection.RIGHT : EMoveDirection.LEFT;
+        }
+        else if (vector.y != 0)
+        {
+            return vector.y > 0 ? EMoveDirection.UP : EMoveDirection.DOWN;
+        }
+
+        return EMoveDirection.NONE;
+    }
+
     protected virtual void UpdateAnimation()
     {
         animator.SetBool(AnimatorKey.Creature.IS_MOVE_HASH, state == ECreatureState.MOVE);
