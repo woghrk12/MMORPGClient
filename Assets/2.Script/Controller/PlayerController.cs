@@ -7,6 +7,7 @@ public class PlayerController : CreatureController
     #region Variables
 
     private Coroutine coSkill = null;
+    private EMoveDirection inputMoveDirection = EMoveDirection.NONE;
 
     #endregion Variables
 
@@ -36,6 +37,8 @@ public class PlayerController : CreatureController
 
     protected override void UpdateIdleState()
     {
+        MoveDirection = inputMoveDirection;
+
         if (MoveDirection != EMoveDirection.NONE)
         {
             State = ECreatureState.MOVE;
@@ -61,27 +64,34 @@ public class PlayerController : CreatureController
         }
     }
 
+    protected override void MoveToNextPos()
+    {
+        MoveDirection = inputMoveDirection;
+
+        base.MoveToNextPos();
+    }
+
     private void GetInputDirection()
     {
         if (Input.GetKey(KeyCode.W))
         {
-            MoveDirection = EMoveDirection.UP;
+            inputMoveDirection = EMoveDirection.UP;
         }
         else if (Input.GetKey(KeyCode.S))
         {
-            MoveDirection = EMoveDirection.DOWN;
+            inputMoveDirection = EMoveDirection.DOWN;
         }
         else if (Input.GetKey(KeyCode.A))
         {
-            MoveDirection = EMoveDirection.LEFT;
+            inputMoveDirection = EMoveDirection.LEFT;
         }
         else if (Input.GetKey(KeyCode.D))
         {
-            MoveDirection = EMoveDirection.RIGHT;
+            inputMoveDirection = EMoveDirection.RIGHT;
         }
         else
         {
-            MoveDirection = EMoveDirection.NONE;
+            inputMoveDirection = EMoveDirection.NONE;
         }
     }
 

@@ -29,6 +29,7 @@ public class CreatureController : MonoBehaviour
     [SerializeField] protected float moveSpeed = 0f;
 
     protected ECreatureState state = ECreatureState.IDLE;
+    protected EMoveDirection moveDirection = EMoveDirection.NONE;
 
     #endregion Variables
 
@@ -49,7 +50,25 @@ public class CreatureController : MonoBehaviour
         get => state;
     }
 
-    public EMoveDirection MoveDirection { protected set; get; } = EMoveDirection.NONE;
+    public EMoveDirection MoveDirection 
+    {
+        protected set
+        {
+            if (moveDirection == value) return;
+
+            moveDirection = value;
+
+            if (moveDirection == EMoveDirection.NONE) return;
+
+            if (moveDirection == EMoveDirection.LEFT || moveDirection == EMoveDirection.RIGHT)
+            {
+                transform.localScale = new Vector3(moveDirection == EMoveDirection.LEFT ? -1f : 1f, 1f, 1f);
+            }
+
+            LastMoveDirection = moveDirection;
+        }
+        get => moveDirection; 
+    }
     public EMoveDirection LastMoveDirection { protected set; get; } = EMoveDirection.RIGHT;
 
     #endregion Properties
