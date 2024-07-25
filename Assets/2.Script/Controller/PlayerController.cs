@@ -128,5 +128,14 @@ public class PlayerController : CreatureController
         coSkill = null;
     }
 
+    #region Events
+
+    public override void OnDamaged()
+    {
+        Debug.Log("OnDamaged");
+    }
+
+    #endregion Events
+
     #endregion Methods
 }

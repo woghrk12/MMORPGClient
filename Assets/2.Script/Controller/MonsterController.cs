@@ -8,10 +8,14 @@ public class MonsterController : CreatureController
 
     private Coroutine coPatrol = null;
     private Coroutine coSearch = null;
+    private Coroutine coAttack = null;
+
     private Vector3Int destCellPos = Vector3Int.zero;
 
     private PlayerController target = null;
+    
     [SerializeField] private int searchRange = 5;
+    [SerializeField] private int attackRange = 1;
 
     #endregion Variables
 
@@ -69,6 +73,13 @@ public class MonsterController : CreatureController
             if (Utility.CalculateDistance(target.CellPos, CellPos) <= searchRange)
             {
                 destCellPos = target.CellPos;
+
+                if (Utility.CalculateDistance(destCellPos, CellPos) <= attackRange)
+                {
+                    State = ECreatureState.ATTACK;
+                    coAttack = StartCoroutine(AttackCo());
+                    return;
+                }
             }
             else
             {
@@ -94,14 +105,18 @@ public class MonsterController : CreatureController
         Vector3Int nextPos = path[1];
         Vector3Int moveVector = nextPos - CellPos;
 
+        MoveDirection = GetDirFromVec(moveVector);
+
         if (moveVector.x != 0)
         {
             MoveDirection = moveVector.x > 0 ? EMoveDirection.RIGHT : EMoveDirection.LEFT;
+            LastMoveDirection = MoveDirection;
             transform.localScale = new Vector3(moveVector.x > 0 ? 1f : -1f, 1f, 1f);
         }
         else if (moveVector.y != 0)
         {
             MoveDirection = moveVector.y > 0 ? EMoveDirection.UP : EMoveDirection.DOWN;
+            LastMoveDirection = MoveDirection;
         }
         else
         {
@@ -161,6 +176,18 @@ public class MonsterController : CreatureController
                 if (ReferenceEquals(target, null) == true) continue;
             }
         }
+    }
+
+    private IEnumerator AttackCo()
+    {
+        if (ReferenceEquals(target, null) == false)
+        {
+            target.OnDamaged();
+        }
+
+        yield return new WaitForSeconds(0.5f);
+
+        State = ECreatureState.MOVE;
     }
 
     #region Events
