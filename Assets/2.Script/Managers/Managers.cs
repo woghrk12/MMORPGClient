@@ -15,6 +15,7 @@ public class Managers : MonoBehaviour
 
     private MapManager map = new();
     private ObjectManager obj = new();
+    private NetworkManager network = new();
 
     #endregion Variables
 
@@ -46,6 +47,8 @@ public class Managers : MonoBehaviour
 
     public static ObjectManager Obj => Instance.obj;
 
+    public static NetworkManager Network => Instance.network;
+
     #endregion Properties
 
     #region Unity Events
@@ -53,6 +56,11 @@ public class Managers : MonoBehaviour
     private void Awake()
     {
         Init();
+    }
+
+    private void Update()
+    {
+        network.Update();
     }
 
     #endregion Unity Events
@@ -75,6 +83,7 @@ public class Managers : MonoBehaviour
             instance = go.GetComponent<Managers>();
         }
 
+        instance.network.Init();
         instance.sound.Init();
         instance.pool.Init();
     }
