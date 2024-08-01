@@ -2,7 +2,6 @@ using Google.Protobuf;
 using System;
 using System.Collections.Generic;
 using System.Net;
-using ServerCore;
 
 public class NetworkManager
 {
@@ -28,15 +27,15 @@ public class NetworkManager
         List<PacketMessage> list = PacketQueue.Instance.PopAll();
         foreach (PacketMessage packet in list)
         {
-            if (PacketManager.Instance.TryGetPacketHandler(packet.ID, out Action<PacketSession, IMessage> handler) == false) continue;
+            if (PacketManager.Instance.TryGetPacketHandler(packet.ID, out Action<ServerSession, IMessage> handler) == false) continue;
 
             handler.Invoke(session, packet.Message);
         }
     }
 
-    public void Send(ArraySegment<byte> sendBuff)
+    public void Send(IMessage packet)
     {
-        session.Send(sendBuff);
+        session.Send(packet);
     }
 
     #endregion Methods

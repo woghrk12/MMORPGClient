@@ -1,6 +1,5 @@
 using Google.Protobuf;
 using Google.Protobuf.Protocol;
-using ServerCore;
 using System;
 using System.Collections.Generic;
 
@@ -10,8 +9,8 @@ public class PacketManager
 
     private static PacketManager instance = new();
 
-    private Dictionary<ushort, Action<PacketSession, ArraySegment<byte>, ushort>> receivedPacketHandlerDict = new();
-    private Dictionary<ushort, Action<PacketSession, IMessage>> handlerDict = new();
+    private Dictionary<ushort, Action<ServerSession, ArraySegment<byte>, ushort>> receivedPacketHandlerDict = new();
+    private Dictionary<ushort, Action<ServerSession, IMessage>> handlerDict = new();
 
     #endregion Variables
 
@@ -38,14 +37,14 @@ public class PacketManager
 
     #region Methods
 
-    public Action<PacketSession, IMessage> GetPacketHandler(ushort id)
+    public Action<ServerSession, IMessage> GetPacketHandler(ushort id)
     {
-        return handlerDict.TryGetValue(id, out Action<PacketSession, IMessage> action) == true ? action : null;
+        return handlerDict.TryGetValue(id, out Action<ServerSession, IMessage> action) == true ? action : null;
     }
 
-    public bool TryGetPacketHandler(ushort id, out Action<PacketSession, IMessage> handler)
+    public bool TryGetPacketHandler(ushort id, out Action<ServerSession, IMessage> handler)
     {
-        if (handlerDict.TryGetValue(id, out Action<PacketSession, IMessage> action) == false)
+        if (handlerDict.TryGetValue(id, out Action<ServerSession, IMessage> action) == false)
         {
             handler = null;
             return false;
@@ -55,12 +54,12 @@ public class PacketManager
         return true;
     }
 
-    private void MakePacket<T>(PacketSession session, ArraySegment<byte> buffer, ushort id) where T : IMessage, new()
+    private void MakePacket<T>(ServerSession session, ArraySegment<byte> buffer, ushort id) where T : IMessage, new()
     {
         T packet = new();
         packet.MergeFrom(buffer.Array, buffer.Offset + 4, buffer.Count - 4);
 
-        if (handlerDict.TryGetValue(id, out Action<PacketSession, IMessage> action))
+        if (handlerDict.TryGetValue(id, out Action<ServerSession, IMessage> action))
         {
             action.Invoke(session, packet);
         }
@@ -68,7 +67,7 @@ public class PacketManager
 
     #region Events
 
-    public void OnReceivePacket(PacketSession session, ArraySegment<byte> buffer)
+    public void OnReceivePacket(ServerSession session, ArraySegment<byte> buffer)
     {
         ushort count = 0;
 
@@ -77,7 +76,7 @@ public class PacketManager
         ushort id = BitConverter.ToUInt16(buffer.Array, buffer.Offset + count);
         count += 2;
 
-        if (receivedPacketHandlerDict.TryGetValue(id, out Action<PacketSession, ArraySegment<byte>, ushort> action))
+        if (receivedPacketHandlerDict.TryGetValue(id, out Action<ServerSession, ArraySegment<byte>, ushort> action))
         {
             action.Invoke(session, buffer, id);
         }
