@@ -25,7 +25,20 @@ public class Managers : MonoBehaviour
     {
         get
         {
-            Init();
+            if (ReferenceEquals(instance, null) == true)
+            {
+                GameObject go = GameObject.Find("@Managers");
+
+                if (ReferenceEquals(go, null) == true)
+                {
+                    go = new GameObject { name = "@Managers" };
+                    instance = go.AddComponent<Managers>();
+
+                    DontDestroyOnLoad(go);
+                }
+
+                Init();
+            }
             
             return instance;
         }
@@ -53,11 +66,6 @@ public class Managers : MonoBehaviour
 
     #region Unity Events
 
-    private void Awake()
-    {
-        Init();
-    }
-
     private void Update()
     {
         network.Update();
@@ -69,20 +77,6 @@ public class Managers : MonoBehaviour
 
     private static void Init()
     {
-        if (ReferenceEquals(instance, null))
-        {
-            GameObject go = GameObject.Find("@Managers");
-
-            if (ReferenceEquals(go, null))
-            {
-                go = new GameObject { name = "@Managers" };
-                go.AddComponent<Managers>();
-            }
-
-            DontDestroyOnLoad(go);
-            instance = go.GetComponent<Managers>();
-        }
-
         instance.network.Init();
         instance.sound.Init();
         instance.pool.Init();
