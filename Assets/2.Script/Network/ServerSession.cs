@@ -19,7 +19,7 @@ public class ServerSession : PacketSession
         Debug.Log($"OnDisconnected : {endPoint}");
     }
 
-    public override void OnRecvPacket(ArraySegment<byte> buffer)
+    public override void OnReceivePacket(ArraySegment<byte> buffer)
     {
         PacketManager.Instance.OnReceivePacket(this, buffer);
     }
