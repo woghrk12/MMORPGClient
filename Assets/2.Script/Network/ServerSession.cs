@@ -36,6 +36,9 @@ public class ServerSession
         recvArgs.Completed += new EventHandler<SocketAsyncEventArgs>(OnReceiveCompleted);
         sendArgs.Completed += new EventHandler<SocketAsyncEventArgs>(OnSendCompleted);
 
+        OnConnected(socket.RemoteEndPoint);
+
+        RegisterRecv();
     }
 
     public void Clear()
@@ -129,12 +132,12 @@ public class ServerSession
 
     #region Events
 
-    public  void OnConnected(EndPoint endPoint)
+    private void OnConnected(EndPoint endPoint)
     {
         Debug.Log($"OnConnected : {endPoint}");
     }
 
-    public  void OnDisconnected(EndPoint endPoint)
+    private void OnDisconnected(EndPoint endPoint)
     {
         Debug.Log($"OnDisconnected : {endPoint}");
     }

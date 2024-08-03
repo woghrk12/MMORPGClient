@@ -48,7 +48,7 @@ public class Connector
         }
 
         ServerSession session = sessionFactory.Invoke();
-
+        session.Init(args.ConnectSocket);
     }
 
     #endregion Methods
