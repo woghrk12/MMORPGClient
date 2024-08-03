@@ -1,10 +1,8 @@
 using UnityEngine;
 
-public class Managers : MonoBehaviour
+public class Managers : SingletonMonobehaviour<Managers>
 {
     #region Variables
-
-    private static Managers instance = null;
 
     private DataManager data = new();
     private PoolManager pool = new();
@@ -20,29 +18,6 @@ public class Managers : MonoBehaviour
     #endregion Variables
 
     #region Properties
-
-    public static Managers Instance
-    {
-        get
-        {
-            if (ReferenceEquals(instance, null) == true)
-            {
-                GameObject go = GameObject.Find("@Managers");
-
-                if (ReferenceEquals(go, null) == true)
-                {
-                    go = new GameObject { name = "@Managers" };
-                    instance = go.AddComponent<Managers>();
-
-                    DontDestroyOnLoad(go);
-                }
-
-                Init();
-            }
-            
-            return instance;
-        }
-    }
 
     public static DataManager Data => Instance.data;
 
@@ -65,6 +40,13 @@ public class Managers : MonoBehaviour
     #endregion Properties
 
     #region Unity Events
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        Init();
+    }
 
     private void Update()
     {
