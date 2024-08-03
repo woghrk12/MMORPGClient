@@ -19,7 +19,7 @@ public abstract class BaseScene : MonoBehaviour
 
     #region Unity Events
 
-    private void Awake()
+    private void Start()
     {
         Init();
     }

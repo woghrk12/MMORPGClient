@@ -22,6 +22,11 @@ public class NetworkManager
         connector.Connect(endPoint, () => session);
     }
 
+    public void Clear()
+    {
+        session.Disconnect();
+    }
+
     public void Update()
     {
         List<PacketMessage> list = PacketQueue.Instance.PopAll();
@@ -37,6 +42,7 @@ public class NetworkManager
     {
         session.Send(packet);
     }
+
 
     #endregion Methods
 }

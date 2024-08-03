@@ -41,15 +41,6 @@ public class ServerSession
         RegisterRecv();
     }
 
-    public void Clear()
-    { 
-        lock (lockObj)
-        {
-            sendQueue.Clear();
-            pendingList.Clear();
-        }
-    }
-
     public void Disconnect()
     {
         if (Interlocked.Exchange(ref isDisconnected, 1) == 1) return;
@@ -83,6 +74,15 @@ public class ServerSession
             {
                 RegisterSend();
             }
+        }
+    }
+
+    private void Clear()
+    {
+        lock (lockObj)
+        {
+            sendQueue.Clear();
+            pendingList.Clear();
         }
     }
 
@@ -140,6 +140,9 @@ public class ServerSession
     private void OnDisconnected(EndPoint endPoint)
     {
         Debug.Log($"OnDisconnected : {endPoint}");
+
+        recvArgs.Completed -= new EventHandler<SocketAsyncEventArgs>(OnReceiveCompleted);
+        sendArgs.Completed -= new EventHandler<SocketAsyncEventArgs>(OnSendCompleted);
     }
 
     private int OnReceive(ArraySegment<byte> buffer)

@@ -53,15 +53,20 @@ public class Managers : SingletonMonobehaviour<Managers>
         network.Update();
     }
 
+    private void OnDestroy()
+    {
+        network.Clear();
+    }
+
     #endregion Unity Events
-    
+
     #region Methods
 
     private static void Init()
     {
-        instance.network.Init();
-        instance.sound.Init();
-        instance.pool.Init();
+        Network.Init();
+        Sound.Init();
+        Pool.Init();
     }
 
     public static void Clear()
