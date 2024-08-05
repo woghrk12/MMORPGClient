@@ -24,13 +24,17 @@ public class PacketManager
 
     public PacketManager()
     {
-        // Implement the constructor to register methods for handling the packets that the client needs.
-        // Example
-        // {0} : The class name of the packet.
-        // receivedPacketHandlerDict.Add((ushort)EMessageID.{0}}, MakePacket<{0}}>);
-        // handlerDict.Add((ushort)EMessageID.{0}}, PacketHandler.Handle{0}});
-        receivedPacketHandlerDict.Add((ushort)EMessageID.PlayerMoveBrodcast, MakePacket<PlayerMoveBrodcast>);
-        handlerDict.Add((ushort)EMessageID.PlayerMoveBrodcast, PacketHandler.HandlePlayerMoveBrodcast);
+        receivedPacketHandlerDict.Add((ushort)EMessageID.PlayerEnterBrodcast, MakePacket<PlayerEnterBrodcast>);
+        receivedPacketHandlerDict.Add((ushort)EMessageID.PlayerLeaveBrodcast, MakePacket<PlayerLeaveBrodcast>);
+        receivedPacketHandlerDict.Add((ushort)EMessageID.CreatureSpawnBrodcast, MakePacket<CreatureSpawnBrodcast>);
+        receivedPacketHandlerDict.Add((ushort)EMessageID.CreatureDespawnBrodcast, MakePacket<CreatureDespawnBrodcast>);
+        receivedPacketHandlerDict.Add((ushort)EMessageID.CreatureMoveBrodcast, MakePacket<CreatureMoveBrodcast>);
+
+        handlerDict.Add((ushort)EMessageID.PlayerEnterBrodcast, PacketHandler.HandlePlayerEnterBrodcast);
+        handlerDict.Add((ushort)EMessageID.PlayerLeaveBrodcast, PacketHandler.HandlePlayerLeaveBrodcast);
+        handlerDict.Add((ushort)EMessageID.CreatureSpawnBrodcast, PacketHandler.HandleCreatureSpawnBrodcast);
+        handlerDict.Add((ushort)EMessageID.CreatureDespawnBrodcast, PacketHandler.HandleCreatureDespawnBrodcast);
+        handlerDict.Add((ushort)EMessageID.CreatureMoveBrodcast, PacketHandler.HandleCreatureMoveBrodcast);
     }
 
     #endregion Constructor

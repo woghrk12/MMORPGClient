@@ -4,18 +4,28 @@ using UnityEngine;
 
 public class PacketHandler
 {
-    // Implement the methods for handling the packets that the client needs.
-    // Example
-    // {0} : The class name of the packet.
-    //public static void Handle{0}(ServerSession session, IMessage message)
-    //{
-    //    throw new NotImplementedException();
-    //}
-
-    public static void HandlePlayerMoveBrodcast(ServerSession session, IMessage message)
+    public static void HandlePlayerEnterBrodcast(ServerSession session, IMessage message)
     {
-        PlayerMoveBrodcast packet = message as PlayerMoveBrodcast;
+        PlayerEnterBrodcast packet = message as PlayerEnterBrodcast;
+    }
 
-        Debug.Log(packet.PlayerID + " : " + packet.Direction);
+    public static void HandlePlayerLeaveBrodcast(ServerSession session, IMessage message)
+    {
+        PlayerLeaveBrodcast packet = message as PlayerLeaveBrodcast;
+    }
+
+    public static void HandleCreatureSpawnBrodcast(ServerSession session, IMessage message)
+    {
+        CreatureSpawnBrodcast packet = message as CreatureSpawnBrodcast;
+    }
+
+    public static void HandleCreatureDespawnBrodcast(ServerSession session, IMessage message)
+    {
+        CreatureDespawnBrodcast packet = message as CreatureDespawnBrodcast;
+    }
+
+    public static void HandleCreatureMoveBrodcast(ServerSession session, IMessage message)
+    {
+        CreatureMoveBrodcast packet = message as CreatureMoveBrodcast;
     }
 }
