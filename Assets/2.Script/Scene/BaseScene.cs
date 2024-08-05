@@ -28,6 +28,8 @@ public abstract class BaseScene : MonoBehaviour
 
     protected virtual void Init() 
     {
+        Screen.SetResolution(840, 640, false);
+
         Object obj = GameObject.FindObjectOfType(typeof(EventSystem));
 
         if (ReferenceEquals(obj, null))
