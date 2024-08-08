@@ -30,6 +30,8 @@ public class PacketHandler
     public static void HandlePlayerLeftRoomBrodcast(ServerSession session, IMessage message)
     {
         PlayerLeftRoomBrodcast packet = message as PlayerLeftRoomBrodcast;
+
+        Managers.Obj.Remove(packet.OtherPlayerID);
     }
 
     public static void HandleCreatureSpawnedBrodcast(ServerSession session, IMessage message)

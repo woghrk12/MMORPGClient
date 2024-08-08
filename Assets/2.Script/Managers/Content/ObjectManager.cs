@@ -42,7 +42,10 @@ public class ObjectManager
 
     public void Remove(int id)
     {
+        if (objectDict.TryGetValue(id, out GameObject go) == false) return;
+            
         objectDict.Remove(id);
+        Managers.Resource.Destory(go);
     }
 
     public void Clear()
