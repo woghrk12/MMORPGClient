@@ -65,12 +65,10 @@ public class PacketManager
     private void MakePacket<T>(ServerSession session, ArraySegment<byte> buffer, ushort id) where T : IMessage, new()
     {
         T packet = new();
+
         packet.MergeFrom(buffer.Array, buffer.Offset + 4, buffer.Count - 4);
 
-        if (handlerDict.TryGetValue(id, out Action<ServerSession, IMessage> action))
-        {
-            action.Invoke(session, packet);
-        }
+        PacketQueue.Instance.Push(id, packet);
     }
 
     #region Events
