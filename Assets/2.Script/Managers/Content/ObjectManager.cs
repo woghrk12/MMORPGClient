@@ -6,30 +6,30 @@ public class ObjectManager
 {
     #region Variables
 
-    List<GameObject> objectList = new();
+    private Dictionary<int, GameObject> objectDict = new();
 
     #endregion Variables
 
     #region Methods
 
-    public void Add(GameObject go)
+    public void Add(int id, GameObject go)
     {
-        objectList.Add(go);
+        objectDict.Add(id, go);
     }
 
-    public void Remove(GameObject go)
+    public void Remove(int id)
     {
-        objectList.Remove(go);
+        objectDict.Remove(id);
     }
 
     public void Clear()
     {
-        objectList.Clear();
+        objectDict.Clear();
     }
 
     public GameObject Find(Vector3Int cellPos)
     {
-        foreach (GameObject go in objectList)
+        foreach (GameObject go in objectDict.Values)
         {
             if (go.TryGetComponent(out CreatureController controller) == false) continue;
             if (controller.CellPos != cellPos) continue;
@@ -44,7 +44,7 @@ public class ObjectManager
     {
         if (ReferenceEquals(condition, null) == true) return null;
 
-        foreach (GameObject go in objectList)
+        foreach (GameObject go in objectDict.Values)
         {
             if (condition.Invoke(go) == false) continue;
 
