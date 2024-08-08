@@ -33,6 +33,8 @@ public class CreatureController : MonoBehaviour
 
     #region Properties
 
+    public int ID { set; get; } = -1;
+
     public Vector3Int CellPos { set; get; } = Vector3Int.zero;
 
     public virtual ECreatureState State

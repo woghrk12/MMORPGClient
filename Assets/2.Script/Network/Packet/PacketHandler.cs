@@ -7,6 +7,8 @@ public class PacketHandler
     public static void HandlePlayerEnterBrodcast(ServerSession session, IMessage message)
     {
         PlayerEnterBrodcast packet = message as PlayerEnterBrodcast;
+
+        Managers.Obj.AddPlayer(packet.Player, isMine: true);
     }
 
     public static void HandlePlayerLeaveBrodcast(ServerSession session, IMessage message)

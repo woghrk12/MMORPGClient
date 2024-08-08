@@ -1,78 +1,77 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : CharacterController
+public class PlayerController : CreatureController
 {
     #region Variables
 
-    private EMoveDirection inputMoveDirection = EMoveDirection.NONE;
+    protected Coroutine coSkill = null;
 
     #endregion Variables
 
-    #region Unity Events
-
-    protected override void Update()
-    {
-        GetInputDirection();
-
-        base.Update();
-    }
-
-    private void LateUpdate()
-    {
-        Camera.main.transform.position = new Vector3(transform.position.x, transform.position.y, -10f);
-    }
-
-    #endregion Unity Events
-
     #region Methods
-
-    #region States
 
     protected override void UpdateIdleState()
     {
-        MoveDirection = inputMoveDirection;
-
-        if (Input.GetKey(KeyCode.Space))
+        if (MoveDirection != EMoveDirection.NONE)
         {
-            //coSkill = StartCoroutine(StartBaseAttack());
-            coSkill = StartCoroutine(StartSkillAttack());
+            State = ECreatureState.MOVE;
+            return;
         }
-
-        base.UpdateIdleState();
     }
 
-    #endregion States
-
-    protected override void MoveToNextPos()
+    protected override void UpdateAnimation()
     {
-        MoveDirection = inputMoveDirection;
+        base.UpdateAnimation();
 
-        base.MoveToNextPos();
+        if (state == ECreatureState.SKILL)
+        {
+            animator.SetTrigger(AnimatorKey.Creature.DO_SKILL_HASH);
+        }
     }
 
-    private void GetInputDirection()
+    protected IEnumerator StartBaseAttack()
     {
-        if (Input.GetKey(KeyCode.W))
+        State = ECreatureState.ATTACK;
+
+        GameObject go = Managers.Obj.Find(GetFrontCellPos());
+        if (ReferenceEquals(go, null) == false && go.TryGetComponent(out CreatureController controller) == true)
         {
-            inputMoveDirection = EMoveDirection.UP;
+            controller.OnDamaged();
         }
-        else if (Input.GetKey(KeyCode.S))
-        {
-            inputMoveDirection = EMoveDirection.DOWN;
-        }
-        else if (Input.GetKey(KeyCode.A))
-        {
-            inputMoveDirection = EMoveDirection.LEFT;
-        }
-        else if (Input.GetKey(KeyCode.D))
-        {
-            inputMoveDirection = EMoveDirection.RIGHT;
-        }
-        else
-        {
-            inputMoveDirection = EMoveDirection.NONE;
-        }
+
+        yield return new WaitForSeconds(1f);
+
+        State = ECreatureState.IDLE;
+
+        coSkill = null;
     }
+
+    protected IEnumerator StartSkillAttack()
+    {
+        State = ECreatureState.SKILL;
+
+        GameObject go = Managers.Resource.Instantiate("Creature/BigSwordHero3_Skill1");
+        ProjectileController controller = go.GetComponent<ProjectileController>();
+        controller.SetProjectile(LastMoveDirection);
+        controller.CellPos = CellPos;
+
+        yield return new WaitForSeconds(1f);
+
+        State = ECreatureState.IDLE;
+
+        coSkill = null;
+    }
+
+    #region Events
+
+    public override void OnDamaged()
+    {
+        Debug.Log("OnDamaged");
+    }
+
+    #endregion Events
 
     #endregion Methods
 }

@@ -1,3 +1,4 @@
+using Google.Protobuf.Protocol;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,7 +11,29 @@ public class ObjectManager
 
     #endregion Variables
 
+    #region Properties
+
+    public LocalPlayerController LocalPlayer { set; get; } = null;
+
+    #endregion Properties
+
     #region Methods
+
+    public void AddPlayer(PlayerInfo info, bool isMine = false)
+    {
+        GameObject go = Managers.Resource.Instantiate("Creature/" + (isMine ? "LocalPlayer" : "Player"));
+        go.name = info.Name;
+        objectDict.Add(info.PlayerID, go);
+
+        PlayerController controller = go.GetComponent<PlayerController>();
+        controller.ID = info.PlayerID;
+        controller.CellPos = new Vector3Int(info.PosX, info.PosY, 0);
+
+        if (isMine)
+        {
+            LocalPlayer = controller as LocalPlayerController;
+        }
+    }
 
     public void Add(int id, GameObject go)
     {

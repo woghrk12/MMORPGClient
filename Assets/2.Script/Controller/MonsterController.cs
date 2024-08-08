@@ -199,7 +199,6 @@ public class MonsterController : CreatureController
         GameObject.Destroy(effect, 0.5f);
 
         Debug.Log(gameObject.name);
-        Managers.Obj.Remove(gameObject);
         Managers.Resource.Destory(gameObject);
     }
 
