@@ -4,26 +4,42 @@ using UnityEngine;
 
 public class PacketHandler
 {
-    public static void HandlePlayerEnterBrodcast(ServerSession session, IMessage message)
+    public static void HandlePlayerEnteredRoomResponse(ServerSession session, IMessage message)
     {
-        PlayerEnterBrodcast packet = message as PlayerEnterBrodcast;
+        PlayerEnteredRoomResponse packet = message as PlayerEnteredRoomResponse;
 
-        Managers.Obj.AddPlayer(packet.Player, isMine: true);
+        Managers.Obj.AddPlayer(packet.MyInfo, isMine: true);
+        foreach (PlayerInfo info in packet.OtherPlayers)
+        {
+            Managers.Obj.AddPlayer(info, isMine: false);
+        }
     }
 
-    public static void HandlePlayerLeaveBrodcast(ServerSession session, IMessage message)
+    public static void HandlePlayerEnteredRoomBrodcast(ServerSession session, IMessage message)
     {
-        PlayerLeaveBrodcast packet = message as PlayerLeaveBrodcast;
+        PlayerEnteredRoomBrodcast packet = message as PlayerEnteredRoomBrodcast;
+
+        Managers.Obj.AddPlayer(packet.NewPlayer, isMine: false);
     }
 
-    public static void HandleCreatureSpawnBrodcast(ServerSession session, IMessage message)
+    public static void HandlePlayerLeftRoomResponse(ServerSession session, IMessage message)
     {
-        CreatureSpawnBrodcast packet = message as CreatureSpawnBrodcast;
+        PlayerLeftRoomResponse packet = message as PlayerLeftRoomResponse;
     }
 
-    public static void HandleCreatureDespawnBrodcast(ServerSession session, IMessage message)
+    public static void HandlePlayerLeftRoomBrodcast(ServerSession session, IMessage message)
     {
-        CreatureDespawnBrodcast packet = message as CreatureDespawnBrodcast;
+        PlayerLeftRoomBrodcast packet = message as PlayerLeftRoomBrodcast;
+    }
+
+    public static void HandleCreatureSpawnedBrodcast(ServerSession session, IMessage message)
+    {
+        CreatureSpawnedBrodcast packet = message as CreatureSpawnedBrodcast;
+    }
+
+    public static void HandleCreatureDespawnedBrodcast(ServerSession session, IMessage message)
+    {
+        CreatureDespawnedBrodcast packet = message as CreatureDespawnedBrodcast;
     }
 
     public static void HandleCreatureMoveBrodcast(ServerSession session, IMessage message)
