@@ -1,19 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : CreatureController
+public class PlayerController : CharacterController
 {
     #region Variables
 
-    private Coroutine coSkill = null;
     private EMoveDirection inputMoveDirection = EMoveDirection.NONE;
 
     #endregion Variables
-
-    #region Properties
-
-    #endregion Properties
 
     #region Unity Events
 
@@ -39,30 +32,16 @@ public class PlayerController : CreatureController
     {
         MoveDirection = inputMoveDirection;
 
-        if (MoveDirection != EMoveDirection.NONE)
-        {
-            State = ECreatureState.MOVE;
-            return;
-        }
-
         if (Input.GetKey(KeyCode.Space))
         {
             //coSkill = StartCoroutine(StartBaseAttack());
             coSkill = StartCoroutine(StartSkillAttack());
         }
+
+        base.UpdateIdleState();
     }
 
     #endregion States
-
-    protected override void UpdateAnimation()
-    {
-        base.UpdateAnimation();
-
-        if (state == ECreatureState.SKILL)
-        {
-            animator.SetTrigger(AnimatorKey.Creature.DO_SKILL_HASH);
-        }
-    }
 
     protected override void MoveToNextPos()
     {
@@ -94,48 +73,6 @@ public class PlayerController : CreatureController
             inputMoveDirection = EMoveDirection.NONE;
         }
     }
-
-    private IEnumerator StartBaseAttack()
-    {
-        State = ECreatureState.ATTACK;
-
-        GameObject go = Managers.Obj.Find(GetFrontCellPos());
-        if (ReferenceEquals(go, null) == false && go.TryGetComponent(out CreatureController controller) == true)
-        {
-            controller.OnDamaged();
-        }
-
-        yield return new WaitForSeconds(0.5f);
-
-        State = ECreatureState.IDLE;
-
-        coSkill = null;
-    }
-
-    private IEnumerator StartSkillAttack()
-    {
-        State = ECreatureState.SKILL;
-
-        GameObject go = Managers.Resource.Instantiate("Creature/BigSwordHero3_Skill1");
-        ProjectileController controller = go.GetComponent<ProjectileController>();
-        controller.SetProjectile(LastMoveDirection);
-        controller.CellPos = CellPos;
-
-        yield return new WaitForSeconds(0.3f);
-
-        State = ECreatureState.IDLE;
-
-        coSkill = null;
-    }
-
-    #region Events
-
-    public override void OnDamaged()
-    {
-        Debug.Log("OnDamaged");
-    }
-
-    #endregion Events
 
     #endregion Methods
 }
