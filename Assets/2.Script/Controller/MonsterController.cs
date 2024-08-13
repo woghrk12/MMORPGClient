@@ -1,3 +1,4 @@
+using Google.Protobuf.Protocol;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -109,18 +110,18 @@ public class MonsterController : CreatureController
 
         if (moveVector.x != 0)
         {
-            MoveDirection = moveVector.x > 0 ? EMoveDirection.RIGHT : EMoveDirection.LEFT;
+            MoveDirection = moveVector.x > 0 ? EMoveDirection.Right : EMoveDirection.Left;
             LastMoveDirection = MoveDirection;
             transform.localScale = new Vector3(moveVector.x > 0 ? 1f : -1f, 1f, 1f);
         }
         else if (moveVector.y != 0)
         {
-            MoveDirection = moveVector.y > 0 ? EMoveDirection.UP : EMoveDirection.DOWN;
+            MoveDirection = moveVector.y > 0 ? EMoveDirection.Up : EMoveDirection.Down;
             LastMoveDirection = MoveDirection;
         }
         else
         {
-            MoveDirection = EMoveDirection.NONE;
+            MoveDirection = EMoveDirection.None;
             State = ECreatureState.IDLE;
             return;
         }

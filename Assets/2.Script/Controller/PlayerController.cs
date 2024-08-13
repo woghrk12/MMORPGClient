@@ -1,5 +1,5 @@
+using Google.Protobuf.Protocol;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController : CreatureController
@@ -14,7 +14,7 @@ public class PlayerController : CreatureController
 
     protected override void UpdateIdleState()
     {
-        if (MoveDirection != EMoveDirection.NONE)
+        if (MoveDirection != EMoveDirection.None)
         {
             State = ECreatureState.MOVE;
             return;

@@ -1,10 +1,11 @@
+using Google.Protobuf.Protocol;
 using UnityEngine;
 
 public class LocalPlayerController : PlayerController
 {
     #region Variables
 
-    private EMoveDirection inputMoveDirection = EMoveDirection.NONE;
+    private EMoveDirection inputMoveDirection = EMoveDirection.None;
 
     #endregion Variables
 
@@ -54,23 +55,23 @@ public class LocalPlayerController : PlayerController
     {
         if (Input.GetKey(KeyCode.W))
         {
-            inputMoveDirection = EMoveDirection.UP;
+            inputMoveDirection = EMoveDirection.Up;
         }
         else if (Input.GetKey(KeyCode.S))
         {
-            inputMoveDirection = EMoveDirection.DOWN;
+            inputMoveDirection = EMoveDirection.Down;
         }
         else if (Input.GetKey(KeyCode.A))
         {
-            inputMoveDirection = EMoveDirection.LEFT;
+            inputMoveDirection = EMoveDirection.Left;
         }
         else if (Input.GetKey(KeyCode.D))
         {
-            inputMoveDirection = EMoveDirection.RIGHT;
+            inputMoveDirection = EMoveDirection.Right;
         }
         else
         {
-            inputMoveDirection = EMoveDirection.NONE;
+            inputMoveDirection = EMoveDirection.None;
         }
     }
 

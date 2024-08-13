@@ -1,3 +1,4 @@
+using Google.Protobuf.Protocol;
 using UnityEngine;
 
 public class ProjectileController : CreatureController
@@ -21,19 +22,19 @@ public class ProjectileController : CreatureController
 
         switch (MoveDirection)
         {
-            case EMoveDirection.UP:
+            case EMoveDirection.Up:
                 transform.rotation = Quaternion.Euler(0f, 0f, 90f);
                 break;
 
-            case EMoveDirection.DOWN:
+            case EMoveDirection.Down:
                 transform.rotation = Quaternion.Euler(0f, 0f, -90f);
                 break;
 
-            case EMoveDirection.LEFT:
+            case EMoveDirection.Left:
                 transform.localScale = new Vector3(-1f, 1f, 1f);
                 break;
 
-            case EMoveDirection.RIGHT:
+            case EMoveDirection.Right:
                 transform.localScale = new Vector3(1f, 1f, 1f);
                 break;
         }
@@ -47,19 +48,19 @@ public class ProjectileController : CreatureController
 
         switch (MoveDirection)
         {
-            case EMoveDirection.UP:
+            case EMoveDirection.Up:
                 cellPos += Vector3Int.up;
                 break;
 
-            case EMoveDirection.DOWN:
+            case EMoveDirection.Down:
                 cellPos += Vector3Int.down;
                 break;
 
-            case EMoveDirection.LEFT:
+            case EMoveDirection.Left:
                 cellPos += Vector3Int.left;
                 break;
 
-            case EMoveDirection.RIGHT:
+            case EMoveDirection.Right:
                 cellPos += Vector3Int.right;
                 break;
         }

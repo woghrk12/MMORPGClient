@@ -38,19 +38,23 @@ namespace Google.Protobuf.Protocol
                   "ZXJMZWZ0Um9vbUJyb2RjYXN0EhUKDW90aGVyUGxheWVySUQYASABKAUiLwoX",
                   "Q3JlYXR1cmVTcGF3bmVkQnJvZGNhc3QSFAoMbmV3T2JqZWN0SURzGAEgAygF",
                   "IjEKGUNyZWF0dXJlRGVzcGF3bmVkQnJvZGNhc3QSFAoMb2xkT2JqZWN0SURz",
-                  "GAEgAygFIjEKE0NyZWF0dXJlTW92ZVJlcXVlc3QSDAoEcG9zWBgBIAEoBRIM",
-                  "CgRwb3NZGAIgASgFIkQKFENyZWF0dXJlTW92ZUJyb2RjYXN0EhAKCHBsYXll",
-                  "cklEGAEgASgFEgwKBHBvc1gYAiABKAUSDAoEcG9zWRgDIAEoBSqFAgoKRU1l",
-                  "c3NhZ2VJRBIgChxQTEFZRVJfRU5URVJFRF9ST09NX1JFU1BPTlNFEAASIAoc",
-                  "UExBWUVSX0VOVEVSRURfUk9PTV9CUk9EQ0FTVBABEh0KGVBMQVlFUl9MRUZU",
-                  "X1JPT01fUkVTUE9OU0UQAhIdChlQTEFZRVJfTEVGVF9ST09NX0JST0RDQVNU",
-                  "EAMSHQoZQ1JFQVRVUkVfU1BBV05FRF9CUk9EQ0FTVBAEEh8KG0NSRUFUVVJF",
-                  "X0RFU1BBV05FRF9CUk9EQ0FTVBAFEhkKFUNSRUFUVVJFX01PVkVfUkVRVUVT",
-                  "VBAGEhoKFkNSRUFUVVJFX01PVkVfQlJPRENBU1QQB0IbqgIYR29vZ2xlLlBy",
-                  "b3RvYnVmLlByb3RvY29sYgZwcm90bzM="));
+                  "GAEgAygFImIKE0NyZWF0dXJlTW92ZVJlcXVlc3QSLwoNbW92ZURpcmVjdGlv",
+                  "bhgBIAEoDjIYLnR1dG9yaWFsLkVNb3ZlRGlyZWN0aW9uEgwKBHBvc1gYAiAB",
+                  "KAUSDAoEcG9zWRgDIAEoBSJ3ChRDcmVhdHVyZU1vdmVCcm9kY2FzdBISCgpj",
+                  "cmVhdHVyZUlEGAEgASgFEi8KDW1vdmVEaXJlY3Rpb24YAiABKA4yGC50dXRv",
+                  "cmlhbC5FTW92ZURpcmVjdGlvbhIMCgRwb3NYGAMgASgFEgwKBHBvc1kYBCAB",
+                  "KAUqhQIKCkVNZXNzYWdlSUQSIAocUExBWUVSX0VOVEVSRURfUk9PTV9SRVNQ",
+                  "T05TRRAAEiAKHFBMQVlFUl9FTlRFUkVEX1JPT01fQlJPRENBU1QQARIdChlQ",
+                  "TEFZRVJfTEVGVF9ST09NX1JFU1BPTlNFEAISHQoZUExBWUVSX0xFRlRfUk9P",
+                  "TV9CUk9EQ0FTVBADEh0KGUNSRUFUVVJFX1NQQVdORURfQlJPRENBU1QQBBIf",
+                  "ChtDUkVBVFVSRV9ERVNQQVdORURfQlJPRENBU1QQBRIZChVDUkVBVFVSRV9N",
+                  "T1ZFX1JFUVVFU1QQBhIaChZDUkVBVFVSRV9NT1ZFX0JST0RDQVNUEAcqQQoO",
+                  "RU1vdmVEaXJlY3Rpb24SCAoETk9ORRAAEgYKAlVQEAESCAoERE9XThACEggK",
+                  "BExFRlQQAxIJCgVSSUdIVBAEQhuqAhhHb29nbGUuUHJvdG9idWYuUHJvdG9j",
+                  "b2xiBnByb3RvMw=="));
             descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
                 new pbr::FileDescriptor[] { },
-                new pbr::GeneratedClrTypeInfo(new[] { typeof(global::Google.Protobuf.Protocol.EMessageID), }, null, new pbr::GeneratedClrTypeInfo[] {
+                new pbr::GeneratedClrTypeInfo(new[] { typeof(global::Google.Protobuf.Protocol.EMessageID), typeof(global::Google.Protobuf.Protocol.EMoveDirection), }, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.PlayerInfo), global::Google.Protobuf.Protocol.PlayerInfo.Parser, new[]{ "PlayerID", "Name", "PosX", "PosY" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.PlayerEnteredRoomResponse), global::Google.Protobuf.Protocol.PlayerEnteredRoomResponse.Parser, new[]{ "MyInfo", "OtherPlayers" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.PlayerEnteredRoomBrodcast), global::Google.Protobuf.Protocol.PlayerEnteredRoomBrodcast.Parser, new[]{ "NewPlayer" }, null, null, null, null),
@@ -58,8 +62,8 @@ namespace Google.Protobuf.Protocol
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.PlayerLeftRoomBrodcast), global::Google.Protobuf.Protocol.PlayerLeftRoomBrodcast.Parser, new[]{ "OtherPlayerID" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.CreatureSpawnedBrodcast), global::Google.Protobuf.Protocol.CreatureSpawnedBrodcast.Parser, new[]{ "NewObjectIDs" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.CreatureDespawnedBrodcast), global::Google.Protobuf.Protocol.CreatureDespawnedBrodcast.Parser, new[]{ "OldObjectIDs" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.CreatureMoveRequest), global::Google.Protobuf.Protocol.CreatureMoveRequest.Parser, new[]{ "PosX", "PosY" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.CreatureMoveBrodcast), global::Google.Protobuf.Protocol.CreatureMoveBrodcast.Parser, new[]{ "PlayerID", "PosX", "PosY" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.CreatureMoveRequest), global::Google.Protobuf.Protocol.CreatureMoveRequest.Parser, new[]{ "MoveDirection", "PosX", "PosY" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.CreatureMoveBrodcast), global::Google.Protobuf.Protocol.CreatureMoveBrodcast.Parser, new[]{ "CreatureID", "MoveDirection", "PosX", "PosY" }, null, null, null, null)
                 }));
         }
         #endregion
@@ -76,6 +80,15 @@ namespace Google.Protobuf.Protocol
         [pbr::OriginalName("CREATURE_DESPAWNED_BRODCAST")] CreatureDespawnedBrodcast = 5,
         [pbr::OriginalName("CREATURE_MOVE_REQUEST")] CreatureMoveRequest = 6,
         [pbr::OriginalName("CREATURE_MOVE_BRODCAST")] CreatureMoveBrodcast = 7,
+    }
+
+    public enum EMoveDirection
+    {
+        [pbr::OriginalName("NONE")] None = 0,
+        [pbr::OriginalName("UP")] Up = 1,
+        [pbr::OriginalName("DOWN")] Down = 2,
+        [pbr::OriginalName("LEFT")] Left = 3,
+        [pbr::OriginalName("RIGHT")] Right = 4,
     }
 
     #endregion
@@ -1826,6 +1839,7 @@ namespace Google.Protobuf.Protocol
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public CreatureMoveRequest(CreatureMoveRequest other) : this()
         {
+            moveDirection_ = other.moveDirection_;
             posX_ = other.posX_;
             posY_ = other.posY_;
             _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
@@ -1838,8 +1852,22 @@ namespace Google.Protobuf.Protocol
             return new CreatureMoveRequest(this);
         }
 
+        /// <summary>Field number for the "moveDirection" field.</summary>
+        public const int MoveDirectionFieldNumber = 1;
+        private global::Google.Protobuf.Protocol.EMoveDirection moveDirection_ = global::Google.Protobuf.Protocol.EMoveDirection.None;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public global::Google.Protobuf.Protocol.EMoveDirection MoveDirection
+        {
+            get { return moveDirection_; }
+            set
+            {
+                moveDirection_ = value;
+            }
+        }
+
         /// <summary>Field number for the "posX" field.</summary>
-        public const int PosXFieldNumber = 1;
+        public const int PosXFieldNumber = 2;
         private int posX_;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -1853,7 +1881,7 @@ namespace Google.Protobuf.Protocol
         }
 
         /// <summary>Field number for the "posY" field.</summary>
-        public const int PosYFieldNumber = 2;
+        public const int PosYFieldNumber = 3;
         private int posY_;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -1885,6 +1913,7 @@ namespace Google.Protobuf.Protocol
             {
                 return true;
             }
+            if (MoveDirection != other.MoveDirection) return false;
             if (PosX != other.PosX) return false;
             if (PosY != other.PosY) return false;
             return Equals(_unknownFields, other._unknownFields);
@@ -1895,6 +1924,7 @@ namespace Google.Protobuf.Protocol
         public override int GetHashCode()
         {
             int hash = 1;
+            if (MoveDirection != global::Google.Protobuf.Protocol.EMoveDirection.None) hash ^= MoveDirection.GetHashCode();
             if (PosX != 0) hash ^= PosX.GetHashCode();
             if (PosY != 0) hash ^= PosY.GetHashCode();
             if (_unknownFields != null)
@@ -1918,12 +1948,16 @@ namespace Google.Protobuf.Protocol
 #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
             output.WriteRawMessage(this);
 #else
-      if (PosX != 0) {
+      if (MoveDirection != global::Google.Protobuf.Protocol.EMoveDirection.None) {
         output.WriteRawTag(8);
+        output.WriteEnum((int) MoveDirection);
+      }
+      if (PosX != 0) {
+        output.WriteRawTag(16);
         output.WriteInt32(PosX);
       }
       if (PosY != 0) {
-        output.WriteRawTag(16);
+        output.WriteRawTag(24);
         output.WriteInt32(PosY);
       }
       if (_unknownFields != null) {
@@ -1937,14 +1971,19 @@ namespace Google.Protobuf.Protocol
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output)
         {
-            if (PosX != 0)
+            if (MoveDirection != global::Google.Protobuf.Protocol.EMoveDirection.None)
             {
                 output.WriteRawTag(8);
+                output.WriteEnum((int)MoveDirection);
+            }
+            if (PosX != 0)
+            {
+                output.WriteRawTag(16);
                 output.WriteInt32(PosX);
             }
             if (PosY != 0)
             {
-                output.WriteRawTag(16);
+                output.WriteRawTag(24);
                 output.WriteInt32(PosY);
             }
             if (_unknownFields != null)
@@ -1959,6 +1998,10 @@ namespace Google.Protobuf.Protocol
         public int CalculateSize()
         {
             int size = 0;
+            if (MoveDirection != global::Google.Protobuf.Protocol.EMoveDirection.None)
+            {
+                size += 1 + pb::CodedOutputStream.ComputeEnumSize((int)MoveDirection);
+            }
             if (PosX != 0)
             {
                 size += 1 + pb::CodedOutputStream.ComputeInt32Size(PosX);
@@ -1981,6 +2024,10 @@ namespace Google.Protobuf.Protocol
             if (other == null)
             {
                 return;
+            }
+            if (other.MoveDirection != global::Google.Protobuf.Protocol.EMoveDirection.None)
+            {
+                MoveDirection = other.MoveDirection;
             }
             if (other.PosX != 0)
             {
@@ -2011,10 +2058,14 @@ namespace Google.Protobuf.Protocol
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 8: {
-            PosX = input.ReadInt32();
+            MoveDirection = (global::Google.Protobuf.Protocol.EMoveDirection) input.ReadEnum();
             break;
           }
           case 16: {
+            PosX = input.ReadInt32();
+            break;
+          }
+          case 24: {
             PosY = input.ReadInt32();
             break;
           }
@@ -2043,10 +2094,15 @@ namespace Google.Protobuf.Protocol
                         break;
                     case 8:
                         {
-                            PosX = input.ReadInt32();
+                            MoveDirection = (global::Google.Protobuf.Protocol.EMoveDirection)input.ReadEnum();
                             break;
                         }
                     case 16:
+                        {
+                            PosX = input.ReadInt32();
+                            break;
+                        }
+                    case 24:
                         {
                             PosY = input.ReadInt32();
                             break;
@@ -2097,7 +2153,8 @@ namespace Google.Protobuf.Protocol
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public CreatureMoveBrodcast(CreatureMoveBrodcast other) : this()
         {
-            playerID_ = other.playerID_;
+            creatureID_ = other.creatureID_;
+            moveDirection_ = other.moveDirection_;
             posX_ = other.posX_;
             posY_ = other.posY_;
             _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
@@ -2110,22 +2167,36 @@ namespace Google.Protobuf.Protocol
             return new CreatureMoveBrodcast(this);
         }
 
-        /// <summary>Field number for the "playerID" field.</summary>
-        public const int PlayerIDFieldNumber = 1;
-        private int playerID_;
+        /// <summary>Field number for the "creatureID" field.</summary>
+        public const int CreatureIDFieldNumber = 1;
+        private int creatureID_;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-        public int PlayerID
+        public int CreatureID
         {
-            get { return playerID_; }
+            get { return creatureID_; }
             set
             {
-                playerID_ = value;
+                creatureID_ = value;
+            }
+        }
+
+        /// <summary>Field number for the "moveDirection" field.</summary>
+        public const int MoveDirectionFieldNumber = 2;
+        private global::Google.Protobuf.Protocol.EMoveDirection moveDirection_ = global::Google.Protobuf.Protocol.EMoveDirection.None;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public global::Google.Protobuf.Protocol.EMoveDirection MoveDirection
+        {
+            get { return moveDirection_; }
+            set
+            {
+                moveDirection_ = value;
             }
         }
 
         /// <summary>Field number for the "posX" field.</summary>
-        public const int PosXFieldNumber = 2;
+        public const int PosXFieldNumber = 3;
         private int posX_;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -2139,7 +2210,7 @@ namespace Google.Protobuf.Protocol
         }
 
         /// <summary>Field number for the "posY" field.</summary>
-        public const int PosYFieldNumber = 3;
+        public const int PosYFieldNumber = 4;
         private int posY_;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -2171,7 +2242,8 @@ namespace Google.Protobuf.Protocol
             {
                 return true;
             }
-            if (PlayerID != other.PlayerID) return false;
+            if (CreatureID != other.CreatureID) return false;
+            if (MoveDirection != other.MoveDirection) return false;
             if (PosX != other.PosX) return false;
             if (PosY != other.PosY) return false;
             return Equals(_unknownFields, other._unknownFields);
@@ -2182,7 +2254,8 @@ namespace Google.Protobuf.Protocol
         public override int GetHashCode()
         {
             int hash = 1;
-            if (PlayerID != 0) hash ^= PlayerID.GetHashCode();
+            if (CreatureID != 0) hash ^= CreatureID.GetHashCode();
+            if (MoveDirection != global::Google.Protobuf.Protocol.EMoveDirection.None) hash ^= MoveDirection.GetHashCode();
             if (PosX != 0) hash ^= PosX.GetHashCode();
             if (PosY != 0) hash ^= PosY.GetHashCode();
             if (_unknownFields != null)
@@ -2206,16 +2279,20 @@ namespace Google.Protobuf.Protocol
 #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
             output.WriteRawMessage(this);
 #else
-      if (PlayerID != 0) {
+      if (CreatureID != 0) {
         output.WriteRawTag(8);
-        output.WriteInt32(PlayerID);
+        output.WriteInt32(CreatureID);
+      }
+      if (MoveDirection != global::Google.Protobuf.Protocol.EMoveDirection.None) {
+        output.WriteRawTag(16);
+        output.WriteEnum((int) MoveDirection);
       }
       if (PosX != 0) {
-        output.WriteRawTag(16);
+        output.WriteRawTag(24);
         output.WriteInt32(PosX);
       }
       if (PosY != 0) {
-        output.WriteRawTag(24);
+        output.WriteRawTag(32);
         output.WriteInt32(PosY);
       }
       if (_unknownFields != null) {
@@ -2229,19 +2306,24 @@ namespace Google.Protobuf.Protocol
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output)
         {
-            if (PlayerID != 0)
+            if (CreatureID != 0)
             {
                 output.WriteRawTag(8);
-                output.WriteInt32(PlayerID);
+                output.WriteInt32(CreatureID);
+            }
+            if (MoveDirection != global::Google.Protobuf.Protocol.EMoveDirection.None)
+            {
+                output.WriteRawTag(16);
+                output.WriteEnum((int)MoveDirection);
             }
             if (PosX != 0)
             {
-                output.WriteRawTag(16);
+                output.WriteRawTag(24);
                 output.WriteInt32(PosX);
             }
             if (PosY != 0)
             {
-                output.WriteRawTag(24);
+                output.WriteRawTag(32);
                 output.WriteInt32(PosY);
             }
             if (_unknownFields != null)
@@ -2256,9 +2338,13 @@ namespace Google.Protobuf.Protocol
         public int CalculateSize()
         {
             int size = 0;
-            if (PlayerID != 0)
+            if (CreatureID != 0)
             {
-                size += 1 + pb::CodedOutputStream.ComputeInt32Size(PlayerID);
+                size += 1 + pb::CodedOutputStream.ComputeInt32Size(CreatureID);
+            }
+            if (MoveDirection != global::Google.Protobuf.Protocol.EMoveDirection.None)
+            {
+                size += 1 + pb::CodedOutputStream.ComputeEnumSize((int)MoveDirection);
             }
             if (PosX != 0)
             {
@@ -2283,9 +2369,13 @@ namespace Google.Protobuf.Protocol
             {
                 return;
             }
-            if (other.PlayerID != 0)
+            if (other.CreatureID != 0)
             {
-                PlayerID = other.PlayerID;
+                CreatureID = other.CreatureID;
+            }
+            if (other.MoveDirection != global::Google.Protobuf.Protocol.EMoveDirection.None)
+            {
+                MoveDirection = other.MoveDirection;
             }
             if (other.PosX != 0)
             {
@@ -2316,14 +2406,18 @@ namespace Google.Protobuf.Protocol
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 8: {
-            PlayerID = input.ReadInt32();
+            CreatureID = input.ReadInt32();
             break;
           }
           case 16: {
-            PosX = input.ReadInt32();
+            MoveDirection = (global::Google.Protobuf.Protocol.EMoveDirection) input.ReadEnum();
             break;
           }
           case 24: {
+            PosX = input.ReadInt32();
+            break;
+          }
+          case 32: {
             PosY = input.ReadInt32();
             break;
           }
@@ -2352,15 +2446,20 @@ namespace Google.Protobuf.Protocol
                         break;
                     case 8:
                         {
-                            PlayerID = input.ReadInt32();
+                            CreatureID = input.ReadInt32();
                             break;
                         }
                     case 16:
                         {
-                            PosX = input.ReadInt32();
+                            MoveDirection = (global::Google.Protobuf.Protocol.EMoveDirection)input.ReadEnum();
                             break;
                         }
                     case 24:
+                        {
+                            PosX = input.ReadInt32();
+                            break;
+                        }
+                    case 32:
                         {
                             PosY = input.ReadInt32();
                             break;

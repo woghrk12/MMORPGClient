@@ -1,13 +1,5 @@
+using Google.Protobuf.Protocol;
 using UnityEngine;
-
-public enum EMoveDirection
-{
-    NONE = -1,
-    UP,
-    DOWN,
-    LEFT,
-    RIGHT
-}
 
 public enum ECreatureState
 { 
@@ -27,7 +19,7 @@ public class CreatureController : MonoBehaviour
     [SerializeField] protected float moveSpeed = 0f;
 
     protected ECreatureState state = ECreatureState.IDLE;
-    protected EMoveDirection moveDirection = EMoveDirection.NONE;
+    protected EMoveDirection moveDirection = EMoveDirection.None;
 
     #endregion Variables
 
@@ -58,18 +50,18 @@ public class CreatureController : MonoBehaviour
 
             moveDirection = value;
 
-            if (moveDirection == EMoveDirection.NONE) return;
+            if (moveDirection == EMoveDirection.None) return;
 
-            if (moveDirection == EMoveDirection.LEFT || moveDirection == EMoveDirection.RIGHT)
+            if (moveDirection == EMoveDirection.Left || moveDirection == EMoveDirection.Right)
             {
-                transform.localScale = new Vector3(moveDirection == EMoveDirection.LEFT ? -1f : 1f, 1f, 1f);
+                transform.localScale = new Vector3(moveDirection == EMoveDirection.Left? -1f : 1f, 1f, 1f);
             }
 
             LastMoveDirection = moveDirection;
         }
         get => moveDirection; 
     }
-    public EMoveDirection LastMoveDirection { protected set; get; } = EMoveDirection.RIGHT;
+    public EMoveDirection LastMoveDirection { protected set; get; } = EMoveDirection.Right;
 
     #endregion Properties
 
@@ -150,19 +142,19 @@ public class CreatureController : MonoBehaviour
 
         switch (LastMoveDirection)
         {
-            case EMoveDirection.UP:
+            case EMoveDirection.Up:
                 cellPos += Vector3Int.up;
                 break;
 
-            case EMoveDirection.DOWN:
+            case EMoveDirection.Down:
                 cellPos += Vector3Int.down;
                 break;
 
-            case EMoveDirection.LEFT:
+            case EMoveDirection.Left:
                 cellPos += Vector3Int.left;
                 break;
 
-            case EMoveDirection.RIGHT:
+            case EMoveDirection.Right:
                 cellPos += Vector3Int.right;
                 break;
         }
@@ -174,14 +166,14 @@ public class CreatureController : MonoBehaviour
     {
         if (vector.x != 0)
         {
-            return vector.x > 0 ? EMoveDirection.RIGHT : EMoveDirection.LEFT;
+            return vector.x > 0 ? EMoveDirection.Right : EMoveDirection.Left;
         }
         else if (vector.y != 0)
         {
-            return vector.y > 0 ? EMoveDirection.UP : EMoveDirection.DOWN;
+            return vector.y > 0 ? EMoveDirection.Up : EMoveDirection.Down;
         }
 
-        return EMoveDirection.NONE;
+        return EMoveDirection.None;
     }
 
     protected virtual void UpdateAnimation()
@@ -196,7 +188,7 @@ public class CreatureController : MonoBehaviour
 
     protected virtual void MoveToNextPos()
     {
-        if (MoveDirection == EMoveDirection.NONE)
+        if (MoveDirection == EMoveDirection.None)
         {
             State = ECreatureState.IDLE;
             return;
@@ -206,20 +198,20 @@ public class CreatureController : MonoBehaviour
 
         switch (MoveDirection)
         {
-            case EMoveDirection.UP:
+            case EMoveDirection.Up:
                 cellPos += Vector3Int.up;
                 break;
 
-            case EMoveDirection.DOWN:
+            case EMoveDirection.Down:
                 cellPos += Vector3Int.down;
                 break;
 
-            case EMoveDirection.LEFT:
+            case EMoveDirection.Left:
                 cellPos += Vector3Int.left;
                 transform.localScale = new Vector3(-1f, 1f, 1f);
                 break;
 
-            case EMoveDirection.RIGHT:
+            case EMoveDirection.Right:
                 cellPos += Vector3Int.right;
                 transform.localScale = new Vector3(1f, 1f, 1f);
                 break;
