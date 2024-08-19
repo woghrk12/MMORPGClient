@@ -1,8 +1,10 @@
 using Google.Protobuf.Protocol;
+using System.Collections.Generic;
 using UnityEngine;
 
 public enum ECreatureState
 { 
+    NONE = -1,
     IDLE = 0,
     MOVE,
     ATTACK,
@@ -14,11 +16,11 @@ public class CreatureController : MonoBehaviour
 {
     #region Variables
 
+    private Dictionary<ECreatureState, CreatureState> stateDictionary = new();
+    private CreatureState curState = null;
+
     protected Animator animator = null;
 
-    [SerializeField] protected float moveSpeed = 0f;
-
-    protected ECreatureState state = ECreatureState.IDLE;
     protected EMoveDirection moveDirection = EMoveDirection.None;
 
     #endregion Variables
@@ -29,39 +31,40 @@ public class CreatureController : MonoBehaviour
 
     public Vector3Int CellPos { set; get; } = Vector3Int.zero;
 
-    public virtual ECreatureState State
+    public EMoveDirection MoveDirection
     {
-        protected set
-        {
-            if (state == value) return;
-
-            state = value;
-
-            UpdateAnimation();
-        }
-        get => state;
-    }
-
-    public EMoveDirection MoveDirection 
-    {
-        protected set
+        set
         {
             if (moveDirection == value) return;
 
             moveDirection = value;
 
-            if (moveDirection == EMoveDirection.None) return;
-
-            if (moveDirection == EMoveDirection.Left || moveDirection == EMoveDirection.Right)
+            if (curState.StateID == ECreatureState.MOVE && moveDirection == EMoveDirection.None)
             {
-                transform.localScale = new Vector3(moveDirection == EMoveDirection.Left? -1f : 1f, 1f, 1f);
+                SetState(ECreatureState.IDLE);
+                return;
+            }
+
+            if (curState.StateID == ECreatureState.IDLE && moveDirection != EMoveDirection.None)
+            {
+                SetState(ECreatureState.MOVE);
+            }
+
+            if (moveDirection == EMoveDirection.Left)
+            {
+                transform.localScale = new Vector3(-1f, 1f, 1f);
+            }
+            if (moveDirection == EMoveDirection.Right)
+            {
+                transform.localScale = new Vector3(1f, 1f, 1f);
             }
 
             LastMoveDirection = moveDirection;
         }
-        get => moveDirection; 
+        get => moveDirection;
     }
-    public EMoveDirection LastMoveDirection { protected set; get; } = EMoveDirection.Right;
+
+    public EMoveDirection LastMoveDirection { set; get; } = EMoveDirection.Right;
 
     #endregion Properties
 
@@ -70,71 +73,50 @@ public class CreatureController : MonoBehaviour
     protected virtual void Awake()
     {
         animator = GetComponent<Animator>();
+
+        CreatureState[] states = GetComponents<CreatureState>();
+        
+        foreach (CreatureState state in states)
+        {
+            stateDictionary.Add(state.StateID, state);
+        }
     }
 
     protected virtual void Start()
     {
         Vector3 pos = Managers.Map.CurrentGrid.CellToWorld(CellPos) + new Vector3(0.5f, 0.5f, 0);
         transform.position = pos;
+
+        SetState(ECreatureState.IDLE);
     }
 
     protected virtual void Update()
     {
-        switch (State)
-        {
-            case ECreatureState.IDLE:
-                UpdateIdleState();
-                break;
+        curState?.OnUpdate();
+    }
 
-            case ECreatureState.MOVE:
-                UpdateMoveState();
-                break;
+    protected virtual void FixedUpdate()
+    {
+        curState?.OnFixedUpdate();
+    }
 
-            case ECreatureState.ATTACK:
-                UpdateAttackState();
-                break;
-
-            case ECreatureState.SKILL:
-                UpdateSkillState();
-                break;
-
-            case ECreatureState.DEAD:
-                UpdateDeadState();
-                break;
-        }
+    protected virtual void LateUpdate()
+    {
+        curState?.OnLateUpdate();
     }
 
     #endregion Unity Events
 
     #region Methods
 
-    #region States
-
-    protected virtual void UpdateIdleState() { }
-
-    protected virtual void UpdateMoveState() 
+    public void SetState(ECreatureState stateID)
     {
-        Vector3 destPos = Managers.Map.CurrentGrid.CellToWorld(CellPos) + new Vector3(0.5f, 0.5f, 0);
-        Vector3 moveVector = destPos - transform.position;
+        if (stateDictionary.TryGetValue(stateID, out CreatureState state) == false) return;
 
-        if (moveVector.sqrMagnitude < (moveSpeed * Time.deltaTime) * (moveSpeed * Time.deltaTime))
-        {
-            transform.position = destPos;
-            MoveToNextPos();
-        }
-        else
-        {
-            transform.position += moveSpeed * Time.deltaTime * moveVector.normalized;
-        }
+        curState?.OnExit();
+        curState = state;
+        curState.OnStart();
     }
-
-    protected virtual void UpdateAttackState() { }
-
-    protected virtual void UpdateSkillState() { }
-
-    protected virtual void UpdateDeadState() { }
-
-    #endregion States
 
     public Vector3Int GetFrontCellPos()
     {
@@ -160,69 +142,6 @@ public class CreatureController : MonoBehaviour
         }
 
         return cellPos;
-    }
-
-    public EMoveDirection GetDirFromVec(Vector3Int vector)
-    {
-        if (vector.x != 0)
-        {
-            return vector.x > 0 ? EMoveDirection.Right : EMoveDirection.Left;
-        }
-        else if (vector.y != 0)
-        {
-            return vector.y > 0 ? EMoveDirection.Up : EMoveDirection.Down;
-        }
-
-        return EMoveDirection.None;
-    }
-
-    protected virtual void UpdateAnimation()
-    {
-        animator.SetBool(AnimatorKey.Creature.IS_MOVE_HASH, state == ECreatureState.MOVE);
-
-        if (state == ECreatureState.ATTACK)
-        {
-            animator.SetTrigger(AnimatorKey.Creature.DO_ATTACK_HASH);
-        }
-    }
-
-    protected virtual void MoveToNextPos()
-    {
-        if (MoveDirection == EMoveDirection.None)
-        {
-            State = ECreatureState.IDLE;
-            return;
-        }
-
-        Vector3Int cellPos = CellPos;
-
-        switch (MoveDirection)
-        {
-            case EMoveDirection.Up:
-                cellPos += Vector3Int.up;
-                break;
-
-            case EMoveDirection.Down:
-                cellPos += Vector3Int.down;
-                break;
-
-            case EMoveDirection.Left:
-                cellPos += Vector3Int.left;
-                transform.localScale = new Vector3(-1f, 1f, 1f);
-                break;
-
-            case EMoveDirection.Right:
-                cellPos += Vector3Int.right;
-                transform.localScale = new Vector3(1f, 1f, 1f);
-                break;
-        }
-
-        LastMoveDirection = MoveDirection;
-
-        if (Managers.Map.CheckCanMove(cellPos) == true && ReferenceEquals(Managers.Obj.Find(cellPos), null) == true)
-        {
-            CellPos = cellPos;
-        }
     }
 
     #region Events

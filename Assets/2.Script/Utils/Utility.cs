@@ -1,3 +1,4 @@
+using Google.Protobuf.Protocol;
 using UnityEngine;
 
 public class Utility 
@@ -96,6 +97,20 @@ public class Utility
     public static int CalculateDistance(Vector3Int a, Vector3Int b)
     {
         return Mathf.Abs(a.x - b.x) + Mathf.Abs(a.y - b.y);
+    }
+
+    public static EMoveDirection GetDirFromVec(Vector3Int vector)
+    {
+        if (vector.x != 0)
+        {
+            return vector.x > 0 ? EMoveDirection.Right : EMoveDirection.Left;
+        }
+        else if (vector.y != 0)
+        {
+            return vector.y > 0 ? EMoveDirection.Up : EMoveDirection.Down;
+        }
+
+        return EMoveDirection.None;
     }
 
     #endregion Methods

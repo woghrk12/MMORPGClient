@@ -5,73 +5,66 @@ public class LocalPlayerController : PlayerController
 {
     #region Variables
 
-    private EMoveDirection inputMoveDirection = EMoveDirection.None;
+    private Camera mainCamera = null;
 
     #endregion Variables
 
+    #region Properties
+
+    public EMoveDirection InputMoveDirection { private set; get; } = EMoveDirection.None;
+
+    #endregion Properties
+
     #region Unity Events
 
-    protected override void Update()
+    protected override void Awake()
     {
-        GetInputDirection();
+        base.Awake();
 
-        base.Update();
+        mainCamera = Camera.main;
     }
 
-    private void LateUpdate()
+    protected override void LateUpdate()
     {
-        Camera.main.transform.position = new Vector3(transform.position.x, transform.position.y, -10f);
+        base.LateUpdate();
+
+        mainCamera.transform.position = new Vector3(transform.position.x, transform.position.y, -10f);
     }
 
     #endregion Unity Events
 
     #region Methods
 
-    #region States
-
-    protected override void UpdateIdleState()
-    {
-        MoveDirection = inputMoveDirection;
-
-        if (Input.GetKey(KeyCode.Space))
-        {
-            //coSkill = StartCoroutine(StartBaseAttack());
-            coSkill = StartCoroutine(StartSkillAttack());
-        }
-
-        base.UpdateIdleState();
-    }
-
-    #endregion States
-
-    protected override void MoveToNextPos()
-    {
-        MoveDirection = inputMoveDirection;
-
-        base.MoveToNextPos();
-    }
-
-    private void GetInputDirection()
+    public void GetInputDirection()
     {
         if (Input.GetKey(KeyCode.W))
         {
-            inputMoveDirection = EMoveDirection.Up;
+            InputMoveDirection = EMoveDirection.Up;
         }
         else if (Input.GetKey(KeyCode.S))
         {
-            inputMoveDirection = EMoveDirection.Down;
+            InputMoveDirection = EMoveDirection.Down;
         }
         else if (Input.GetKey(KeyCode.A))
         {
-            inputMoveDirection = EMoveDirection.Left;
+            InputMoveDirection = EMoveDirection.Left;
         }
         else if (Input.GetKey(KeyCode.D))
         {
-            inputMoveDirection = EMoveDirection.Right;
+            InputMoveDirection = EMoveDirection.Right;
         }
         else
         {
-            inputMoveDirection = EMoveDirection.None;
+            InputMoveDirection = EMoveDirection.None;
+        }
+    }
+
+    public void GetInputAttack()
+    {
+        if (Input.GetKey(KeyCode.Space))
+        {
+            Debug.Log("Attack");
+            SetState(ECreatureState.ATTACK);
         }
     }
 
