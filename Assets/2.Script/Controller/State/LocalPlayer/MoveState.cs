@@ -1,24 +1,22 @@
+using Google.Protobuf.Protocol;
+using UnityEngine;
+
 namespace LocalPlayer
 {
     public class MoveState : Creature.MoveState<LocalPlayerController>
     {
         #region Methods
-
-        protected override void SetNextPos()
+        
+        protected override void NotifyMoveCompleted()
         {
-            controller.MoveDirection = controller.InputMoveDirection;
+            CreatureMoveRequest packet = new();
 
-            base.SetNextPos();
+            packet.PosX = controller.CellPos.x;
+            packet.PosY = controller.CellPos.y;
+            packet.MoveDirection = controller.InputMoveDirection;
+
+            Managers.Network.Send(packet);
         }
-
-        #region Events
-
-        public override void OnUpdate()
-        {
-            controller.GetInputDirection();
-        }
-
-        #endregion Events
 
         #endregion Methods
     }

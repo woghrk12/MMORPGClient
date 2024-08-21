@@ -47,5 +47,12 @@ public class PacketHandler
     public static void HandleCreatureMoveBrodcast(ServerSession session, IMessage message)
     {
         CreatureMoveBrodcast packet = message as CreatureMoveBrodcast;
+        
+        Debug.Log($"CreatureMoveBroadcast. Session ID : {packet.CreatureID} ({packet.PosX}, {packet.PosY}, {packet.MoveDirection})");
+
+        if (Managers.Obj.TryFind(packet.CreatureID, out GameObject creature) == false) return;
+        if (creature.TryGetComponent(out CreatureController controller) == false) return;
+
+        controller.SetNextPos(packet.MoveDirection);
     }
 }

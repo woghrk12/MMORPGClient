@@ -1,4 +1,3 @@
-using Google.Protobuf.Protocol;
 using UnityEngine;
 
 namespace Creature
@@ -11,11 +10,29 @@ namespace Creature
 
         protected T controller = null;
 
+        private bool isCompleted = false;
+
         #endregion Variables
 
         #region Properties
 
         public sealed override ECreatureState StateID => ECreatureState.MOVE;
+
+        public bool IsCompleted
+        {
+            private set
+            {
+                if (isCompleted == value) return;
+
+                isCompleted = value;
+
+                if (isCompleted == true)
+                {
+                    NotifyMoveCompleted();
+                }
+            }
+            get => isCompleted;
+        }
 
         #endregion Properties
 
@@ -32,52 +49,23 @@ namespace Creature
 
         #region Methods
 
-        protected virtual void MoveToNextPos()
+        protected virtual void NotifyMoveCompleted() { }
+
+        protected void MoveToNextPos()
         {
+            if (IsCompleted) return;
+
             Vector3 destPos = Managers.Map.CurrentGrid.CellToWorld(controller.CellPos) + new Vector3(0.5f, 0.5f, 0f);
             Vector3 moveVector = destPos - transform.position;
 
             if (moveVector.sqrMagnitude < (moveSpeed * Time.deltaTime) * (moveSpeed * Time.deltaTime))
             {
                 transform.position = destPos;
-                SetNextPos();
+                IsCompleted = true;
             }
             else
             {
                 transform.position += moveSpeed * Time.deltaTime * moveVector.normalized;
-            }
-        }
-
-        protected virtual void SetNextPos()
-        {
-            Vector3Int cellPos = controller.CellPos;
-
-            switch (controller.MoveDirection)
-            {
-                case EMoveDirection.Up:
-                    cellPos += Vector3Int.up;
-                    break;
-
-                case EMoveDirection.Down:
-                    cellPos += Vector3Int.down;
-                    break;
-
-                case EMoveDirection.Left:
-                    cellPos += Vector3Int.left;
-                    break;
-
-                case EMoveDirection.Right:
-                    cellPos += Vector3Int.right;
-                    break;
-
-                default:
-                    controller.SetState(ECreatureState.IDLE);
-                    return;
-            }
-
-            if (Managers.Map.CheckCanMove(cellPos) == true && ReferenceEquals(Managers.Obj.Find(cellPos), null) == true)
-            {
-                controller.CellPos = cellPos;
             }
         }
 
@@ -86,6 +74,8 @@ namespace Creature
         public override void OnStart()
         {
             animator.SetBool(AnimatorKey.Creature.IS_MOVE_HASH, true);
+
+            IsCompleted = false;
         }
 
         public override void OnFixedUpdate()

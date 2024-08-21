@@ -53,6 +53,21 @@ public class ObjectManager
         objectDict.Clear();
     }
 
+    public GameObject Find(int creatureID)
+    {
+        return objectDict.TryGetValue(creatureID, out GameObject gameObject) ? gameObject : null;
+    }
+
+    public bool TryFind(int creatureID, out GameObject creature)
+    {
+        creature = null;
+
+        if (objectDict.TryGetValue(creatureID, out GameObject gameobject) == false) return false;
+
+        creature = gameobject;
+        return true;
+    }
+
     public GameObject Find(Vector3Int cellPos)
     {
         foreach (GameObject go in objectDict.Values)

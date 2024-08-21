@@ -39,17 +39,6 @@ public class CreatureController : MonoBehaviour
 
             moveDirection = value;
 
-            if (curState.StateID == ECreatureState.MOVE && moveDirection == EMoveDirection.None)
-            {
-                SetState(ECreatureState.IDLE);
-                return;
-            }
-
-            if (curState.StateID == ECreatureState.IDLE && moveDirection != EMoveDirection.None)
-            {
-                SetState(ECreatureState.MOVE);
-            }
-
             if (moveDirection == EMoveDirection.Left)
             {
                 transform.localScale = new Vector3(-1f, 1f, 1f);
@@ -116,6 +105,41 @@ public class CreatureController : MonoBehaviour
         curState?.OnExit();
         curState = state;
         curState.OnStart();
+    }
+
+    public virtual void SetNextPos(EMoveDirection moveDirection)
+    {
+        Vector3Int cellPos = CellPos;
+        MoveDirection = moveDirection;
+
+        switch (moveDirection)
+        {
+            case EMoveDirection.Up:
+                cellPos += Vector3Int.up;
+                break;
+
+            case EMoveDirection.Down:
+                cellPos += Vector3Int.down;
+                break;
+
+            case EMoveDirection.Left:
+                cellPos += Vector3Int.left;
+                break;
+
+            case EMoveDirection.Right:
+                cellPos += Vector3Int.right;
+                break;
+
+            default:
+                SetState(ECreatureState.IDLE);
+                return;
+        }
+
+        if (Managers.Map.CheckCanMove(cellPos) == true && ReferenceEquals(Managers.Obj.Find(cellPos), null) == true)
+        {
+            CellPos = cellPos;
+            SetState(ECreatureState.MOVE);
+        }
     }
 
     public Vector3Int GetFrontCellPos()

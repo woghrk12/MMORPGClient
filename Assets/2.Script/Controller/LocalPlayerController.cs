@@ -24,6 +24,13 @@ public class LocalPlayerController : PlayerController
         mainCamera = Camera.main;
     }
 
+    protected override void Update()
+    {
+        GetInputDirection();
+
+        base.Update();
+    }
+
     protected override void LateUpdate()
     {
         base.LateUpdate();

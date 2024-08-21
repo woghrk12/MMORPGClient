@@ -10,7 +10,6 @@ namespace LocalPlayer
 
         public override void OnUpdate()
         {
-            controller.GetInputDirection();
             controller.GetInputAttack();
 
             if (controller.InputMoveDirection != EMoveDirection.None)
