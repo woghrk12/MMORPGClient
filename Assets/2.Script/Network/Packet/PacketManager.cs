@@ -30,6 +30,7 @@ public class PacketManager
         receivedPacketHandlerDict.Add((ushort)EMessageID.PlayerLeftRoomBrodcast, MakePacket<PlayerLeftRoomBrodcast>);
         receivedPacketHandlerDict.Add((ushort)EMessageID.CreatureSpawnedBrodcast, MakePacket<CreatureSpawnedBrodcast>);
         receivedPacketHandlerDict.Add((ushort)EMessageID.CreatureDespawnedBrodcast, MakePacket<CreatureDespawnedBrodcast>);
+        receivedPacketHandlerDict.Add((ushort)EMessageID.UpdateCreatureStateBroadcast, MakePacket<UpdateCreatureStateBroadcast>);
         receivedPacketHandlerDict.Add((ushort)EMessageID.CreatureMoveBrodcast, MakePacket<CreatureMoveBrodcast>);
 
         handlerDict.Add((ushort)EMessageID.PlayerEnteredRoomResponse, PacketHandler.HandlePlayerEnteredRoomResponse);
@@ -38,6 +39,7 @@ public class PacketManager
         handlerDict.Add((ushort)EMessageID.PlayerLeftRoomBrodcast, PacketHandler.HandlePlayerLeftRoomBrodcast);
         handlerDict.Add((ushort)EMessageID.CreatureSpawnedBrodcast, PacketHandler.HandleCreatureSpawnedBrodcast);
         handlerDict.Add((ushort)EMessageID.CreatureDespawnedBrodcast, PacketHandler.HandleCreatureDespawnedBrodcast);
+        handlerDict.Add((ushort)EMessageID.UpdateCreatureStateBroadcast, PacketHandler.HandleUpdateCreatureStateBroadcast);
         handlerDict.Add((ushort)EMessageID.CreatureMoveBrodcast, PacketHandler.HandleCreatureMoveBrodcast);
     }
 

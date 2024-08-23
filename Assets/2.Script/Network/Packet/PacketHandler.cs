@@ -44,6 +44,18 @@ public class PacketHandler
         CreatureDespawnedBrodcast packet = message as CreatureDespawnedBrodcast;
     }
 
+    public static void HandleUpdateCreatureStateBroadcast(ServerSession session, IMessage message)
+    {
+        UpdateCreatureStateBroadcast packet = message as UpdateCreatureStateBroadcast;
+
+        Debug.Log($"UpdateCreatureStateBroadcast. Creature ID : {packet.CreatureID} ({packet.State})");
+
+        if (Managers.Obj.TryFind(packet.CreatureID, out GameObject creature) == false) return;
+        if (creature.TryGetComponent(out CreatureController controller) == false) return;
+
+        controller.SetState(packet.State);
+    }
+
     public static void HandleCreatureMoveBrodcast(ServerSession session, IMessage message)
     {
         CreatureMoveBrodcast packet = message as CreatureMoveBrodcast;

@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using Google.Protobuf.Protocol;
 using UnityEngine;
 
 namespace LocalPlayer
@@ -35,7 +34,7 @@ namespace LocalPlayer
 
             if (curDelay > attackDelay)
             {
-                controller.SetState(ECreatureState.IDLE);
+                controller.SetState(ECreatureState.Idle);
             }
         }
 

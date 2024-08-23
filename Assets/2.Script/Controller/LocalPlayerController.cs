@@ -71,7 +71,7 @@ public class LocalPlayerController : PlayerController
         if (Input.GetKey(KeyCode.Space))
         {
             Debug.Log("Attack");
-            SetState(ECreatureState.ATTACK);
+            SetState(ECreatureState.Attack);
         }
     }
 

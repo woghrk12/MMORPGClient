@@ -9,7 +9,7 @@ public class ProjectileController : CreatureController
     {
         base.Start();
 
-        SetState(ECreatureState.MOVE);
+        SetState(ECreatureState.Move);
     }
 
     #endregion Unity Events

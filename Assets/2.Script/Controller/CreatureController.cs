@@ -2,16 +2,6 @@ using Google.Protobuf.Protocol;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum ECreatureState
-{ 
-    NONE = -1,
-    IDLE = 0,
-    MOVE,
-    ATTACK,
-    SKILL,
-    DEAD,
-}
-
 public class CreatureController : MonoBehaviour
 {
     #region Variables
@@ -76,7 +66,7 @@ public class CreatureController : MonoBehaviour
         Vector3 pos = Managers.Map.CurrentGrid.CellToWorld(CellPos) + new Vector3(0.5f, 0.5f, 0);
         transform.position = pos;
 
-        SetState(ECreatureState.IDLE);
+        SetState(ECreatureState.Idle);
     }
 
     protected virtual void Update()
@@ -131,14 +121,14 @@ public class CreatureController : MonoBehaviour
                 break;
 
             default:
-                SetState(ECreatureState.IDLE);
+                SetState(ECreatureState.Idle);
                 return;
         }
 
         if (Managers.Map.CheckCanMove(cellPos) == true && ReferenceEquals(Managers.Obj.Find(cellPos), null) == true)
         {
             CellPos = cellPos;
-            SetState(ECreatureState.MOVE);
+            SetState(ECreatureState.Move);
         }
     }
 

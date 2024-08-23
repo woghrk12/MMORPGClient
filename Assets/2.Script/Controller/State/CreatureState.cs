@@ -1,6 +1,7 @@
+using Google.Protobuf.Protocol;
 using UnityEngine;
 
-public class CreatureState : MonoBehaviour
+public abstract class CreatureState : MonoBehaviour
 {
     #region Variables
 
@@ -10,7 +11,7 @@ public class CreatureState : MonoBehaviour
 
     #region Properties
 
-    public virtual ECreatureState StateID => ECreatureState.NONE;
+    public abstract ECreatureState StateID { get; }
 
     #endregion Properties
 

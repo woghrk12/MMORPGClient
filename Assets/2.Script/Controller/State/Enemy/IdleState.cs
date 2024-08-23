@@ -1,3 +1,4 @@
+using Google.Protobuf.Protocol;
 using System.Collections;
 using UnityEngine;
 
@@ -25,7 +26,7 @@ namespace Monster
                 if (ReferenceEquals(Managers.Obj.Find(randPos), null) == false) continue;
 
                 controller.DestCellPos = randPos;
-                controller.SetState(ECreatureState.MOVE);
+                controller.SetState(ECreatureState.Move);
 
                 yield break;
             }

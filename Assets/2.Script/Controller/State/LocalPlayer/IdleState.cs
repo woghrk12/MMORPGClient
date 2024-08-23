@@ -14,7 +14,7 @@ namespace LocalPlayer
 
             if (controller.InputMoveDirection != EMoveDirection.None)
             {
-                controller.SetState(ECreatureState.MOVE);
+                controller.SetState(ECreatureState.Move);
             }
         }
 

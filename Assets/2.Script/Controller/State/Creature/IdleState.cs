@@ -1,3 +1,5 @@
+using Google.Protobuf.Protocol;
+
 namespace Creature
 {
     public class IdleState<T> : CreatureState where T : CreatureController
@@ -10,7 +12,7 @@ namespace Creature
 
         #region Properties
 
-        public sealed override ECreatureState StateID => ECreatureState.IDLE;
+        public sealed override ECreatureState StateID => ECreatureState.Idle;
 
         #endregion Properties
 

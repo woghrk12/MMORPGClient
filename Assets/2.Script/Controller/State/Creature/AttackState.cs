@@ -1,3 +1,5 @@
+using Google.Protobuf.Protocol;
+
 namespace Creature
 {
     public class AttackState<T> : CreatureState where T : CreatureController
@@ -10,7 +12,7 @@ namespace Creature
 
         #region Properties
 
-        public sealed override ECreatureState StateID => ECreatureState.ATTACK;
+        public sealed override ECreatureState StateID => ECreatureState.Attack;
 
         #endregion Properties
 

@@ -1,3 +1,4 @@
+using Google.Protobuf.Protocol;
 using UnityEngine;
 
 namespace Monster
@@ -32,7 +33,7 @@ namespace Monster
 
             if (curDelay > attackDelay)
             {
-                controller.SetState(ECreatureState.MOVE);
+                controller.SetState(ECreatureState.Move);
             }
         }
 

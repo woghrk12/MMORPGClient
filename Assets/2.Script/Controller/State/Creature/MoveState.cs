@@ -1,3 +1,4 @@
+using Google.Protobuf.Protocol;
 using UnityEngine;
 
 namespace Creature
@@ -16,7 +17,7 @@ namespace Creature
 
         #region Properties
 
-        public sealed override ECreatureState StateID => ECreatureState.MOVE;
+        public sealed override ECreatureState StateID => ECreatureState.Move;
 
         public bool IsCompleted
         {
