@@ -44,36 +44,53 @@ public class LocalPlayerController : PlayerController
 
     public void GetInputDirection()
     {
-        if (Input.GetKey(KeyCode.W))
+        EMoveDirection direction = InputMoveDirection;
+
+        if (Input.GetKeyDown(KeyCode.W))
         {
-            InputMoveDirection = EMoveDirection.Up;
+            InputMoveDirection |= EMoveDirection.Up;
         }
-        else if (Input.GetKey(KeyCode.S))
+        if (Input.GetKeyDown(KeyCode.S))
         {
-            InputMoveDirection = EMoveDirection.Down;
+            InputMoveDirection |= EMoveDirection.Down;
         }
-        else if (Input.GetKey(KeyCode.A))
+        if (Input.GetKeyDown(KeyCode.A))
         {
-            InputMoveDirection = EMoveDirection.Left;
+            InputMoveDirection |= EMoveDirection.Left;
         }
-        else if (Input.GetKey(KeyCode.D))
+        if (Input.GetKeyDown(KeyCode.D))
         {
-            InputMoveDirection = EMoveDirection.Right;
+            InputMoveDirection |= EMoveDirection.Right;
         }
-        else
+
+        if (Input.GetKeyUp(KeyCode.W))
         {
-            InputMoveDirection = EMoveDirection.None;
+            InputMoveDirection &= ~EMoveDirection.Up;
+        }
+        if (Input.GetKeyUp(KeyCode.S))
+        {
+            InputMoveDirection &= ~EMoveDirection.Down;
+        }
+        if (Input.GetKeyUp(KeyCode.A))
+        {
+            InputMoveDirection &= ~EMoveDirection.Left;
+        }
+        if (Input.GetKeyUp(KeyCode.D))
+        {
+            InputMoveDirection &= ~EMoveDirection.Right;
+        }
+
+        if (direction != InputMoveDirection)
+        {
+            InputDirectionRequest packet = new()
+            {
+                MoveDirection = InputMoveDirection,
+            };
+
+            Managers.Network.Send(packet);
         }
     }
 
-    public void GetInputAttack()
-    {
-        if (Input.GetKey(KeyCode.Space))
-        {
-            Debug.Log("Attack");
-            SetState(ECreatureState.Attack);
-        }
-    }
 
     #endregion Methods
 }

@@ -8,8 +8,9 @@ public class PacketHandler
     {
         PlayerEnteredRoomResponse packet = message as PlayerEnteredRoomResponse;
 
-        Managers.Obj.AddPlayer(packet.MyInfo, isMine: true);
-        foreach (PlayerInfo info in packet.OtherPlayers)
+        Managers.Obj.AddPlayer(packet.NewPlayer, isMine: true);
+
+        foreach(CreatureInfo info in packet.OtherPlayers)
         {
             Managers.Obj.AddPlayer(info, isMine: false);
         }
@@ -44,27 +45,19 @@ public class PacketHandler
         CreatureDespawnedBrodcast packet = message as CreatureDespawnedBrodcast;
     }
 
-    public static void HandleUpdateCreatureStateBroadcast(ServerSession session, IMessage message)
+    public static void HandleUpdateCreatureInfoBroadcast(ServerSession session, IMessage message)
     {
-        UpdateCreatureStateBroadcast packet = message as UpdateCreatureStateBroadcast;
-
-        Debug.Log($"UpdateCreatureStateBroadcast. Creature ID : {packet.CreatureID} ({packet.State})");
-
-        if (Managers.Obj.TryFind(packet.CreatureID, out GameObject creature) == false) return;
-        if (creature.TryGetComponent(out CreatureController controller) == false) return;
-
-        controller.SetState(packet.State);
-    }
-
-    public static void HandleCreatureMoveBrodcast(ServerSession session, IMessage message)
-    {
-        CreatureMoveBrodcast packet = message as CreatureMoveBrodcast;
+        UpdateCreatureInfoBroadcast packet = message as UpdateCreatureInfoBroadcast;
+        CreatureInfo info = packet.CreatureInfo;
         
-        Debug.Log($"CreatureMoveBroadcast. Session ID : {packet.CreatureID} ({packet.PosX}, {packet.PosY}, {packet.MoveDirection})");
+        Debug.Log($"UpdateCreatureStateBroadcast. Creature ID : {info.CreatureID} ({info.CellPosX}, {info.CellPosY}, {info.FacingDirection}, {info.MoveSpeed}");
 
-        if (Managers.Obj.TryFind(packet.CreatureID, out GameObject creature) == false) return;
+        if (Managers.Obj.TryFind(info.CreatureID, out GameObject creature) == false) return;
         if (creature.TryGetComponent(out CreatureController controller) == false) return;
 
-        controller.SetNextPos(packet.MoveDirection);
+        controller.CurState = info.CurState;
+        controller.CellPos = new Vector3Int(info.CellPosX, info.CellPosY, 0);
+        controller.FacingDirection = info.FacingDirection;
+        controller.MoveSpeed = info.MoveSpeed;
     }
 }

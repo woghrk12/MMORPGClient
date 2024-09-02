@@ -19,15 +19,21 @@ public class ObjectManager
 
     #region Methods
 
-    public void AddPlayer(PlayerInfo info, bool isMine = false)
+    public void AddPlayer(CreatureInfo info, bool isMine = false)
     {
         GameObject go = Managers.Resource.Instantiate("Creature/" + (isMine ? "LocalPlayer" : "Player"));
         go.name = info.Name;
-        objectDict.Add(info.PlayerID, go);
+        objectDict.Add(info.CreatureID, go);
 
         PlayerController controller = go.GetComponent<PlayerController>();
-        controller.ID = info.PlayerID;
-        controller.CellPos = new Vector3Int(info.PosX, info.PosY, 0);
+        controller.ID = info.CreatureID;
+        controller.Name = info.Name;
+        controller.CurState = info.CurState;
+        controller.CellPos = new Vector3Int(info.CellPosX, info.CellPosY, 0);
+        controller.FacingDirection = info.FacingDirection;
+        controller.MoveSpeed = info.MoveSpeed;
+
+        controller.transform.position = new Vector3(controller.CellPos.x, controller.CellPos.y, 0f) + new Vector3(0.5f, 0.5f, 0f);
 
         if (isMine)
         {

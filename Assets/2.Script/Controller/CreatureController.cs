@@ -11,7 +11,7 @@ public class CreatureController : MonoBehaviour
 
     protected Animator animator = null;
 
-    protected EMoveDirection moveDirection = EMoveDirection.None;
+    private EMoveDirection facingDirection = EMoveDirection.None;
 
     #endregion Variables
 
@@ -19,31 +19,45 @@ public class CreatureController : MonoBehaviour
 
     public int ID { set; get; } = -1;
 
+    public string Name { set; get; } = string.Empty;
+
     public Vector3Int CellPos { set; get; } = Vector3Int.zero;
 
-    public EMoveDirection MoveDirection
+    public ECreatureState CurState
     {
         set
         {
-            if (moveDirection == value) return;
+            if (ReferenceEquals(curState, null) == false && curState.StateID == value) return;
+            if (stateDictionary.TryGetValue(value, out CreatureState state) == false) return;
 
-            moveDirection = value;
+            curState?.OnExit();
+            curState = state;
+            curState.OnStart();
+        }
+        get => ReferenceEquals(curState, null) == false ? curState.StateID : ECreatureState.Idle;
+    }
 
-            if (moveDirection == EMoveDirection.Left)
+    public EMoveDirection FacingDirection
+    {
+        set
+        {
+            if (facingDirection == value) return;
+
+            facingDirection = value;
+
+            if (facingDirection == EMoveDirection.Left)
             {
                 transform.localScale = new Vector3(-1f, 1f, 1f);
             }
-            if (moveDirection == EMoveDirection.Right)
+            if (facingDirection == EMoveDirection.Right)
             {
                 transform.localScale = new Vector3(1f, 1f, 1f);
             }
-
-            LastMoveDirection = moveDirection;
         }
-        get => moveDirection;
+        get => facingDirection;
     }
 
-    public EMoveDirection LastMoveDirection { set; get; } = EMoveDirection.Right;
+    public int MoveSpeed { set; get; } = -1;
 
     #endregion Properties
 
@@ -59,14 +73,6 @@ public class CreatureController : MonoBehaviour
         {
             stateDictionary.Add(state.StateID, state);
         }
-    }
-
-    protected virtual void Start()
-    {
-        Vector3 pos = Managers.Map.CurrentGrid.CellToWorld(CellPos) + new Vector3(0.5f, 0.5f, 0);
-        transform.position = pos;
-
-        SetState(ECreatureState.Idle);
     }
 
     protected virtual void Update()
@@ -87,76 +93,6 @@ public class CreatureController : MonoBehaviour
     #endregion Unity Events
 
     #region Methods
-
-    public void SetState(ECreatureState stateID)
-    {
-        if (stateDictionary.TryGetValue(stateID, out CreatureState state) == false) return;
-
-        curState?.OnExit();
-        curState = state;
-        curState.OnStart();
-    }
-
-    public virtual void SetNextPos(EMoveDirection moveDirection)
-    {
-        Vector3Int cellPos = CellPos;
-        MoveDirection = moveDirection;
-
-        switch (moveDirection)
-        {
-            case EMoveDirection.Up:
-                cellPos += Vector3Int.up;
-                break;
-
-            case EMoveDirection.Down:
-                cellPos += Vector3Int.down;
-                break;
-
-            case EMoveDirection.Left:
-                cellPos += Vector3Int.left;
-                break;
-
-            case EMoveDirection.Right:
-                cellPos += Vector3Int.right;
-                break;
-
-            default:
-                SetState(ECreatureState.Idle);
-                return;
-        }
-
-        if (Managers.Map.CheckCanMove(cellPos) == true && ReferenceEquals(Managers.Obj.Find(cellPos), null) == true)
-        {
-            CellPos = cellPos;
-            SetState(ECreatureState.Move);
-        }
-    }
-
-    public Vector3Int GetFrontCellPos()
-    {
-        Vector3Int cellPos = CellPos;
-
-        switch (LastMoveDirection)
-        {
-            case EMoveDirection.Up:
-                cellPos += Vector3Int.up;
-                break;
-
-            case EMoveDirection.Down:
-                cellPos += Vector3Int.down;
-                break;
-
-            case EMoveDirection.Left:
-                cellPos += Vector3Int.left;
-                break;
-
-            case EMoveDirection.Right:
-                cellPos += Vector3Int.right;
-                break;
-        }
-
-        return cellPos;
-    }
 
     #region Events
 
