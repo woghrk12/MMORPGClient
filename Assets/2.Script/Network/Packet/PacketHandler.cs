@@ -50,8 +50,6 @@ public class PacketHandler
         UpdateCreatureInfoBroadcast packet = message as UpdateCreatureInfoBroadcast;
         CreatureInfo info = packet.CreatureInfo;
         
-        Debug.Log($"UpdateCreatureStateBroadcast. Creature ID : {info.CreatureID} ({info.CellPosX}, {info.CellPosY}, {info.FacingDirection}, {info.MoveSpeed}");
-
         if (Managers.Obj.TryFind(info.CreatureID, out GameObject creature) == false) return;
         if (creature.TryGetComponent(out CreatureController controller) == false) return;
 
