@@ -13,7 +13,7 @@ public class ObjectManager
 
     #region Properties
 
-    public LocalPlayerController LocalPlayer { set; get; } = null;
+    public LocalPlayer LocalPlayer { set; get; } = null;
 
     #endregion Properties
 
@@ -25,7 +25,7 @@ public class ObjectManager
         go.name = info.Name;
         objectDict.Add(info.CreatureID, go);
 
-        PlayerController controller = go.GetComponent<PlayerController>();
+        Creature controller = go.GetComponent<Creature>();
         controller.ID = info.CreatureID;
         controller.Name = info.Name;
         controller.CurState = info.CurState;
@@ -37,7 +37,7 @@ public class ObjectManager
 
         if (isMine)
         {
-            LocalPlayer = controller as LocalPlayerController;
+            LocalPlayer = controller as LocalPlayer;
         }
     }
 
@@ -78,7 +78,7 @@ public class ObjectManager
     {
         foreach (GameObject go in objectDict.Values)
         {
-            if (go.TryGetComponent(out CreatureController controller) == false) continue;
+            if (go.TryGetComponent(out Creature controller) == false) continue;
             if (controller.CellPos != cellPos) continue;
          
             return go;

@@ -1,36 +1,19 @@
 using Google.Protobuf.Protocol;
 using UnityEngine;
 
-namespace Creature
+namespace RemoteCreatureState
 {
-    public class MoveState<T> : CreatureState where T : CreatureController
+    public class MoveState : State
     {
-        #region Variables
-
-        protected T controller = null;
-
-        #endregion Variables
-
         #region Properties
 
         public sealed override ECreatureState StateID => ECreatureState.Move;
 
         #endregion Properties
 
-        #region Unity Events
-
-        protected override void Awake()
-        {
-            base.Awake();
-
-            controller = GetComponent<T>();
-        }
-
-        #endregion Unity Events
-
         #region Methods
 
-        public override void OnStart()
+        public override void OnEnter()
         {
             animator.SetBool(AnimatorKey.Creature.IS_MOVE_HASH, true);
         }

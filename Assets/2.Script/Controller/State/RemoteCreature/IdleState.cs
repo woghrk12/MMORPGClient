@@ -1,6 +1,6 @@
 using Google.Protobuf.Protocol;
 
-namespace LocalPlayerState
+namespace RemoteCreatureState
 {
     public class IdleState : State
     {
@@ -11,3 +11,4 @@ namespace LocalPlayerState
         #endregion Properties
     }
 }
+

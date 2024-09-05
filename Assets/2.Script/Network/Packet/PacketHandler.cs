@@ -51,7 +51,7 @@ public class PacketHandler
         CreatureInfo info = packet.CreatureInfo;
         
         if (Managers.Obj.TryFind(info.CreatureID, out GameObject creature) == false) return;
-        if (creature.TryGetComponent(out CreatureController controller) == false) return;
+        if (creature.TryGetComponent(out Creature controller) == false) return;
 
         controller.CurState = info.CurState;
         controller.CellPos = new Vector3Int(info.CellPosX, info.CellPosY, 0);
