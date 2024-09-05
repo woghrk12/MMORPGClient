@@ -21,23 +21,42 @@ public class ObjectManager
 
     public void AddPlayer(CreatureInfo info, bool isMine = false)
     {
-        GameObject go = Managers.Resource.Instantiate("Creature/" + (isMine ? "LocalPlayer" : "Player"));
-        go.name = info.Name;
-        objectDict.Add(info.CreatureID, go);
-
-        Creature controller = go.GetComponent<Creature>();
-        controller.ID = info.CreatureID;
-        controller.Name = info.Name;
-        controller.CurState = info.CurState;
-        controller.CellPos = new Vector3Int(info.CellPosX, info.CellPosY, 0);
-        controller.FacingDirection = info.FacingDirection;
-        controller.MoveSpeed = info.MoveSpeed;
-
-        controller.transform.position = new Vector3(controller.CellPos.x, controller.CellPos.y, 0f) + new Vector3(0.5f, 0.5f, 0f);
-
         if (isMine)
         {
-            LocalPlayer = controller as LocalPlayer;
+            GameObject go = Managers.Resource.Instantiate("Creature/LocalPlayer");
+
+            go.name = info.Name;
+            objectDict.Add(info.CreatureID, go);
+
+            LocalPlayer localPlayer = go.GetComponent<LocalPlayer>();
+
+            localPlayer.ID = info.CreatureID;
+            localPlayer.Name = info.Name;
+            localPlayer.CellPos = new Vector3Int(info.CellPosX, info.CellPosY, 0);
+            localPlayer.FacingDirection = info.FacingDirection;
+            localPlayer.MoveSpeed = info.MoveSpeed;
+            localPlayer.transform.position = new Vector3(localPlayer.CellPos.x, localPlayer.CellPos.y, 0f) + new Vector3(0.5f, 0.5f, 0f);
+
+            localPlayer.SetState(info.CurState, EPlayerInput.NONE);
+
+            LocalPlayer = localPlayer;
+        }
+        else
+        { 
+            GameObject go = Managers.Resource.Instantiate("Creature/Player");
+
+            go.name = info.Name;
+            objectDict.Add(info.CreatureID, go);
+
+            RemoteCreature remoteCreature = go.GetComponent<RemoteCreature>();
+
+            remoteCreature.ID = info.CreatureID;
+            remoteCreature.Name = info.Name;
+            remoteCreature.CellPos = new Vector3Int(info.CellPosX, info.CellPosY, 0);
+            remoteCreature.FacingDirection = info.FacingDirection;
+            remoteCreature.MoveSpeed = info.MoveSpeed;
+
+            remoteCreature.SetState(info.CurState);
         }
     }
 
