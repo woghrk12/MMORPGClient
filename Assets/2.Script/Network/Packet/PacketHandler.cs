@@ -53,7 +53,8 @@ public class PacketHandler
         if (Managers.Obj.TryFind(info.CreatureID, out GameObject creature) == false) return;
         if (creature.TryGetComponent(out Creature controller) == false) return;
 
-        controller.CurState = info.CurState;
+        // TODO : Classify the creature by the id
+        //controller.CurState = info.CurState;
         controller.CellPos = new Vector3Int(info.CellPosX, info.CellPosY, 0);
         controller.FacingDirection = info.FacingDirection;
         controller.MoveSpeed = info.MoveSpeed;
