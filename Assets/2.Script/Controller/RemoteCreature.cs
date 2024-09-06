@@ -1,6 +1,5 @@
 using Google.Protobuf.Protocol;
 using System.Collections.Generic;
-using UnityEngine;
 
 public class RemoteCreature : Creature
 {
