@@ -106,6 +106,22 @@ public class ObjectManager
         return null;
     }
 
+    public bool TryFind(Vector3Int cellPos, out GameObject creature)
+    {
+        creature = null;
+
+        foreach (GameObject go in objectDict.Values)
+        {
+            if (go.TryGetComponent(out Creature controller) == false) continue;
+            if (controller.CellPos != cellPos) continue;
+
+            creature = go;
+            return true;
+        }
+
+        return false;   
+    }
+
     public GameObject Find(Func<GameObject, bool> condition)
     {
         if (ReferenceEquals(condition, null) == true) return null;
