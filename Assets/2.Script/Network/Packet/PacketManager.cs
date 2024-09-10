@@ -30,7 +30,8 @@ public class PacketManager
         receivedPacketHandlerDict.Add((ushort)EMessageID.PlayerLeftRoomBrodcast, MakePacket<PlayerLeftRoomBrodcast>);
         receivedPacketHandlerDict.Add((ushort)EMessageID.CreatureSpawnedBrodcast, MakePacket<CreatureSpawnedBrodcast>);
         receivedPacketHandlerDict.Add((ushort)EMessageID.CreatureDespawnedBrodcast, MakePacket<CreatureDespawnedBrodcast>);
-        receivedPacketHandlerDict.Add((ushort)EMessageID.UpdateCreatureInfoBroadcast, MakePacket<UpdateCreatureInfoBroadcast>);
+        receivedPacketHandlerDict.Add((ushort)EMessageID.PerformMoveResponse, MakePacket<PerformMoveResponse>);
+        receivedPacketHandlerDict.Add((ushort)EMessageID.PerformMoveBroadcast, MakePacket<PerformMoveBroadcast>);
 
         handlerDict.Add((ushort)EMessageID.PlayerEnteredRoomResponse, PacketHandler.HandlePlayerEnteredRoomResponse);
         handlerDict.Add((ushort)EMessageID.PlayerEnteredRoomBrodcast, PacketHandler.HandlePlayerEnteredRoomBrodcast);
@@ -38,7 +39,8 @@ public class PacketManager
         handlerDict.Add((ushort)EMessageID.PlayerLeftRoomBrodcast, PacketHandler.HandlePlayerLeftRoomBrodcast);
         handlerDict.Add((ushort)EMessageID.CreatureSpawnedBrodcast, PacketHandler.HandleCreatureSpawnedBrodcast);
         handlerDict.Add((ushort)EMessageID.CreatureDespawnedBrodcast, PacketHandler.HandleCreatureDespawnedBrodcast);
-        handlerDict.Add((ushort)EMessageID.UpdateCreatureInfoBroadcast, PacketHandler.HandleUpdateCreatureInfoBroadcast);
+        handlerDict.Add((ushort)EMessageID.PerformMoveResponse, PacketHandler.HandlePerformMoveResponse);
+        handlerDict.Add((ushort)EMessageID.PerformMoveBroadcast, PacketHandler.HandlePerformMoveBroadcast);
     }
 
     #endregion Constructor

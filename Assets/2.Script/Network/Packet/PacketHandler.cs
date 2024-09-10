@@ -45,18 +45,32 @@ public class PacketHandler
         CreatureDespawnedBrodcast packet = message as CreatureDespawnedBrodcast;
     }
 
-    public static void HandleUpdateCreatureInfoBroadcast(ServerSession session, IMessage message)
+    public static void HandlePerformMoveResponse(ServerSession session, IMessage message)
     {
-        UpdateCreatureInfoBroadcast packet = message as UpdateCreatureInfoBroadcast;
-        CreatureInfo info = packet.CreatureInfo;
-        
-        if (Managers.Obj.TryFind(info.CreatureID, out GameObject creature) == false) return;
-        if (creature.TryGetComponent(out Creature controller) == false) return;
+        PerformMoveResponse packet = message as PerformMoveResponse;
 
-        // TODO : Classify the creature by the id
-        //controller.CurState = info.CurState;
-        controller.CellPos = new Vector3Int(info.CellPosX, info.CellPosY, 0);
-        controller.FacingDirection = info.FacingDirection;
-        controller.MoveSpeed = info.MoveSpeed;
+        if (ReferenceEquals(Managers.Obj.LocalPlayer, null) == true) return;
+
+        Managers.Obj.LocalPlayer.Position = new Vector3Int(packet.TargetPosX, packet.TargetPosY, 0);
+    }
+
+    public static void HandlePerformMoveBroadcast(ServerSession session, IMessage message)
+    {
+        PerformMoveBroadcast packet = message as PerformMoveBroadcast;
+
+        if (ReferenceEquals(Managers.Obj.LocalPlayer, null) == false && Managers.Obj.LocalPlayer.ID == packet.CreatureID) return;
+        if (Managers.Obj.TryFind(packet.CreatureID, out GameObject creature) == false) return;
+        if (creature.TryGetComponent(out RemoteCreature controller) == false) return;
+
+        if (packet.MoveDirection == EMoveDirection.None)
+        {
+            controller.SetState(ECreatureState.Idle);
+        }
+        else
+        {
+            controller.MoveDirection = packet.MoveDirection;
+            controller.Position = new Vector3Int(packet.TargetPosX, packet.TargetPosY);
+            controller.SetState(ECreatureState.Move);
+        }
     }
 }

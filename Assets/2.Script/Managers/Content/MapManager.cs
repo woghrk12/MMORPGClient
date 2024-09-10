@@ -43,7 +43,7 @@ public class MapManager
         height = maxY - minY + 1;
 
         isblocked = new bool[height, width];
-        for (int y = 0; y < height; y++)
+        for (int y = height - 1; y >= 0; y--)
         {
             string line = reader.ReadLine();
             for (int x = 0; x < width; x++)
@@ -62,7 +62,10 @@ public class MapManager
 
     public bool CheckCanMove(Vector3Int targetCellPos)
     {
-        return isblocked[targetCellPos.y, targetCellPos.x] == false;
+        int x = targetCellPos.x - minX;
+        int y = maxY - targetCellPos.y;
+
+        return isblocked[y, x] == false;
     }
 
     #endregion Methods

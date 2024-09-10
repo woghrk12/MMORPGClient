@@ -32,10 +32,10 @@ public class ObjectManager
 
             localPlayer.ID = info.CreatureID;
             localPlayer.Name = info.Name;
-            localPlayer.CellPos = new Vector3Int(info.CellPosX, info.CellPosY, 0);
-            localPlayer.FacingDirection = info.FacingDirection;
+            localPlayer.Position = new Vector3Int(info.PosX, info.PosY, 0);
+            localPlayer.MoveDirection = info.FacingDirection;
             localPlayer.MoveSpeed = info.MoveSpeed;
-            localPlayer.transform.position = new Vector3(localPlayer.CellPos.x, localPlayer.CellPos.y, 0f) + new Vector3(0.5f, 0.5f, 0f);
+            localPlayer.transform.position = new Vector3(localPlayer.Position.x, localPlayer.Position.y, 0f) + new Vector3(0.5f, 0.5f, 0f);
 
             localPlayer.SetState(info.CurState, EPlayerInput.NONE);
 
@@ -52,8 +52,8 @@ public class ObjectManager
 
             remoteCreature.ID = info.CreatureID;
             remoteCreature.Name = info.Name;
-            remoteCreature.CellPos = new Vector3Int(info.CellPosX, info.CellPosY, 0);
-            remoteCreature.FacingDirection = info.FacingDirection;
+            remoteCreature.Position = new Vector3Int(info.PosX, info.PosY, 0);
+            remoteCreature.MoveDirection = info.FacingDirection;
             remoteCreature.MoveSpeed = info.MoveSpeed;
 
             remoteCreature.SetState(info.CurState);
@@ -98,7 +98,7 @@ public class ObjectManager
         foreach (GameObject go in objectDict.Values)
         {
             if (go.TryGetComponent(out Creature controller) == false) continue;
-            if (controller.CellPos != cellPos) continue;
+            if (controller.Position != cellPos) continue;
          
             return go;
         }
@@ -113,7 +113,7 @@ public class ObjectManager
         foreach (GameObject go in objectDict.Values)
         {
             if (go.TryGetComponent(out Creature controller) == false) continue;
-            if (controller.CellPos != cellPos) continue;
+            if (controller.Position != cellPos) continue;
 
             creature = go;
             return true;

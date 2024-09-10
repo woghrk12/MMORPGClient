@@ -6,7 +6,7 @@ public abstract class Creature : MonoBehaviour
 {
     #region Variables
 
-    private EMoveDirection facingDirection = EMoveDirection.None;
+    private EMoveDirection moveDirection = EMoveDirection.None;
 
     #endregion Variables
 
@@ -16,27 +16,34 @@ public abstract class Creature : MonoBehaviour
 
     public string Name { set; get; } = string.Empty;
 
-    public Vector3Int CellPos { set; get; } = Vector3Int.zero;
+    public Vector3Int Position { set; get; } = Vector3Int.zero;
 
-    public EMoveDirection FacingDirection
-    {
+    public EMoveDirection MoveDirection
+    { 
         set
         {
-            if (facingDirection == value) return;
+            if (moveDirection == value) return;
 
-            facingDirection = value;
+            moveDirection = value;
 
-            if (facingDirection == EMoveDirection.Left)
+            if (moveDirection == EMoveDirection.Left)
             {
                 transform.localScale = new Vector3(-1f, 1f, 1f);
             }
-            if (facingDirection == EMoveDirection.Right)
+            if (moveDirection == EMoveDirection.Right)
             {
                 transform.localScale = new Vector3(1f, 1f, 1f);
             }
+
+            if (moveDirection != EMoveDirection.None)
+            {
+                FacingDirection = moveDirection;
+            }
         }
-        get => facingDirection;
+        get => moveDirection;
     }
+
+    public EMoveDirection FacingDirection { private set; get; } = EMoveDirection.Right;
 
     public int MoveSpeed { set; get; } = 0;
 
