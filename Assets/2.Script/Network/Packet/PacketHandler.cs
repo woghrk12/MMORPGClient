@@ -65,14 +65,15 @@ public class PacketHandler
         if (Managers.Obj.TryFind(packet.CreatureID, out GameObject creature) == false) return;
         if (creature.TryGetComponent(out RemoteCreature controller) == false) return;
 
+        controller.MoveDirection = packet.MoveDirection;
+        controller.Position = new Vector3Int(packet.TargetPosX, packet.TargetPosY, 0);
+        
         if (packet.MoveDirection == EMoveDirection.None)
         {
             controller.SetState(ECreatureState.Idle);
         }
         else
         {
-            controller.MoveDirection = packet.MoveDirection;
-            controller.Position = new Vector3Int(packet.TargetPosX, packet.TargetPosY);
             controller.SetState(ECreatureState.Move);
 
             Managers.Map.MoveCreature(packet.CreatureID, new Vector3Int(packet.CurPosX, packet.CurPosY, 0), new Vector3Int(packet.TargetPosX, packet.TargetPosY, 0));
