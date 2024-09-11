@@ -32,7 +32,7 @@ public class PacketHandler
     {
         PlayerLeftRoomBrodcast packet = message as PlayerLeftRoomBrodcast;
 
-        Managers.Obj.Remove(packet.OtherPlayerID);
+        Managers.Obj.RemovePlayer(packet.OtherPlayerID);
     }
 
     public static void HandleCreatureSpawnedBrodcast(ServerSession session, IMessage message)
@@ -48,10 +48,13 @@ public class PacketHandler
     public static void HandlePerformMoveResponse(ServerSession session, IMessage message)
     {
         PerformMoveResponse packet = message as PerformMoveResponse;
+        LocalPlayer localPlayer = Managers.Obj.LocalPlayer;
+        
+        if (ReferenceEquals(localPlayer, null) == true) return;
 
-        if (ReferenceEquals(Managers.Obj.LocalPlayer, null) == true) return;
-
-        Managers.Obj.LocalPlayer.Position = new Vector3Int(packet.TargetPosX, packet.TargetPosY, 0);
+        localPlayer.Position = new Vector3Int(packet.TargetPosX, packet.TargetPosY, 0);
+        
+        Managers.Map.MoveCreature(localPlayer.ID, new Vector3Int(packet.CurPosX, packet.CurPosY, 0), new Vector3Int(packet.TargetPosX, packet.TargetPosY, 0));
     }
 
     public static void HandlePerformMoveBroadcast(ServerSession session, IMessage message)
@@ -71,6 +74,8 @@ public class PacketHandler
             controller.MoveDirection = packet.MoveDirection;
             controller.Position = new Vector3Int(packet.TargetPosX, packet.TargetPosY);
             controller.SetState(ECreatureState.Move);
+
+            Managers.Map.MoveCreature(packet.CreatureID, new Vector3Int(packet.CurPosX, packet.CurPosY, 0), new Vector3Int(packet.TargetPosX, packet.TargetPosY, 0));
         }
     }
 }

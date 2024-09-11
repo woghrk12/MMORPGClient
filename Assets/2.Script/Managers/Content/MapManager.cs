@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
@@ -7,7 +8,7 @@ public class MapManager
 
     private GameObject mapObject = null;
 
-    private bool[,] isblocked = null;
+    private Dictionary<int, Creature>[,] collision = null;
     private int minX = 0;
     private int maxX = 0;
     private int minY = 0;
@@ -42,13 +43,18 @@ public class MapManager
         width = maxX - minX + 1;
         height = maxY - minY + 1;
 
-        isblocked = new bool[height, width];
+        collision = new Dictionary<int, Creature>[height, width];
         for (int y = height - 1; y >= 0; y--)
         {
             string line = reader.ReadLine();
             for (int x = 0; x < width; x++)
             {
-                isblocked[y, x] = line[x] == '1' ? true : false;
+                collision[y, x] = new Dictionary<int, Creature>();
+
+                if (line[x] == '1')
+                {
+                    collision[y, x].Add(-1, null);
+                }
             }
         }
     }
@@ -60,13 +66,48 @@ public class MapManager
         GameObject.Destroy(mapObject);
     }
 
-    public bool CheckCanMove(Vector3Int targetCellPos)
+    public void AddCreature(Creature creature)
     {
-        int x = targetCellPos.x - minX;
-        int y = maxY - targetCellPos.y;
+        if (ReferenceEquals(creature, null) == true) return;
 
-        return isblocked[y, x] == false;
+        Vector3Int cellPos = ConvertPosToCell(creature.Position);
+        collision[cellPos.y, cellPos.x].Add(creature.ID, creature);
     }
+
+    public void RemoveCreature(Creature creature)
+    {
+        if (ReferenceEquals(creature, null) == true) return;
+
+        Vector3Int cellPos = ConvertPosToCell(creature.Position);
+        collision[cellPos.y, cellPos.x].Remove(creature.ID);
+    }
+
+    public void MoveCreature(int creatureID, Vector3Int curPos, Vector3Int targetPos)
+    {
+        Vector3Int curCellPos = ConvertPosToCell(curPos);
+        Vector3Int targetCellPos = ConvertPosToCell(targetPos);
+
+        if (collision[curCellPos.y, curCellPos.x].TryGetValue(creatureID, out Creature creature) == false) return;
+
+        collision[curCellPos.y, curCellPos.x].Remove(creatureID);
+        collision[targetCellPos.y, targetCellPos.x].Add(creatureID, creature);
+    }
+
+    public bool CheckCanMove(Vector3Int position, bool isIgnoreObject = false)
+    {
+        if (position.x < minX || position.x > maxX) return false;
+        if (position.y < minY || position.y > maxY) return false;
+
+        int cellPosX = position.x - minX;
+        int cellPosY = position.y - minY;
+
+        if (collision[cellPosY, cellPosX].ContainsKey(-1) == true) return false;
+        if (isIgnoreObject == false && collision[cellPosY, cellPosX].Count > 0) return false;
+
+        return true;
+    }
+
+    private Vector3Int ConvertPosToCell(Vector3Int Pos) => new Vector3Int(Pos.x - minX, Pos.y - minY, 0);
 
     #endregion Methods
 }

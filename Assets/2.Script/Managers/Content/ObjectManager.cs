@@ -39,6 +39,8 @@ public class ObjectManager
 
             localPlayer.SetState(info.CurState, EPlayerInput.NONE);
 
+            Managers.Map.AddCreature(localPlayer);
+
             LocalPlayer = localPlayer;
         }
         else
@@ -57,12 +59,25 @@ public class ObjectManager
             remoteCreature.MoveSpeed = info.MoveSpeed;
 
             remoteCreature.SetState(info.CurState);
+
+            Managers.Map.AddCreature(remoteCreature);
         }
     }
 
     public void Add(int id, GameObject go)
     {
         objectDict.Add(id, go);
+    }
+
+    public void RemovePlayer(int leftPlayerID)
+    {
+        if (objectDict.TryGetValue(leftPlayerID, out GameObject go) == false) return;
+        if (go.TryGetComponent(out Creature creature) == false) return;
+
+        objectDict.Remove(leftPlayerID);
+
+        Managers.Map.RemoveCreature(creature);
+        Managers.Resource.Destory(go);
     }
 
     public void Remove(int id)

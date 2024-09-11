@@ -107,10 +107,10 @@ namespace LocalPlayerState
             }
             else
             {
-                // When the character's movement direction is EMoveDirection.None,
+                // When the character's movement direction is not EMoveDirection.None,
                 // it indicates that the character is continuously attempting to move to an unreachable location
                 // When the player's character attempts to move to an unreachable location for the first time
-                if (controller.MoveDirection == moveDirection)
+                if (controller.MoveDirection == EMoveDirection.None)
                 {
                     packet.MoveDirection = moveDirection;
                     packet.CurPosX = controller.Position.x;
@@ -118,10 +118,10 @@ namespace LocalPlayerState
 
                     Managers.Network.Send(packet);
 
-                    controller.MoveDirection = EMoveDirection.None;
+                    controller.MoveDirection = moveDirection;
                 }
-                // When the player's character is blocked from moving and the player inputs a new direction
-                else if (moveDirection != EMoveDirection.None) 
+                // When the player inputs a new direction and the player's character is blocked from moving 
+                else if (controller.MoveDirection != moveDirection)
                 {
                     packet.MoveDirection = moveDirection;
                     packet.CurPosX = controller.Position.x;
