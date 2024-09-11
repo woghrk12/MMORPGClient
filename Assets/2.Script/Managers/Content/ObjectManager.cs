@@ -35,8 +35,8 @@ public class ObjectManager
             localPlayer.Position = new Vector3Int(info.PosX, info.PosY, 0);
             localPlayer.MoveDirection = info.FacingDirection;
             localPlayer.MoveSpeed = info.MoveSpeed;
-            localPlayer.transform.position = new Vector3(localPlayer.Position.x, localPlayer.Position.y, 0f) + new Vector3(0.5f, 0.5f, 0f);
 
+            localPlayer.transform.position = new Vector3(localPlayer.Position.x, localPlayer.Position.y, 0f) + new Vector3(0.5f, 0.5f, 0f);
             localPlayer.SetState(info.CurState, EPlayerInput.NONE);
 
             Managers.Map.AddCreature(localPlayer);
@@ -58,6 +58,7 @@ public class ObjectManager
             remoteCreature.MoveDirection = info.FacingDirection;
             remoteCreature.MoveSpeed = info.MoveSpeed;
 
+            remoteCreature.transform.position = new Vector3(remoteCreature.Position.x, remoteCreature.Position.y, 0f) + new Vector3(0.5f, 0.5f, 0f);
             remoteCreature.SetState(info.CurState);
 
             Managers.Map.AddCreature(remoteCreature);
