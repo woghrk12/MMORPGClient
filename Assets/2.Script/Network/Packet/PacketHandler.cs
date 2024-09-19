@@ -60,8 +60,9 @@ public class PacketHandler
     public static void HandlePerformMoveBroadcast(ServerSession session, IMessage message)
     {
         PerformMoveBroadcast packet = message as PerformMoveBroadcast;
+        LocalPlayer localPlayer = Managers.Obj.LocalPlayer;
 
-        if (ReferenceEquals(Managers.Obj.LocalPlayer, null) == false && Managers.Obj.LocalPlayer.ID == packet.CreatureID) return;
+        if (ReferenceEquals(localPlayer, null) == false && localPlayer.ID == packet.CreatureID) return;
         if (Managers.Obj.TryFind(packet.CreatureID, out GameObject creature) == false) return;
         if (creature.TryGetComponent(out RemoteCreature controller) == false) return;
 
@@ -78,5 +79,27 @@ public class PacketHandler
 
             Managers.Map.MoveCreature(packet.CreatureID, new Vector3Int(packet.CurPosX, packet.CurPosY, 0), new Vector3Int(packet.TargetPosX, packet.TargetPosY, 0));
         }
+    }
+
+    public static void HandlePerformAttackResponse(ServerSession session, IMessage message)
+    {
+        PerformAttackResponse packet = message as PerformAttackResponse;
+        LocalPlayer localPlayer = Managers.Obj.LocalPlayer;
+
+        if (ReferenceEquals(localPlayer, null) == true) return;
+
+        localPlayer.PerformAttack(packet.AttackStartTime, packet.AttackInfo);
+    }
+
+    public static void HandlePerformAttackBroadcast(ServerSession session, IMessage message)
+    {
+        PerformAttackBroadcast packet = message as PerformAttackBroadcast;
+        LocalPlayer localPlayer = Managers.Obj.LocalPlayer;
+
+        if (ReferenceEquals(localPlayer, null) == false && localPlayer.ID == packet.CreatureID) return;
+        if (Managers.Obj.TryFind(packet.CreatureID, out GameObject creature) == false) return;
+        if (creature.TryGetComponent(out RemoteCreature controller) == false) return;
+
+        controller.PerformAttack(packet.AttackStartTime, packet.AttackInfo);
     }
 }

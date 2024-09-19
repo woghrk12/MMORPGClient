@@ -51,5 +51,15 @@ public class RemoteCreature : Creature
         return ReferenceEquals(curState, null) == false ? curState.StateID : ECreatureState.Idle;
     }
 
+    public void PerformAttack(long attackStartTicks, AttackInfo attackInfo)
+    {
+        if (stateDictionary.TryGetValue(ECreatureState.Attack, out RemoteCreatureState.State state) == false) return;
+
+        RemoteCreatureState.AttackState attackState = state as RemoteCreatureState.AttackState;
+        attackState.SetAttackType(attackStartTicks, attackInfo);
+
+        SetState(ECreatureState.Attack);
+    }
+
     #endregion Methods
 }

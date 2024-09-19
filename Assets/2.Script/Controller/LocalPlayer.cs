@@ -72,6 +72,16 @@ public class LocalPlayer : Creature
         return ReferenceEquals(curState, null) == false ? curState.StateID : ECreatureState.Idle;
     }
 
+    public void PerformAttack(long attackStartTicks, AttackInfo attackInfo)
+    {
+        if (stateDictionary.TryGetValue(ECreatureState.Attack, out LocalPlayerState.State state) == false) return;
+
+        LocalPlayerState.AttackState attackState = state as LocalPlayerState.AttackState;
+        attackState.SetAttackType(attackStartTicks, attackInfo);
+
+        SetState(ECreatureState.Attack, EPlayerInput.NONE);
+    }
+
     private EPlayerInput GetInput()
     {
         EPlayerInput input = EPlayerInput.NONE;
