@@ -22,6 +22,7 @@ namespace RemoteCreatureState
 
         public void SetAttackType(long attackStartTicks, AttackInfo attackInfo)
         {
+            this.attackStartTicks = attackStartTicks;
             this.attackInfo = attackInfo;
         }
 
@@ -41,7 +42,7 @@ namespace RemoteCreatureState
 
         public override void OnUpdate()
         {
-            if (DateTime.UtcNow.Ticks < attackStartTicks + 1000) return;
+            if (DateTime.UtcNow.Ticks - attackStartTicks < 5 * 100 * 10000) return;
 
             controller.SetState(ECreatureState.Idle);
         }

@@ -42,7 +42,7 @@ namespace LocalPlayerState
 
         public override void OnUpdate(EPlayerInput input)
         {
-            if (DateTime.UtcNow.Ticks < attackStartTicks + 1000) return;
+            if (DateTime.UtcNow.Ticks - attackStartTicks < 5 * 100 * 10000) return;
 
             controller.SetState(ECreatureState.Idle, input);
         }
@@ -50,6 +50,10 @@ namespace LocalPlayerState
         public override void OnExit(EPlayerInput input)
         {
             attackInfo = null;
+
+            AttackCompleteRequest packet = new();
+
+            Managers.Network.Send(packet);
         }
 
         #endregion Methods
