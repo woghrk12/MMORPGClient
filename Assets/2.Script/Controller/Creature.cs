@@ -1,10 +1,12 @@
 using Google.Protobuf.Protocol;
-using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 
 public abstract class Creature : MonoBehaviour
 {
     #region Variables
+
+    private SpriteRenderer spriteRenderer = null;
 
     private EMoveDirection moveDirection = EMoveDirection.None;
 
@@ -48,4 +50,31 @@ public abstract class Creature : MonoBehaviour
     public int MoveSpeed { set; get; } = 0;
 
     #endregion Properties
+
+    #region Unity Events
+
+    protected virtual void Awake()
+    {
+        spriteRenderer = GetComponent<SpriteRenderer>();
+    }
+
+    #endregion Unity Events
+
+    #region Methods
+
+    public virtual void OnDamaged() 
+    {
+        StartCoroutine(OnDamagedCo());
+    }
+
+    private IEnumerator OnDamagedCo()
+    {
+        spriteRenderer.color = Color.red;
+
+        yield return new WaitForSeconds(0.2f);
+
+        spriteRenderer.color = Color.white;
+    }
+
+    #endregion Methods
 }

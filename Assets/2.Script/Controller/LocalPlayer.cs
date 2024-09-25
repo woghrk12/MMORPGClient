@@ -26,8 +26,10 @@ public class LocalPlayer : Creature
 
     #region Unity Events
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         LocalPlayerState.State[] states = GetComponents<LocalPlayerState.State>();
 
         foreach (LocalPlayerState.State state in states)

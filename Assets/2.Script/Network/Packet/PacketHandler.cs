@@ -102,4 +102,16 @@ public class PacketHandler
 
         controller.PerformAttack(packet.AttackStartTime, packet.AttackInfo);
     }
+
+    public static void HandleHitBroadcast(ServerSession session, IMessage message)
+    {
+        HitBroadcast packet = message as HitBroadcast;
+
+        if (Managers.Obj.TryFind(packet.AttackerID, out GameObject attackerObj) == false) return;
+        if (attackerObj.TryGetComponent(out Creature attacker) == false) return;
+        if (Managers.Obj.TryFind(packet.DefenderID, out GameObject defenderObj) == false) return;
+        if (defenderObj.TryGetComponent(out Creature defender) == false) return;
+
+        defender.OnDamaged();
+    }
 }

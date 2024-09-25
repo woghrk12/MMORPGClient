@@ -12,8 +12,10 @@ public class RemoteCreature : Creature
 
     #region Unity Events
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         RemoteCreatureState.State[] states = GetComponents<RemoteCreatureState.State>();
 
         foreach (RemoteCreatureState.State state in states)
