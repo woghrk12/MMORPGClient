@@ -16,9 +16,9 @@ public class PacketHandler
         }
     }
 
-    public static void HandlePlayerEnteredRoomBrodcast(ServerSession session, IMessage message)
+    public static void HandlePlayerEnteredRoomBroadcast(ServerSession session, IMessage message)
     {
-        PlayerEnteredRoomBrodcast packet = message as PlayerEnteredRoomBrodcast;
+        PlayerEnteredRoomBroadcast packet = message as PlayerEnteredRoomBroadcast;
 
         Managers.Obj.AddPlayer(packet.NewPlayer, isMine: false);
     }
@@ -28,21 +28,21 @@ public class PacketHandler
         PlayerLeftRoomResponse packet = message as PlayerLeftRoomResponse;
     }
 
-    public static void HandlePlayerLeftRoomBrodcast(ServerSession session, IMessage message)
+    public static void HandlePlayerLeftRoomBroadcast(ServerSession session, IMessage message)
     {
-        PlayerLeftRoomBrodcast packet = message as PlayerLeftRoomBrodcast;
+        PlayerLeftRoomBroadcast packet = message as PlayerLeftRoomBroadcast;
 
         Managers.Obj.RemovePlayer(packet.OtherPlayerID);
     }
 
-    public static void HandleCreatureSpawnedBrodcast(ServerSession session, IMessage message)
+    public static void HandleCreatureSpawnedBroadcast(ServerSession session, IMessage message)
     {
-        CreatureSpawnedBrodcast packet = message as CreatureSpawnedBrodcast;
+        CreatureSpawnedBroadcast packet = message as CreatureSpawnedBroadcast;
     }
 
-    public static void HandleCreatureDespawnedBrodcast(ServerSession session, IMessage message)
+    public static void HandleCreatureDespawnedBroadcast(ServerSession session, IMessage message)
     {
-        CreatureDespawnedBrodcast packet = message as CreatureDespawnedBrodcast;
+        CreatureDespawnedBroadcast packet = message as CreatureDespawnedBroadcast;
     }
 
     public static void HandlePerformMoveResponse(ServerSession session, IMessage message)

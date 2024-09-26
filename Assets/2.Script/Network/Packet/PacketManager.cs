@@ -25,11 +25,11 @@ public class PacketManager
     public PacketManager()
     {
         receivedPacketHandlerDict.Add((ushort)EMessageID.PlayerEnteredRoomResponse, MakePacket<PlayerEnteredRoomResponse>);
-        receivedPacketHandlerDict.Add((ushort)EMessageID.PlayerEnteredRoomBrodcast, MakePacket<PlayerEnteredRoomBrodcast>);
+        receivedPacketHandlerDict.Add((ushort)EMessageID.PlayerEnteredRoomBroadcast, MakePacket<PlayerEnteredRoomBroadcast>);
         receivedPacketHandlerDict.Add((ushort)EMessageID.PlayerLeftRoomResponse, MakePacket<PlayerLeftRoomResponse>);
-        receivedPacketHandlerDict.Add((ushort)EMessageID.PlayerLeftRoomBrodcast, MakePacket<PlayerLeftRoomBrodcast>);
-        receivedPacketHandlerDict.Add((ushort)EMessageID.CreatureSpawnedBrodcast, MakePacket<CreatureSpawnedBrodcast>);
-        receivedPacketHandlerDict.Add((ushort)EMessageID.CreatureDespawnedBrodcast, MakePacket<CreatureDespawnedBrodcast>);
+        receivedPacketHandlerDict.Add((ushort)EMessageID.PlayerLeftRoomBroadcast, MakePacket<PlayerLeftRoomBroadcast>);
+        receivedPacketHandlerDict.Add((ushort)EMessageID.CreatureSpawnedBroadcast, MakePacket<CreatureSpawnedBroadcast>);
+        receivedPacketHandlerDict.Add((ushort)EMessageID.CreatureDespawnedBroadcast, MakePacket<CreatureDespawnedBroadcast>);
         receivedPacketHandlerDict.Add((ushort)EMessageID.PerformMoveResponse, MakePacket<PerformMoveResponse>);
         receivedPacketHandlerDict.Add((ushort)EMessageID.PerformMoveBroadcast, MakePacket<PerformMoveBroadcast>);
         receivedPacketHandlerDict.Add((ushort)EMessageID.PerformAttackResponse, MakePacket<PerformAttackResponse>);
@@ -37,11 +37,11 @@ public class PacketManager
         receivedPacketHandlerDict.Add((ushort)EMessageID.HitBroadcast, MakePacket<HitBroadcast>);
 
         handlerDict.Add((ushort)EMessageID.PlayerEnteredRoomResponse, PacketHandler.HandlePlayerEnteredRoomResponse);
-        handlerDict.Add((ushort)EMessageID.PlayerEnteredRoomBrodcast, PacketHandler.HandlePlayerEnteredRoomBrodcast);
+        handlerDict.Add((ushort)EMessageID.PlayerEnteredRoomBroadcast, PacketHandler.HandlePlayerEnteredRoomBroadcast);
         handlerDict.Add((ushort)EMessageID.PlayerLeftRoomResponse, PacketHandler.HandlePlayerLeftRoomResponse);
-        handlerDict.Add((ushort)EMessageID.PlayerLeftRoomBrodcast, PacketHandler.HandlePlayerLeftRoomBrodcast);
-        handlerDict.Add((ushort)EMessageID.CreatureSpawnedBrodcast, PacketHandler.HandleCreatureSpawnedBrodcast);
-        handlerDict.Add((ushort)EMessageID.CreatureDespawnedBrodcast, PacketHandler.HandleCreatureDespawnedBrodcast);
+        handlerDict.Add((ushort)EMessageID.PlayerLeftRoomBroadcast, PacketHandler.HandlePlayerLeftRoomBroadcast);
+        handlerDict.Add((ushort)EMessageID.CreatureSpawnedBroadcast, PacketHandler.HandleCreatureSpawnedBroadcast);
+        handlerDict.Add((ushort)EMessageID.CreatureDespawnedBroadcast, PacketHandler.HandleCreatureDespawnedBroadcast);
         handlerDict.Add((ushort)EMessageID.PerformMoveResponse, PacketHandler.HandlePerformMoveResponse);
         handlerDict.Add((ushort)EMessageID.PerformMoveBroadcast, PacketHandler.HandlePerformMoveBroadcast);
         handlerDict.Add((ushort)EMessageID.PerformAttackResponse, PacketHandler.HandlePerformAttackResponse);
