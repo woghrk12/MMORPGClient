@@ -7,7 +7,7 @@ namespace LocalPlayerState
     {
         #region Properties
 
-        public sealed override ECreatureState StateID => ECreatureState.Move;
+        public sealed override EObjectState StateID => EObjectState.Move;
 
         #endregion Properties
 
@@ -15,7 +15,7 @@ namespace LocalPlayerState
 
         public override void OnEnter(EPlayerInput input)
         {
-            animator.SetBool(AnimatorKey.Creature.IS_MOVE_HASH, true);
+            animator.SetBool(AnimatorKey.Object.IS_MOVE_HASH, true);
 
             SetNextPos(input);
         }
@@ -38,7 +38,7 @@ namespace LocalPlayerState
 
         public override void OnExit(EPlayerInput input)
         {
-            animator.SetBool(AnimatorKey.Creature.IS_MOVE_HASH, false);
+            animator.SetBool(AnimatorKey.Object.IS_MOVE_HASH, false);
         }
 
         private void SetNextPos(EPlayerInput input)
@@ -56,7 +56,7 @@ namespace LocalPlayerState
                 Managers.Network.Send(packet);
 
                 controller.MoveDirection = EMoveDirection.None;
-                controller.SetState(ECreatureState.Idle, input);
+                controller.SetState(EObjectState.Idle, input);
                 return;
             }
 
@@ -92,7 +92,7 @@ namespace LocalPlayerState
             }
 
             // When the character can move in the direction the player inputs
-            if (Managers.Map.CheckCanMove(position) == true && Managers.Obj.TryFind(position, out GameObject creature) == false)
+            if (Managers.Map.CheckCanMove(position) == true && Managers.Obj.TryFind(position, out GameObject obj) == false)
             {
                 packet.MoveDirection = moveDirection;
                 packet.CurPosX = controller.Position.x;

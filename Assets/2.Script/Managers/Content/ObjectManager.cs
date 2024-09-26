@@ -19,18 +19,18 @@ public class ObjectManager
 
     #region Methods
 
-    public void AddPlayer(CreatureInfo info, bool isMine = false)
+    public void AddPlayer(ObjectInfo info, bool isMine = false)
     {
         if (isMine)
         {
-            GameObject go = Managers.Resource.Instantiate("Creature/LocalPlayer");
+            GameObject go = Managers.Resource.Instantiate("Object/LocalPlayer");
 
             go.name = info.Name;
-            objectDict.Add(info.CreatureID, go);
+            objectDict.Add(info.ObjectID, go);
 
             LocalPlayer localPlayer = go.GetComponent<LocalPlayer>();
 
-            localPlayer.ID = info.CreatureID;
+            localPlayer.ID = info.ObjectID;
             localPlayer.Name = info.Name;
             localPlayer.Position = new Vector3Int(info.PosX, info.PosY, 0);
             localPlayer.MoveDirection = info.FacingDirection;
@@ -39,29 +39,29 @@ public class ObjectManager
             localPlayer.transform.position = new Vector3(localPlayer.Position.x, localPlayer.Position.y, 0f) + new Vector3(0.5f, 0.5f, 0f);
             localPlayer.SetState(info.CurState, EPlayerInput.NONE);
 
-            Managers.Map.AddCreature(localPlayer);
+            Managers.Map.AddObject(localPlayer);
 
             LocalPlayer = localPlayer;
         }
         else
         { 
-            GameObject go = Managers.Resource.Instantiate("Creature/Player");
+            GameObject go = Managers.Resource.Instantiate("Object/Player");
 
             go.name = info.Name;
-            objectDict.Add(info.CreatureID, go);
+            objectDict.Add(info.ObjectID, go);
 
-            RemoteCreature remoteCreature = go.GetComponent<RemoteCreature>();
+            RemoteObject remoteObject = go.GetComponent<RemoteObject>();
 
-            remoteCreature.ID = info.CreatureID;
-            remoteCreature.Name = info.Name;
-            remoteCreature.Position = new Vector3Int(info.PosX, info.PosY, 0);
-            remoteCreature.MoveDirection = info.FacingDirection;
-            remoteCreature.MoveSpeed = info.MoveSpeed;
+            remoteObject.ID = info.ObjectID;
+            remoteObject.Name = info.Name;
+            remoteObject.Position = new Vector3Int(info.PosX, info.PosY, 0);
+            remoteObject.MoveDirection = info.FacingDirection;
+            remoteObject.MoveSpeed = info.MoveSpeed;
 
-            remoteCreature.transform.position = new Vector3(remoteCreature.Position.x, remoteCreature.Position.y, 0f) + new Vector3(0.5f, 0.5f, 0f);
-            remoteCreature.SetState(info.CurState);
+            remoteObject.transform.position = new Vector3(remoteObject.Position.x, remoteObject.Position.y, 0f) + new Vector3(0.5f, 0.5f, 0f);
+            remoteObject.SetState(info.CurState);
 
-            Managers.Map.AddCreature(remoteCreature);
+            Managers.Map.AddObject(remoteObject);
         }
     }
 
@@ -73,11 +73,11 @@ public class ObjectManager
     public void RemovePlayer(int leftPlayerID)
     {
         if (objectDict.TryGetValue(leftPlayerID, out GameObject go) == false) return;
-        if (go.TryGetComponent(out Creature creature) == false) return;
+        if (go.TryGetComponent(out MMORPG.Object obj) == false) return;
 
         objectDict.Remove(leftPlayerID);
 
-        Managers.Map.RemoveCreature(creature);
+        Managers.Map.Removeobject(obj);
         Managers.Resource.Destory(go);
     }
 
@@ -94,18 +94,18 @@ public class ObjectManager
         objectDict.Clear();
     }
 
-    public GameObject Find(int creatureID)
+    public GameObject Find(int objectID)
     {
-        return objectDict.TryGetValue(creatureID, out GameObject gameObject) ? gameObject : null;
+        return objectDict.TryGetValue(objectID, out GameObject gameObject) ? gameObject : null;
     }
 
-    public bool TryFind(int creatureID, out GameObject creature)
+    public bool TryFind(int objectID, out GameObject obj)
     {
-        creature = null;
+        obj = null;
 
-        if (objectDict.TryGetValue(creatureID, out GameObject gameobject) == false) return false;
+        if (objectDict.TryGetValue(objectID, out GameObject gameobject) == false) return false;
 
-        creature = gameobject;
+        obj = gameobject;
         return true;
     }
 
@@ -113,7 +113,7 @@ public class ObjectManager
     {
         foreach (GameObject go in objectDict.Values)
         {
-            if (go.TryGetComponent(out Creature controller) == false) continue;
+            if (go.TryGetComponent(out MMORPG.Object controller) == false) continue;
             if (controller.Position != cellPos) continue;
          
             return go;
@@ -122,16 +122,16 @@ public class ObjectManager
         return null;
     }
 
-    public bool TryFind(Vector3Int cellPos, out GameObject creature)
+    public bool TryFind(Vector3Int cellPos, out GameObject obj)
     {
-        creature = null;
+        obj = null;
 
         foreach (GameObject go in objectDict.Values)
         {
-            if (go.TryGetComponent(out Creature controller) == false) continue;
+            if (go.TryGetComponent(out MMORPG.Object controller) == false) continue;
             if (controller.Position != cellPos) continue;
 
-            creature = go;
+            obj = go;
             return true;
         }
 

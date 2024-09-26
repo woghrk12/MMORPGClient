@@ -8,7 +8,7 @@ public class MapManager
 
     private GameObject mapObject = null;
 
-    private Dictionary<int, Creature>[,] collision = null;
+    private Dictionary<int, MMORPG.Object>[,] collision = null;
     private int minX = 0;
     private int maxX = 0;
     private int minY = 0;
@@ -43,13 +43,13 @@ public class MapManager
         width = maxX - minX + 1;
         height = maxY - minY + 1;
 
-        collision = new Dictionary<int, Creature>[height, width];
+        collision = new Dictionary<int, MMORPG.Object>[height, width];
         for (int y = height - 1; y >= 0; y--)
         {
             string line = reader.ReadLine();
             for (int x = 0; x < width; x++)
             {
-                collision[y, x] = new Dictionary<int, Creature>();
+                collision[y, x] = new Dictionary<int, MMORPG.Object>();
 
                 if (line[x] == '1')
                 {
@@ -66,31 +66,31 @@ public class MapManager
         GameObject.Destroy(mapObject);
     }
 
-    public void AddCreature(Creature creature)
+    public void AddObject(MMORPG.Object obj)
     {
-        if (ReferenceEquals(creature, null) == true) return;
+        if (ReferenceEquals(obj, null) == true) return;
 
-        Vector3Int cellPos = ConvertPosToCell(creature.Position);
-        collision[cellPos.y, cellPos.x].Add(creature.ID, creature);
+        Vector3Int cellPos = ConvertPosToCell(obj.Position);
+        collision[cellPos.y, cellPos.x].Add(obj.ID, obj);
     }
 
-    public void RemoveCreature(Creature creature)
+    public void Removeobject(MMORPG.Object obj)
     {
-        if (ReferenceEquals(creature, null) == true) return;
+        if (ReferenceEquals(obj, null) == true) return;
 
-        Vector3Int cellPos = ConvertPosToCell(creature.Position);
-        collision[cellPos.y, cellPos.x].Remove(creature.ID);
+        Vector3Int cellPos = ConvertPosToCell(obj.Position);
+        collision[cellPos.y, cellPos.x].Remove(obj.ID);
     }
 
-    public void MoveCreature(int creatureID, Vector3Int curPos, Vector3Int targetPos)
+    public void MoveObject(int objectID, Vector3Int curPos, Vector3Int targetPos)
     {
         Vector3Int curCellPos = ConvertPosToCell(curPos);
         Vector3Int targetCellPos = ConvertPosToCell(targetPos);
 
-        if (collision[curCellPos.y, curCellPos.x].TryGetValue(creatureID, out Creature creature) == false) return;
+        if (collision[curCellPos.y, curCellPos.x].TryGetValue(objectID, out MMORPG.Object obj) == false) return;
 
-        collision[curCellPos.y, curCellPos.x].Remove(creatureID);
-        collision[targetCellPos.y, targetCellPos.x].Add(creatureID, creature);
+        collision[curCellPos.y, curCellPos.x].Remove(objectID);
+        collision[targetCellPos.y, targetCellPos.x].Add(objectID, obj);
     }
 
     public bool CheckCanMove(Vector3Int position, bool isIgnoreObject = false)

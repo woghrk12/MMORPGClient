@@ -14,7 +14,7 @@ namespace LocalPlayerState
 
         #region Properties
 
-        public sealed override ECreatureState StateID => ECreatureState.Idle;
+        public sealed override EObjectState StateID => EObjectState.Idle;
 
         #endregion Properties
 
@@ -40,7 +40,7 @@ namespace LocalPlayerState
 
             if (directionInput != EPlayerInput.NONE)
             {
-                controller.SetState(ECreatureState.Move, directionInput);
+                controller.SetState(EObjectState.Move, directionInput);
                 return;
             }
         }

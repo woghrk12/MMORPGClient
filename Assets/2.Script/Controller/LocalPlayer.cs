@@ -13,11 +13,11 @@ public enum EPlayerInput
     SKILL = 1 << 5,
 }
 
-public class LocalPlayer : Creature
+public class LocalPlayer : MMORPG.Object
 {
     #region Variables
 
-    private Dictionary<ECreatureState, LocalPlayerState.State> stateDictionary = new();
+    private Dictionary<EObjectState, LocalPlayerState.State> stateDictionary = new();
     private LocalPlayerState.State curState = null;
 
     private Camera mainCamera = null;
@@ -54,7 +54,7 @@ public class LocalPlayer : Creature
 
     #region Methods
 
-    public void SetState(ECreatureState value, EPlayerInput input)
+    public void SetState(EObjectState value, EPlayerInput input)
     {
         if (ReferenceEquals(curState, null) == false)
         {
@@ -69,19 +69,19 @@ public class LocalPlayer : Creature
         curState.OnEnter(input);
     }
 
-    public ECreatureState GetState()
+    public EObjectState GetState()
     {
-        return ReferenceEquals(curState, null) == false ? curState.StateID : ECreatureState.Idle;
+        return ReferenceEquals(curState, null) == false ? curState.StateID : EObjectState.Idle;
     }
 
     public void PerformAttack(long attackStartTicks, AttackInfo attackInfo)
     {
-        if (stateDictionary.TryGetValue(ECreatureState.Attack, out LocalPlayerState.State state) == false) return;
+        if (stateDictionary.TryGetValue(EObjectState.Attack, out LocalPlayerState.State state) == false) return;
 
         LocalPlayerState.AttackState attackState = state as LocalPlayerState.AttackState;
         attackState.SetAttackType(attackStartTicks, attackInfo);
 
-        SetState(ECreatureState.Attack, EPlayerInput.NONE);
+        SetState(EObjectState.Attack, EPlayerInput.NONE);
     }
 
     private EPlayerInput GetInput()

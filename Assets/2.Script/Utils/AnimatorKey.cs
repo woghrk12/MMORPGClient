@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class AnimatorKey
 {
-    public class Creature
+    public class Object
     {
         public static int IS_MOVE_HASH = Animator.StringToHash("IsMove");
         public static int DO_ATTACK_HASH = Animator.StringToHash("DoAttack");

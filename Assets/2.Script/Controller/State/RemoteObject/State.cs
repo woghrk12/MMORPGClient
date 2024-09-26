@@ -1,20 +1,20 @@
 using Google.Protobuf.Protocol;
 using UnityEngine;
 
-namespace RemoteCreatureState
+namespace RemoteObjectState
 {
     public abstract class State : MonoBehaviour
     {
         #region Variables
 
         protected Animator animator = null;
-        protected RemoteCreature controller = null;
+        protected RemoteObject controller = null;
 
         #endregion Variables
 
         #region Properties
 
-        public abstract ECreatureState StateID { get; }
+        public abstract EObjectState StateID { get; }
 
         #endregion Properties
 
@@ -23,7 +23,7 @@ namespace RemoteCreatureState
         protected virtual void Awake()
         {
             animator = GetComponent<Animator>();
-            controller = GetComponent<RemoteCreature>();
+            controller = GetComponent<RemoteObject>();
         }
 
         #endregion Unity Events

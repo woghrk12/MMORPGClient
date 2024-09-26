@@ -14,7 +14,7 @@ namespace LocalPlayerState
 
         #region Properties
 
-        public sealed override ECreatureState StateID => ECreatureState.Attack;
+        public sealed override EObjectState StateID => EObjectState.Attack;
 
         #endregion Properties
 
@@ -30,13 +30,13 @@ namespace LocalPlayerState
         {
             if (ReferenceEquals(attackInfo, null) == true)
             {
-                controller.SetState(ECreatureState.Idle, input);
+                controller.SetState(EObjectState.Idle, input);
                 return;
             }
 
             if (attackInfo.AttackID == 1)
             {
-                animator.SetTrigger(AnimatorKey.Creature.DO_ATTACK_HASH);
+                animator.SetTrigger(AnimatorKey.Object.DO_ATTACK_HASH);
             }
         }
 
@@ -44,7 +44,7 @@ namespace LocalPlayerState
         {
             if (DateTime.UtcNow.Ticks - attackStartTicks < 5 * 100 * 10000) return;
 
-            controller.SetState(ECreatureState.Idle, input);
+            controller.SetState(EObjectState.Idle, input);
         }
 
         public override void OnExit(EPlayerInput input)

@@ -1,13 +1,13 @@
 using Google.Protobuf.Protocol;
 using UnityEngine;
 
-namespace RemoteCreatureState
+namespace RemoteObjectState
 {
     public class MoveState : State
     {
         #region Properties
 
-        public sealed override ECreatureState StateID => ECreatureState.Move;
+        public sealed override EObjectState StateID => EObjectState.Move;
 
         #endregion Properties
 
@@ -15,7 +15,7 @@ namespace RemoteCreatureState
 
         public override void OnEnter()
         {
-            animator.SetBool(AnimatorKey.Creature.IS_MOVE_HASH, true);
+            animator.SetBool(AnimatorKey.Object.IS_MOVE_HASH, true);
         }
 
         public override void OnUpdate()
@@ -35,7 +35,7 @@ namespace RemoteCreatureState
 
         public override void OnExit()
         {
-            animator.SetBool(AnimatorKey.Creature.IS_MOVE_HASH, false);
+            animator.SetBool(AnimatorKey.Object.IS_MOVE_HASH, false);
         }
 
         #endregion Methods

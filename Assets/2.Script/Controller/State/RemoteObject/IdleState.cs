@@ -1,12 +1,12 @@
 using Google.Protobuf.Protocol;
 
-namespace RemoteCreatureState
+namespace RemoteObjectState
 {
     public class IdleState : State
     {
         #region Properties
 
-        public sealed override ECreatureState StateID => ECreatureState.Idle;
+        public sealed override EObjectState StateID => EObjectState.Idle;
 
         #endregion Properties
     }
