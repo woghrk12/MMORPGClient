@@ -7,7 +7,7 @@ public class ObjectManager
 {
     #region Variables
 
-    private Dictionary<int, GameObject> objectDict = new();
+    private Dictionary<int, MMORPG.Object> objectDict = new();
 
     #endregion Variables
 
@@ -19,16 +19,13 @@ public class ObjectManager
 
     #region Methods
 
-    public void AddPlayer(ObjectInfo info, bool isMine = false)
+    public static EGameObjectType GetObjectTypeByID(int objectID) => (EGameObjectType)(objectID >> 24 & 0x7F);
+
+    public void AddObject(ObjectInfo info, bool isMine = false)
     {
         if (isMine)
         {
-            GameObject go = Managers.Resource.Instantiate("Object/LocalPlayer");
-
-            go.name = info.Name;
-            objectDict.Add(info.ObjectID, go);
-
-            LocalPlayer localPlayer = go.GetComponent<LocalPlayer>();
+            LocalPlayer localPlayer = Managers.Resource.Instantiate("Object/LocalPlayer").GetComponent<LocalPlayer>();
 
             localPlayer.ID = info.ObjectID;
             localPlayer.Name = info.Name;
@@ -36,57 +33,61 @@ public class ObjectManager
             localPlayer.MoveDirection = info.FacingDirection;
             localPlayer.MoveSpeed = info.MoveSpeed;
 
-            localPlayer.transform.position = new Vector3(localPlayer.Position.x, localPlayer.Position.y, 0f) + new Vector3(0.5f, 0.5f, 0f);
+            localPlayer.gameObject.name = localPlayer.Name;
+            localPlayer.transform.position = new Vector3(localPlayer.Position.x, localPlayer.Position.y) + new Vector3(0.5f, 0.5f);
+
             localPlayer.SetState(info.CurState, EPlayerInput.NONE);
 
             Managers.Map.AddObject(localPlayer);
 
             LocalPlayer = localPlayer;
+            objectDict.Add(localPlayer.ID, localPlayer);
+
+            return;
         }
-        else
-        { 
-            GameObject go = Managers.Resource.Instantiate("Object/Player");
 
-            go.name = info.Name;
-            objectDict.Add(info.ObjectID, go);
+        EGameObjectType type = GetObjectTypeByID(info.ObjectID);
+        RemoteObject remoteObject = null;
 
-            RemoteObject remoteObject = go.GetComponent<RemoteObject>();
+        switch (type)
+        {
+            case EGameObjectType.Player:
+                remoteObject = Managers.Resource.Instantiate("Object/Player").GetComponent<RemoteObject>();
+                break;
 
-            remoteObject.ID = info.ObjectID;
-            remoteObject.Name = info.Name;
-            remoteObject.Position = new Vector3Int(info.PosX, info.PosY, 0);
-            remoteObject.MoveDirection = info.FacingDirection;
-            remoteObject.MoveSpeed = info.MoveSpeed;
+            case EGameObjectType.Monster:
+                remoteObject = Managers.Resource.Instantiate("Object/Monster").GetComponent<RemoteObject>();
+                break;
 
-            remoteObject.transform.position = new Vector3(remoteObject.Position.x, remoteObject.Position.y, 0f) + new Vector3(0.5f, 0.5f, 0f);
-            remoteObject.SetState(info.CurState);
-
-            Managers.Map.AddObject(remoteObject);
+            case EGameObjectType.Projectile:
+                remoteObject = Managers.Resource.Instantiate("Object/Projectile").GetComponent<RemoteObject>();
+                break;
         }
+
+        remoteObject.ID = info.ObjectID;
+        remoteObject.Name = info.Name;
+        remoteObject.Position = new Vector3Int(info.PosX, info.PosY);
+        remoteObject.MoveDirection = info.FacingDirection;
+        remoteObject.MoveSpeed = info.MoveSpeed;
+
+        remoteObject.gameObject.name = remoteObject.Name;
+        remoteObject.transform.position = new Vector3(remoteObject.Position.x, remoteObject.Position.y) + new Vector3(0.5f, 0.5f);
+
+        remoteObject.SetState(info.CurState);
+
+        Managers.Map.AddObject(remoteObject);
+
+        objectDict.Add(remoteObject.ID, remoteObject);
     }
 
-    public void Add(int id, GameObject go)
+    public void RemoveObject(int oldObjectID)
     {
-        objectDict.Add(id, go);
-    }
+        if (objectDict.TryGetValue(oldObjectID, out MMORPG.Object obj) == false) return;
 
-    public void RemovePlayer(int leftPlayerID)
-    {
-        if (objectDict.TryGetValue(leftPlayerID, out GameObject go) == false) return;
-        if (go.TryGetComponent(out MMORPG.Object obj) == false) return;
+        objectDict.Remove(obj.ID);
 
-        objectDict.Remove(leftPlayerID);
-
-        Managers.Map.Removeobject(obj);
-        Managers.Resource.Destory(go);
-    }
-
-    public void Remove(int id)
-    {
-        if (objectDict.TryGetValue(id, out GameObject go) == false) return;
-            
-        objectDict.Remove(id);
-        Managers.Resource.Destory(go);
+        Managers.Map.RemoveObject(obj);
+        Managers.Resource.Destory(obj.gameObject);
     }
 
     public void Clear()
@@ -94,29 +95,23 @@ public class ObjectManager
         objectDict.Clear();
     }
 
-    public GameObject Find(int objectID)
-    {
-        return objectDict.TryGetValue(objectID, out GameObject gameObject) ? gameObject : null;
-    }
-
     public bool TryFind(int objectID, out GameObject obj)
     {
         obj = null;
 
-        if (objectDict.TryGetValue(objectID, out GameObject gameobject) == false) return false;
+        if (objectDict.TryGetValue(objectID, out MMORPG.Object gameobject) == false) return false;
 
-        obj = gameobject;
+        obj = gameobject.gameObject;
         return true;
     }
 
     public GameObject Find(Vector3Int cellPos)
     {
-        foreach (GameObject go in objectDict.Values)
+        foreach (MMORPG.Object obj in objectDict.Values)
         {
-            if (go.TryGetComponent(out MMORPG.Object controller) == false) continue;
-            if (controller.Position != cellPos) continue;
+            if (obj.Position != cellPos) continue;
          
-            return go;
+            return obj.gameObject;
         }
 
         return null;
@@ -126,12 +121,11 @@ public class ObjectManager
     {
         obj = null;
 
-        foreach (GameObject go in objectDict.Values)
+        foreach (MMORPG.Object go in objectDict.Values)
         {
-            if (go.TryGetComponent(out MMORPG.Object controller) == false) continue;
-            if (controller.Position != cellPos) continue;
+            if (go.Position != cellPos) continue;
 
-            obj = go;
+            obj = go.gameObject;
             return true;
         }
 
@@ -142,11 +136,11 @@ public class ObjectManager
     {
         if (ReferenceEquals(condition, null) == true) return null;
 
-        foreach (GameObject go in objectDict.Values)
+        foreach (MMORPG.Object go in objectDict.Values)
         {
-            if (condition.Invoke(go) == false) continue;
+            if (condition.Invoke(go.gameObject) == false) continue;
 
-            return go;
+            return go.gameObject;
         }
 
         return null;

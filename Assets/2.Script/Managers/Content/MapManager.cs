@@ -74,7 +74,7 @@ public class MapManager
         collision[cellPos.y, cellPos.x].Add(obj.ID, obj);
     }
 
-    public void Removeobject(MMORPG.Object obj)
+    public void RemoveObject(MMORPG.Object obj)
     {
         if (ReferenceEquals(obj, null) == true) return;
 

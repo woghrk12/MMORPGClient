@@ -8,11 +8,11 @@ public class PacketHandler
     {
         PlayerEnteredRoomResponse packet = message as PlayerEnteredRoomResponse;
 
-        Managers.Obj.AddPlayer(packet.NewPlayer, isMine: true);
+        Managers.Obj.AddObject(packet.NewPlayer, isMine: true);
 
         foreach(ObjectInfo info in packet.OtherPlayers)
         {
-            Managers.Obj.AddPlayer(info, isMine: false);
+            Managers.Obj.AddObject(info, isMine: false);
         }
     }
 
@@ -20,7 +20,7 @@ public class PacketHandler
     {
         PlayerEnteredRoomBroadcast packet = message as PlayerEnteredRoomBroadcast;
 
-        Managers.Obj.AddPlayer(packet.NewPlayer, isMine: false);
+        Managers.Obj.AddObject(packet.NewPlayer, isMine: false);
     }
 
     public static void HandlePlayerLeftRoomResponse(ServerSession session, IMessage message)
@@ -32,17 +32,21 @@ public class PacketHandler
     {
         PlayerLeftRoomBroadcast packet = message as PlayerLeftRoomBroadcast;
 
-        Managers.Obj.RemovePlayer(packet.OtherPlayerID);
+        Managers.Obj.RemoveObject(packet.OtherPlayerID);
     }
 
     public static void HandleObjectSpawnedBroadcast(ServerSession session, IMessage message)
     {
         ObjectSpawnedBroadcast packet = message as ObjectSpawnedBroadcast;
+
+        Managers.Obj.AddObject(packet.NewObjectInfo);
     }
 
     public static void HandleObjectDespawnedBroadcast(ServerSession session, IMessage message)
     {
         ObjectDespawnedBroadcast packet = message as ObjectDespawnedBroadcast;
+
+        Managers.Obj.RemoveObject(packet.OldObjectID);
     }
 
     public static void HandlePerformMoveResponse(ServerSession session, IMessage message)
