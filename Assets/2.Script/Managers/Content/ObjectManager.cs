@@ -33,6 +33,7 @@ public class ObjectManager
             localPlayer.MoveDirection = info.MoveDirection;
             localPlayer.FacingDirection = info.FacingDirection;
             localPlayer.MoveSpeed = info.MoveSpeed;
+            localPlayer.IsCollidable = info.IsCollidable;
 
             localPlayer.gameObject.name = localPlayer.Name;
             localPlayer.transform.position = new Vector3(localPlayer.Position.x, localPlayer.Position.y) + new Vector3(0.5f, 0.5f);
@@ -71,6 +72,7 @@ public class ObjectManager
         remoteObject.MoveDirection = info.MoveDirection;
         remoteObject.FacingDirection = info.FacingDirection;
         remoteObject.MoveSpeed = info.MoveSpeed;
+        remoteObject.IsCollidable = info.IsCollidable;
 
         remoteObject.gameObject.name = remoteObject.Name;
         remoteObject.transform.position = new Vector3(remoteObject.Position.x, remoteObject.Position.y) + new Vector3(0.5f, 0.5f);

@@ -70,7 +70,7 @@ public class MapManager
     {
         if (ReferenceEquals(obj, null) == true) return;
 
-        Vector3Int cellPos = ConvertPosToCell(obj.Position);
+        Vector2Int cellPos = ConvertPosToCell(obj.Position);
         collision[cellPos.y, cellPos.x].Add(obj.ID, obj);
     }
 
@@ -78,14 +78,14 @@ public class MapManager
     {
         if (ReferenceEquals(obj, null) == true) return;
 
-        Vector3Int cellPos = ConvertPosToCell(obj.Position);
+        Vector2Int cellPos = ConvertPosToCell(obj.Position);
         collision[cellPos.y, cellPos.x].Remove(obj.ID);
     }
 
     public void MoveObject(int objectID, Vector3Int curPos, Vector3Int targetPos)
     {
-        Vector3Int curCellPos = ConvertPosToCell(curPos);
-        Vector3Int targetCellPos = ConvertPosToCell(targetPos);
+        Vector2Int curCellPos = ConvertPosToCell(curPos);
+        Vector2Int targetCellPos = ConvertPosToCell(targetPos);
 
         if (collision[curCellPos.y, curCellPos.x].TryGetValue(objectID, out MMORPG.Object obj) == false) return;
 
@@ -93,21 +93,21 @@ public class MapManager
         collision[targetCellPos.y, targetCellPos.x].Add(objectID, obj);
     }
 
-    public bool CheckCanMove(Vector3Int position, bool isIgnoreObject = false)
+    public bool CheckCanMove(Vector3Int position, bool isIgnoreWall = false, bool isIgnoreObject = false)
     {
-        if (position.x < minX || position.x > maxX) return false;
-        if (position.y < minY || position.y > maxY) return false;
+        if (position.x < minX || position.x > maxX || position.y < minY || position.y > maxY) return false;
 
-        int cellPosX = position.x - minX;
-        int cellPosY = position.y - minY;
+        Vector2Int cellPos = ConvertPosToCell(position);
 
-        if (collision[cellPosY, cellPosX].ContainsKey(-1) == true) return false;
-        if (isIgnoreObject == false && collision[cellPosY, cellPosX].Count > 0) return false;
-
+        foreach (KeyValuePair<int, MMORPG.Object> pair in collision[cellPos.y, cellPos.x])
+        {
+            if (pair.Key == -1 && isIgnoreWall == false) return false;
+            if (pair.Value.IsCollidable == true && isIgnoreObject == false) return false;
+        }
         return true;
     }
 
-    private Vector3Int ConvertPosToCell(Vector3Int Pos) => new Vector3Int(Pos.x - minX, Pos.y - minY, 0);
+    private Vector2Int ConvertPosToCell(Vector3Int Pos) => new Vector2Int(Pos.x - minX, Pos.y - minY);
 
     #endregion Methods
 }

@@ -59,6 +59,8 @@ namespace MMORPG
 
         public int MoveSpeed { set; get; } = 0;
 
+        public bool IsCollidable { set; get; }
+
         #endregion Properties
 
         #region Unity Events
