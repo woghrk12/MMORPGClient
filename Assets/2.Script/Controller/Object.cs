@@ -11,6 +11,7 @@ namespace MMORPG
         private SpriteRenderer spriteRenderer = null;
 
         private EMoveDirection moveDirection = EMoveDirection.None;
+        private EMoveDirection facingDirection = EMoveDirection.Right;
 
         #endregion Variables
 
@@ -30,15 +31,6 @@ namespace MMORPG
 
                 moveDirection = value;
 
-                if (moveDirection == EMoveDirection.Left)
-                {
-                    transform.localScale = new Vector3(-1f, 1f, 1f);
-                }
-                if (moveDirection == EMoveDirection.Right)
-                {
-                    transform.localScale = new Vector3(1f, 1f, 1f);
-                }
-
                 if (moveDirection != EMoveDirection.None)
                 {
                     FacingDirection = moveDirection;
@@ -47,7 +39,23 @@ namespace MMORPG
             get => moveDirection;
         }
 
-        public EMoveDirection FacingDirection { private set; get; } = EMoveDirection.Right;
+        public EMoveDirection FacingDirection 
+        {
+            set
+            {
+                facingDirection = value;
+
+                if (facingDirection == EMoveDirection.Left)
+                {
+                    transform.localScale = new Vector3(-1f, 1f, 1f);
+                }
+                if (facingDirection == EMoveDirection.Right)
+                {
+                    transform.localScale = new Vector3(1f, 1f, 1f);
+                }
+            }
+            get => facingDirection;
+        }
 
         public int MoveSpeed { set; get; } = 0;
 
