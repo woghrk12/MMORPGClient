@@ -30,7 +30,7 @@ public class ObjectManager
             localPlayer.ID = info.ObjectID;
             localPlayer.Name = info.Name;
             localPlayer.Position = new Vector3Int(info.PosX, info.PosY, 0);
-            LocalPlayer.MoveDirection = info.MoveDirection;
+            localPlayer.MoveDirection = info.MoveDirection;
             localPlayer.FacingDirection = info.FacingDirection;
             localPlayer.MoveSpeed = info.MoveSpeed;
 
