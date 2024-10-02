@@ -60,14 +60,25 @@ namespace LocalPlayerState
                 return;
             }
 
-            // TODO : Handle the case where the player presses 3 or more directional keys
-            if ((inputDirection & ~moveDirection) == EMoveDirection.None)
+            EMoveDirection newDirection = inputDirection & ~moveDirection;
+            if (newDirection != EMoveDirection.None)
             {
-                moveDirection = inputDirection;
-            }
-            else
-            {
-                moveDirection = inputDirection & ~moveDirection;
+                if ((newDirection & EMoveDirection.Up) == EMoveDirection.Up)
+                {
+                    moveDirection = EMoveDirection.Up;
+                }
+                else if ((newDirection & EMoveDirection.Down) == EMoveDirection.Down)
+                {
+                    moveDirection = EMoveDirection.Down;
+                }
+                else if ((newDirection & EMoveDirection.Left) == EMoveDirection.Left)
+                {
+                    moveDirection = EMoveDirection.Left;
+                }
+                else if ((newDirection & EMoveDirection.Right) == EMoveDirection.Right)
+                {
+                    moveDirection = EMoveDirection.Right;
+                }
             }
 
             Vector3Int position = controller.Position;
