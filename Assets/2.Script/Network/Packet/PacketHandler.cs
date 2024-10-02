@@ -49,62 +49,39 @@ public class PacketHandler
         Managers.Obj.RemoveObject(packet.OldObjectID);
     }
 
-    public static void HandlePerformMoveResponse(ServerSession session, IMessage message)
-    {
-        PerformMoveResponse packet = message as PerformMoveResponse;
-        LocalPlayer localPlayer = Managers.Obj.LocalPlayer;
-        
-        if (ReferenceEquals(localPlayer, null) == true) return;
-
-        localPlayer.Position = new Vector3Int(packet.TargetPosX, packet.TargetPosY, 0);
-        
-        Managers.Map.MoveObject(localPlayer.ID, new Vector3Int(packet.CurPosX, packet.CurPosY, 0), new Vector3Int(packet.TargetPosX, packet.TargetPosY, 0));
-    }
-
     public static void HandlePerformMoveBroadcast(ServerSession session, IMessage message)
     {
         PerformMoveBroadcast packet = message as PerformMoveBroadcast;
-        LocalPlayer localPlayer = Managers.Obj.LocalPlayer;
 
-        if (ReferenceEquals(localPlayer, null) == false && localPlayer.ID == packet.ObjectID) return;
         if (Managers.Obj.TryFind(packet.ObjectID, out GameObject obj) == false) return;
-        if (obj.TryGetComponent(out RemoteObject controller) == false) return;
+        if (obj.TryGetComponent(out MMORPG.Object controller) == false) return;
 
         controller.MoveDirection = packet.MoveDirection;
         controller.Position = new Vector3Int(packet.TargetPosX, packet.TargetPosY, 0);
-        
-        if (packet.MoveDirection == EMoveDirection.None)
+
+        Managers.Map.MoveObject(packet.ObjectID, new Vector3Int(packet.CurPosX, packet.CurPosY), new Vector3Int(packet.TargetPosX, packet.TargetPosY));
+
+        if (Managers.Obj.LocalPlayer.ID != packet.ObjectID)
         {
-            controller.SetState(EObjectState.Idle);
+            (controller as RemoteObject).SetState(packet.MoveDirection == EMoveDirection.None ? EObjectState.Idle : EObjectState.Move);
         }
-        else
-        {
-            controller.SetState(EObjectState.Move);
-
-            Managers.Map.MoveObject(packet.ObjectID, new Vector3Int(packet.CurPosX, packet.CurPosY, 0), new Vector3Int(packet.TargetPosX, packet.TargetPosY, 0));
-        }
-    }
-
-    public static void HandlePerformAttackResponse(ServerSession session, IMessage message)
-    {
-        PerformAttackResponse packet = message as PerformAttackResponse;
-        LocalPlayer localPlayer = Managers.Obj.LocalPlayer;
-
-        if (ReferenceEquals(localPlayer, null) == true) return;
-
-        localPlayer.PerformAttack(packet.AttackStartTime, packet.AttackInfo);
     }
 
     public static void HandlePerformAttackBroadcast(ServerSession session, IMessage message)
     {
         PerformAttackBroadcast packet = message as PerformAttackBroadcast;
-        LocalPlayer localPlayer = Managers.Obj.LocalPlayer;
 
-        if (ReferenceEquals(localPlayer, null) == false && localPlayer.ID == packet.ObjectID) return;
         if (Managers.Obj.TryFind(packet.ObjectID, out GameObject obj) == false) return;
-        if (obj.TryGetComponent(out RemoteObject controller) == false) return;
+        if (obj.TryGetComponent(out MMORPG.Object controller) == false) return;
 
-        controller.PerformAttack(packet.AttackStartTime, packet.AttackInfo);
+        if (Managers.Obj.LocalPlayer.ID == packet.ObjectID)
+        {
+            (controller as LocalPlayer).PerformAttack(packet.AttackStartTime, packet.AttackInfo);
+        }
+        else
+        {
+            (controller as RemoteObject).PerformAttack(packet.AttackStartTime, packet.AttackInfo);
+        }
     }
 
     public static void HandleHitBroadcast(ServerSession session, IMessage message)
