@@ -97,56 +97,56 @@ public class ObjectManager
         objectDict.Clear();
     }
 
-    public bool TryFind(int objectID, out GameObject obj)
+    public bool TryFind(int objectID, out MMORPG.Object result)
     {
-        obj = null;
+        result = null;
 
-        if (objectDict.TryGetValue(objectID, out MMORPG.Object gameobject) == false) return false;
+        if (objectDict.TryGetValue(objectID, out MMORPG.Object obj) == false) return false;
 
-        obj = gameobject.gameObject;
+        result = obj;
         return true;
     }
 
-    public GameObject Find(Vector3Int cellPos)
+    public bool TryFind(Vector3Int position, out MMORPG.Object result)
     {
+        result = null;
+
         foreach (MMORPG.Object obj in objectDict.Values)
         {
-            if (obj.Position != cellPos) continue;
-         
-            return obj.gameObject;
-        }
+            if (obj.Position != position) continue;
 
-        return null;
-    }
-
-    public bool TryFind(Vector3Int cellPos, out GameObject obj)
-    {
-        obj = null;
-
-        foreach (MMORPG.Object go in objectDict.Values)
-        {
-            if (go.Position != cellPos) continue;
-
-            obj = go.gameObject;
+            result = obj;
             return true;
         }
 
-        return false;   
+        return false;
     }
 
-    public GameObject Find(Func<GameObject, bool> condition)
+    public MMORPG.Object Find(Vector3Int position)
     {
-        if (ReferenceEquals(condition, null) == true) return null;
-
-        foreach (MMORPG.Object go in objectDict.Values)
+        foreach (MMORPG.Object obj in objectDict.Values)
         {
-            if (condition.Invoke(go.gameObject) == false) continue;
+            if (obj.Position != position) continue;
 
-            return go.gameObject;
+            return obj;
         }
 
         return null;
     }
-    
+
+    public MMORPG.Object Find(Func<MMORPG.Object, bool> condition)
+    {
+        if (ReferenceEquals(condition, null) == true) return null;
+
+        foreach (MMORPG.Object obj in objectDict.Values)
+        {
+            if (condition.Invoke(obj) == false) continue;
+
+            return obj;
+        }
+
+        return null;
+    }
+
     #endregion Methods
 }

@@ -53,17 +53,16 @@ public class PacketHandler
     {
         PerformMoveBroadcast packet = message as PerformMoveBroadcast;
 
-        if (Managers.Obj.TryFind(packet.ObjectID, out GameObject obj) == false) return;
-        if (obj.TryGetComponent(out MMORPG.Object controller) == false) return;
+        if (Managers.Obj.TryFind(packet.ObjectID, out MMORPG.Object obj) == false) return;
 
-        controller.MoveDirection = packet.MoveDirection;
-        controller.Position = new Vector3Int(packet.TargetPosX, packet.TargetPosY, 0);
+        obj.MoveDirection = packet.MoveDirection;
+        obj.Position = new Vector3Int(packet.TargetPosX, packet.TargetPosY, 0);
 
         Managers.Map.MoveObject(packet.ObjectID, new Vector3Int(packet.CurPosX, packet.CurPosY), new Vector3Int(packet.TargetPosX, packet.TargetPosY));
 
         if (Managers.Obj.LocalPlayer.ID != packet.ObjectID)
         {
-            (controller as RemoteObject).SetState(packet.MoveDirection == EMoveDirection.None ? EObjectState.Idle : EObjectState.Move);
+            (obj as RemoteObject).SetState(packet.MoveDirection == EMoveDirection.None ? EObjectState.Idle : EObjectState.Move);
         }
     }
 
@@ -71,16 +70,15 @@ public class PacketHandler
     {
         PerformAttackBroadcast packet = message as PerformAttackBroadcast;
 
-        if (Managers.Obj.TryFind(packet.ObjectID, out GameObject obj) == false) return;
-        if (obj.TryGetComponent(out MMORPG.Object controller) == false) return;
+        if (Managers.Obj.TryFind(packet.ObjectID, out MMORPG.Object obj) == false) return;
 
         if (Managers.Obj.LocalPlayer.ID == packet.ObjectID)
         {
-            (controller as LocalPlayer).PerformAttack(packet.AttackStartTime, packet.AttackInfo);
+            (obj as LocalPlayer).PerformAttack(packet.AttackStartTime, packet.AttackInfo);
         }
         else
         {
-            (controller as RemoteObject).PerformAttack(packet.AttackStartTime, packet.AttackInfo);
+            (obj as RemoteObject).PerformAttack(packet.AttackStartTime, packet.AttackInfo);
         }
     }
 
@@ -88,11 +86,9 @@ public class PacketHandler
     {
         HitBroadcast packet = message as HitBroadcast;
 
-        if (Managers.Obj.TryFind(packet.AttackerID, out GameObject attackerObj) == false) return;
-        if (attackerObj.TryGetComponent(out MMORPG.Object attacker) == false) return;
-        if (Managers.Obj.TryFind(packet.DefenderID, out GameObject defenderObj) == false) return;
-        if (defenderObj.TryGetComponent(out MMORPG.Object defender) == false) return;
+        if (Managers.Obj.TryFind(packet.AttackerID, out MMORPG.Object attackerObj) == false) return;
+        if (Managers.Obj.TryFind(packet.DefenderID, out MMORPG.Object defenderObj) == false) return;
 
-        defender.OnDamaged();
+        defenderObj.OnDamaged();
     }
 }

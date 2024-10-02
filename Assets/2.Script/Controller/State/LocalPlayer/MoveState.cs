@@ -92,7 +92,7 @@ namespace LocalPlayerState
             }
 
             // When the character can move in the direction the player inputs
-            if (Managers.Map.CheckCanMove(position) == true && Managers.Obj.TryFind(position, out GameObject obj) == false)
+            if (Managers.Map.CheckCanMove(position) == true && Managers.Obj.TryFind(position, out MMORPG.Object obj) == false)
             {
                 packet.MoveDirection = moveDirection;
                 packet.CurPosX = controller.Position.x;
