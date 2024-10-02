@@ -30,7 +30,8 @@ public class ObjectManager
             localPlayer.ID = info.ObjectID;
             localPlayer.Name = info.Name;
             localPlayer.Position = new Vector3Int(info.PosX, info.PosY, 0);
-            localPlayer.MoveDirection = info.FacingDirection;
+            LocalPlayer.MoveDirection = info.MoveDirection;
+            localPlayer.FacingDirection = info.FacingDirection;
             localPlayer.MoveSpeed = info.MoveSpeed;
 
             localPlayer.gameObject.name = localPlayer.Name;
@@ -67,7 +68,8 @@ public class ObjectManager
         remoteObject.ID = info.ObjectID;
         remoteObject.Name = info.Name;
         remoteObject.Position = new Vector3Int(info.PosX, info.PosY);
-        remoteObject.MoveDirection = info.FacingDirection;
+        remoteObject.MoveDirection = info.MoveDirection;
+        remoteObject.FacingDirection = info.FacingDirection;
         remoteObject.MoveSpeed = info.MoveSpeed;
 
         remoteObject.gameObject.name = remoteObject.Name;
