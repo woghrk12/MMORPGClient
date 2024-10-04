@@ -34,7 +34,7 @@ namespace RemoteObjectState
                 return;
             }
 
-            if (attackInfo.AttackID == 1)
+            if (attackInfo.AttackID == 1 || attackInfo.AttackID == 2)
             {
                 animator.SetTrigger(AnimatorKey.Object.DO_ATTACK_HASH);
             }

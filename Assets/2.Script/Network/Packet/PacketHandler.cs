@@ -45,6 +45,8 @@ public class PacketHandler
     public static void HandleObjectDespawnedBroadcast(ServerSession session, IMessage message)
     {
         ObjectDespawnedBroadcast packet = message as ObjectDespawnedBroadcast;
+        
+        Debug.Log($"ObjectDespawnedBroadcast. Old Object ID : {packet.OldObjectID}");
 
         Managers.Obj.RemoveObject(packet.OldObjectID);
     }
@@ -52,6 +54,8 @@ public class PacketHandler
     public static void HandlePerformMoveBroadcast(ServerSession session, IMessage message)
     {
         PerformMoveBroadcast packet = message as PerformMoveBroadcast;
+
+        Debug.Log($"PerformMoveBroadcast. Object ID : {packet.ObjectID}. Cur Pos : ({packet.CurPosX}, {packet.CurPosY}) / Target Pos : ({packet.TargetPosX}, {packet.TargetPosY})");
 
         if (Managers.Obj.TryFind(packet.ObjectID, out MMORPG.Object obj) == false) return;
 
