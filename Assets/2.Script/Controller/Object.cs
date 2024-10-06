@@ -67,7 +67,7 @@ namespace MMORPG
 
         protected virtual void Awake()
         {
-            spriteRenderer = GetComponent<SpriteRenderer>();
+            spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         }
 
         #endregion Unity Events
