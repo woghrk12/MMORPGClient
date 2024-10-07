@@ -53,12 +53,12 @@ public class RemoteObject : MMORPG.Object
         return ReferenceEquals(curState, null) == false ? curState.StateID : EObjectState.Idle;
     }
 
-    public void PerformAttack(long attackStartTicks, AttackInfo attackInfo)
+    public void PerformAttack(int attackID)
     {
         if (stateDictionary.TryGetValue(EObjectState.Attack, out RemoteObjectState.State state) == false) return;
 
         RemoteObjectState.AttackState attackState = state as RemoteObjectState.AttackState;
-        attackState.SetAttackType(attackStartTicks, attackInfo);
+        attackState.SetAttackType(attackID);
 
         SetState(EObjectState.Attack);
     }

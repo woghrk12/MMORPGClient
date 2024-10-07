@@ -28,7 +28,7 @@ namespace LocalPlayerState
             {
                 PerformAttackRequest packet = new()
                 {
-                    AttackInfo = new AttackInfo() { AttackID = 2 }
+                    AttackID = attackInput == EPlayerInput.ATTACK ? 1 : 2
                 };
 
                 Managers.Network.Send(packet);

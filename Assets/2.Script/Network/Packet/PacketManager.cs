@@ -33,6 +33,7 @@ public class PacketManager
         receivedPacketHandlerDict.Add((ushort)EMessageID.ObjectDespawnedBroadcast, MakePacket<ObjectDespawnedBroadcast>);
         receivedPacketHandlerDict.Add((ushort)EMessageID.PerformMoveBroadcast, MakePacket<PerformMoveBroadcast>);
         receivedPacketHandlerDict.Add((ushort)EMessageID.PerformAttackBroadcast, MakePacket<PerformAttackBroadcast>);
+        receivedPacketHandlerDict.Add((ushort)EMessageID.AttackCompleteBroadcast, MakePacket<AttackCompleteBroadcast>);
         receivedPacketHandlerDict.Add((ushort)EMessageID.HitBroadcast, MakePacket<HitBroadcast>);
 
         handlerDict.Add((ushort)EMessageID.StatDataBroadcast, PacketHandler.HandleStatDataBroadcast);
@@ -44,6 +45,7 @@ public class PacketManager
         handlerDict.Add((ushort)EMessageID.ObjectDespawnedBroadcast, PacketHandler.HandleObjectDespawnedBroadcast);
         handlerDict.Add((ushort)EMessageID.PerformMoveBroadcast, PacketHandler.HandlePerformMoveBroadcast);
         handlerDict.Add((ushort)EMessageID.PerformAttackBroadcast, PacketHandler.HandlePerformAttackBroadcast);
+        handlerDict.Add((ushort)EMessageID.AttackCompleteBroadcast, PacketHandler.HandleAttackCompleteBroadcast);
         handlerDict.Add((ushort)EMessageID.HitBroadcast, PacketHandler.HandleHitBroadcast);
     }
 

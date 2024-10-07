@@ -87,11 +87,27 @@ public class PacketHandler
 
         if (Managers.Obj.LocalPlayer.ID == packet.ObjectID)
         {
-            (obj as LocalPlayer).PerformAttack(packet.AttackStartTime, packet.AttackInfo);
+            (obj as LocalPlayer).PerformAttack(packet.AttackID);
         }
         else
         {
-            (obj as RemoteObject).PerformAttack(packet.AttackStartTime, packet.AttackInfo);
+            (obj as RemoteObject).PerformAttack(packet.AttackID);
+        }
+    }
+
+    public static void HandleAttackCompleteBroadcast(ServerSession session, IMessage message)
+    {
+        AttackCompleteBroadcast packet = message as AttackCompleteBroadcast;
+
+        if (Managers.Obj.TryFind(packet.ObjectID, out MMORPG.Object obj) == false) return;
+
+        if (Managers.Obj.LocalPlayer.ID == packet.ObjectID)
+        {
+            (obj as LocalPlayer).SetState(EObjectState.Idle, EPlayerInput.NONE);
+        }
+        else
+        {
+            (obj as RemoteObject).SetState(EObjectState.Idle);
         }
     }
 

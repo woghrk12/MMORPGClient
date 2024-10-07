@@ -74,12 +74,12 @@ public class LocalPlayer : MMORPG.Object
         return ReferenceEquals(curState, null) == false ? curState.StateID : EObjectState.Idle;
     }
 
-    public void PerformAttack(long attackStartTicks, AttackInfo attackInfo)
+    public void PerformAttack(int attackID)
     {
         if (stateDictionary.TryGetValue(EObjectState.Attack, out LocalPlayerState.State state) == false) return;
 
         LocalPlayerState.AttackState attackState = state as LocalPlayerState.AttackState;
-        attackState.SetAttackType(attackStartTicks, attackInfo);
+        attackState.SetAttackType(attackID);
 
         SetState(EObjectState.Attack, EPlayerInput.NONE);
     }
@@ -108,6 +108,10 @@ public class LocalPlayer : MMORPG.Object
         if (Input.GetKey(KeyCode.Space))
         {
             input |= EPlayerInput.ATTACK;
+        }
+        if (Input.GetKey(KeyCode.R))
+        {
+            input |= EPlayerInput.SKILL;
         }
 
         return input;

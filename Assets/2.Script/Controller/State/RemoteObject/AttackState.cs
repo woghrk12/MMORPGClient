@@ -7,8 +7,7 @@ namespace RemoteObjectState
     {
         #region Variables
 
-        private AttackInfo attackInfo = null;
-        private long attackStartTicks = 0;
+        private Data.AttackStat attackStat = null;
 
         #endregion Variables
 
@@ -20,36 +19,19 @@ namespace RemoteObjectState
 
         #region Methods
 
-        public void SetAttackType(long attackStartTicks, AttackInfo attackInfo)
+        public void SetAttackType(int attackID)
         {
-            this.attackStartTicks = attackStartTicks;
-            this.attackInfo = attackInfo;
+            attackStat = Managers.Data.AttackStatDictionary[attackID];
         }
 
         public override void OnEnter()
         {
-            if (ReferenceEquals(attackInfo, null) == true)
-            {
-                controller.SetState(EObjectState.Idle);
-                return;
-            }
-
-            if (attackInfo.AttackID == 1 || attackInfo.AttackID == 2)
-            {
-                animator.SetTrigger(AnimatorKey.Object.DO_ATTACK_HASH);
-            }
-        }
-
-        public override void OnUpdate()
-        {
-            if (DateTime.UtcNow.Ticks - attackStartTicks < 5 * 100 * 10000) return;
-
-            controller.SetState(EObjectState.Idle);
+            animator.SetTrigger(attackStat.AnimationKey);
         }
 
         public override void OnExit()
         {
-            attackInfo = null;
+            attackStat = null;
         }
 
         #endregion Methods
