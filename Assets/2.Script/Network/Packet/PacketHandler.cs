@@ -120,4 +120,15 @@ public class PacketHandler
 
         defenderObj.OnDamaged();
     }
+
+    public static void HandleUpdateObjectStatBroadcast(ServerSession session, IMessage message)
+    {
+        UpdateObjectStatBroadcast packet = message as UpdateObjectStatBroadcast;
+
+        if (Managers.Obj.TryFind(packet.ObjectID, out MMORPG.Object obj) == false) return;
+
+        obj.MaxHP = packet.Stat.MaxHP;
+        obj.CurHP = packet.Stat.CurHP;
+        obj.AttackPower = packet.Stat.AttackPower;
+    }
 }

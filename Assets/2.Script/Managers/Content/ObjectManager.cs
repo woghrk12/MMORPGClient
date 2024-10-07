@@ -35,6 +35,13 @@ public class ObjectManager
             localPlayer.MoveSpeed = info.MoveSpeed;
             localPlayer.IsCollidable = info.IsCollidable;
 
+            if (ReferenceEquals(info.ObjectStat, null) == false)
+            {
+                localPlayer.MaxHP = info.ObjectStat.MaxHP;
+                localPlayer.CurHP = info.ObjectStat.CurHP;
+                localPlayer.AttackPower = info.ObjectStat.AttackPower;
+            }
+
             localPlayer.gameObject.name = localPlayer.Name;
             localPlayer.transform.position = new Vector3(localPlayer.Position.x, localPlayer.Position.y) + new Vector3(0.5f, 0.5f);
 
@@ -73,6 +80,13 @@ public class ObjectManager
         remoteObject.FacingDirection = info.FacingDirection;
         remoteObject.MoveSpeed = info.MoveSpeed;
         remoteObject.IsCollidable = info.IsCollidable;
+
+        if (ReferenceEquals(info.ObjectStat, null) == false)
+        {
+            remoteObject.MaxHP = info.ObjectStat.MaxHP;
+            remoteObject.CurHP = info.ObjectStat.CurHP;
+            remoteObject.AttackPower = info.ObjectStat.AttackPower;
+        }
 
         remoteObject.gameObject.name = remoteObject.Name;
         remoteObject.transform.position = new Vector3(remoteObject.Position.x, remoteObject.Position.y) + new Vector3(0.5f, 0.5f);

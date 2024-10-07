@@ -13,6 +13,8 @@ namespace MMORPG
         private EMoveDirection moveDirection = EMoveDirection.None;
         private EMoveDirection facingDirection = EMoveDirection.Right;
 
+        private ObjectStat stat = new();
+
         #endregion Variables
 
         #region Properties
@@ -60,6 +62,33 @@ namespace MMORPG
         public int MoveSpeed { set; get; } = 0;
 
         public bool IsCollidable { set; get; }
+
+        public int MaxHP 
+        {
+            set 
+            { 
+                stat.MaxHP = value; 
+            } 
+            get => stat.MaxHP; 
+        }
+
+        public int CurHP 
+        { 
+            set 
+            { 
+                stat.CurHP = value;
+            } 
+            get => stat.CurHP; 
+        }
+
+        public int AttackPower 
+        { 
+            set 
+            { 
+                stat.AttackPower = value; 
+            }
+            get => stat.AttackPower; 
+        }
 
         #endregion Properties
 
