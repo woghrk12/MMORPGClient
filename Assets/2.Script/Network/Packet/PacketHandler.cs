@@ -4,6 +4,15 @@ using UnityEngine;
 
 public class PacketHandler
 {
+    public static void HandleStatDataBroadcast(ServerSession session, IMessage message)
+    {
+        StatDataBroadcast packet = message as StatDataBroadcast;
+
+        Debug.Log($"StatDataBroadcast. Data type : {packet.DataType}");
+
+        Managers.Data.SetData(packet.DataType, packet.Data);
+    }
+
     public static void HandlePlayerEnteredRoomResponse(ServerSession session, IMessage message)
     {
         PlayerEnteredRoomResponse packet = message as PlayerEnteredRoomResponse;
