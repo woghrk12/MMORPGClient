@@ -9,7 +9,7 @@ namespace Data
         public string Name;
         public string AnimationKey;
         public float Cooldown;
-        public Dictionary<int, float> CoeffDictionary;
+        public Dictionary<int, int> CoeffDictionary;
         public EAttackType AttackType;
         public int Range;
         public int ProjectileID;
