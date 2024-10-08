@@ -1,4 +1,5 @@
 using Google.Protobuf.Protocol;
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -14,6 +15,8 @@ namespace MMORPG
         private EMoveDirection facingDirection = EMoveDirection.Right;
 
         private ObjectStat stat = new();
+
+        private event Action<int, int> curHpModified = null;
 
         #endregion Variables
 
@@ -77,8 +80,22 @@ namespace MMORPG
             set 
             { 
                 stat.CurHP = value;
+
+                curHpModified?.Invoke(stat.CurHP, stat.MaxHP);
             } 
             get => stat.CurHP; 
+        }
+
+        public event Action<int, int> CurHpModified
+        {
+            add
+            {
+                curHpModified += value;
+            }
+            remove
+            {
+                curHpModified -= value;
+            }
         }
 
         public int AttackPower 

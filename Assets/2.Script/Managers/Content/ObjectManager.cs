@@ -52,6 +52,11 @@ public class ObjectManager
             LocalPlayer = localPlayer;
             objectDict.Add(localPlayer.ID, localPlayer);
 
+            HpBar hpBar = Managers.Resource.Instantiate("UI/HpBar").GetComponent<HpBar>();
+            hpBar.InitHpBar(localPlayer.transform, 0.65f);
+
+            localPlayer.CurHpModified += hpBar.SetHpBar;
+
             return;
         }
 
@@ -96,6 +101,14 @@ public class ObjectManager
         Managers.Map.AddObject(remoteObject);
 
         objectDict.Add(remoteObject.ID, remoteObject);
+
+        if (type != EGameObjectType.Projectile)
+        {
+            HpBar hpBar = Managers.Resource.Instantiate("UI/HpBar").GetComponent<HpBar>();
+            hpBar.InitHpBar(remoteObject.transform, 0.65f);
+
+            remoteObject.CurHpModified += hpBar.SetHpBar;
+        }
     }
 
     public void RemoveObject(int oldObjectID)
