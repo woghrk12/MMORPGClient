@@ -115,10 +115,11 @@ public class PacketHandler
     {
         HitBroadcast packet = message as HitBroadcast;
 
-        if (Managers.Obj.TryFind(packet.AttackerID, out MMORPG.Object attackerObj) == false) return;
-        if (Managers.Obj.TryFind(packet.DefenderID, out MMORPG.Object defenderObj) == false) return;
+        Debug.Log($"HitBroadcast. Object ID : {packet.ObjectID}, Remain HP : {packet.CurHp}, Damage : {packet.Damage}");
 
-        defenderObj.OnDamaged();
+        if (Managers.Obj.TryFind(packet.ObjectID, out MMORPG.Object obj) == false) return;
+
+        obj.OnDamaged(packet.CurHp, packet.Damage);
     }
 
     public static void HandleUpdateObjectStatBroadcast(ServerSession session, IMessage message)

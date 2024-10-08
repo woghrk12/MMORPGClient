@@ -103,12 +103,14 @@ namespace MMORPG
 
         #region Methods
 
-        public virtual void OnDamaged()
+        public virtual void OnDamaged(int remainHp, int damage)
         {
-            StartCoroutine(OnDamagedCo());
+            CurHP = remainHp;
+
+            StartCoroutine(OnDamagedCo(damage));
         }
 
-        private IEnumerator OnDamagedCo()
+        private IEnumerator OnDamagedCo(int damage)
         {
             spriteRenderer.color = Color.red;
 
