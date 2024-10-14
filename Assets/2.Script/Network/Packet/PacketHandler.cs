@@ -17,11 +17,11 @@ public class PacketHandler
     {
         PlayerEnteredRoomResponse packet = message as PlayerEnteredRoomResponse;
 
-        Managers.Obj.AddObject(packet.NewPlayer, isMine: true);
+        Managers.Obj.AddLocalPlayer(packet.NewPlayer);
 
-        foreach(ObjectInfo info in packet.OtherPlayers)
+        foreach(ObjectInfo info in packet.OtherObjects)
         {
-            Managers.Obj.AddObject(info, isMine: false);
+            Managers.Obj.AddObject(info);
         }
     }
 
@@ -29,7 +29,7 @@ public class PacketHandler
     {
         PlayerEnteredRoomBroadcast packet = message as PlayerEnteredRoomBroadcast;
 
-        Managers.Obj.AddObject(packet.NewPlayer, isMine: false);
+        Managers.Obj.AddObject(packet.NewPlayer);
     }
 
     public static void HandlePlayerLeftRoomResponse(ServerSession session, IMessage message)

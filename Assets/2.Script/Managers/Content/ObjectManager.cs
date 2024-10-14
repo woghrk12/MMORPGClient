@@ -21,45 +21,43 @@ public class ObjectManager
 
     public static EGameObjectType GetObjectTypeByID(int objectID) => (EGameObjectType)(objectID >> 24 & 0x7F);
 
-    public void AddObject(ObjectInfo info, bool isMine = false)
+    public void AddLocalPlayer(ObjectInfo info)
     {
-        if (isMine)
+        LocalPlayer localPlayer = Managers.Resource.Instantiate("Object/LocalPlayer").GetComponent<LocalPlayer>();
+
+        HpBar hpBar = Managers.Resource.Instantiate("UI/HpBar").GetComponent<HpBar>();
+        hpBar.InitHpBar(localPlayer.transform, 0.65f);
+
+        localPlayer.CurHpModified += hpBar.SetHpBar;
+
+        localPlayer.ID = info.ObjectID;
+        localPlayer.Name = info.Name;
+        localPlayer.Position = new Vector3Int(info.PosX, info.PosY, 0);
+        localPlayer.MoveDirection = info.MoveDirection;
+        localPlayer.FacingDirection = info.FacingDirection;
+        localPlayer.MoveSpeed = info.MoveSpeed;
+        localPlayer.IsCollidable = info.IsCollidable;
+
+        if (ReferenceEquals(info.ObjectStat, null) == false)
         {
-            LocalPlayer localPlayer = Managers.Resource.Instantiate("Object/LocalPlayer").GetComponent<LocalPlayer>();
-
-            HpBar hpBar = Managers.Resource.Instantiate("UI/HpBar").GetComponent<HpBar>();
-            hpBar.InitHpBar(localPlayer.transform, 0.65f);
-
-            localPlayer.CurHpModified += hpBar.SetHpBar;
-
-            localPlayer.ID = info.ObjectID;
-            localPlayer.Name = info.Name;
-            localPlayer.Position = new Vector3Int(info.PosX, info.PosY, 0);
-            localPlayer.MoveDirection = info.MoveDirection;
-            localPlayer.FacingDirection = info.FacingDirection;
-            localPlayer.MoveSpeed = info.MoveSpeed;
-            localPlayer.IsCollidable = info.IsCollidable;
-
-            if (ReferenceEquals(info.ObjectStat, null) == false)
-            {
-                localPlayer.MaxHP = info.ObjectStat.MaxHP;
-                localPlayer.CurHP = info.ObjectStat.CurHP;
-                localPlayer.AttackPower = info.ObjectStat.AttackPower;
-            }
-
-            localPlayer.gameObject.name = localPlayer.Name;
-            localPlayer.transform.position = new Vector3(localPlayer.Position.x, localPlayer.Position.y) + new Vector3(0.5f, 0.5f);
-
-            localPlayer.SetState(info.CurState, EPlayerInput.NONE);
-
-            Managers.Map.AddObject(localPlayer);
-
-            LocalPlayer = localPlayer;
-            objectDict.Add(localPlayer.ID, localPlayer);
-
-            return;
+            localPlayer.MaxHP = info.ObjectStat.MaxHP;
+            localPlayer.CurHP = info.ObjectStat.CurHP;
+            localPlayer.AttackPower = info.ObjectStat.AttackPower;
         }
 
+        localPlayer.gameObject.name = localPlayer.Name;
+        localPlayer.transform.position = new Vector3(localPlayer.Position.x, localPlayer.Position.y) + new Vector3(0.5f, 0.5f);
+
+        localPlayer.SetState(info.CurState, EPlayerInput.NONE);
+
+        Managers.Map.AddObject(localPlayer);
+
+        LocalPlayer = localPlayer;
+        objectDict.Add(localPlayer.ID, localPlayer);
+    }
+
+    public void AddObject(ObjectInfo info)
+    {
         EGameObjectType type = GetObjectTypeByID(info.ObjectID);
         RemoteObject remoteObject = null;
 
