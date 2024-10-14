@@ -42,7 +42,15 @@ public class HpBar : MonoBehaviour
     {
         float ratio = Mathf.Clamp01((float)curHp / maxHp);
 
-        fillTransform.localScale = new Vector3(ratio, 1f, 1f);
+        if (ratio <= 0f)
+        {
+            gameObject.SetActive(false);
+        }
+        else
+        {
+            gameObject.SetActive(true);
+            fillTransform.localScale = new Vector3(ratio, 1f, 1f);
+        }
     }
 
     #endregion Methods

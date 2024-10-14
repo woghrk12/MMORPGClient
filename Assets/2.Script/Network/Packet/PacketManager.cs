@@ -35,6 +35,8 @@ public class PacketManager
         receivedPacketHandlerDict.Add((ushort)EMessageID.PerformAttackBroadcast, MakePacket<PerformAttackBroadcast>);
         receivedPacketHandlerDict.Add((ushort)EMessageID.AttackCompleteBroadcast, MakePacket<AttackCompleteBroadcast>);
         receivedPacketHandlerDict.Add((ushort)EMessageID.HitBroadcast, MakePacket<HitBroadcast>);
+        receivedPacketHandlerDict.Add((ushort)EMessageID.ObjectDeadBroadcast, MakePacket<ObjectDeadBroadcast>);
+        receivedPacketHandlerDict.Add((ushort)EMessageID.ObjectReviveBroadcast, MakePacket<ObjectReviveBroadcast>);
 
         handlerDict.Add((ushort)EMessageID.StatDataBroadcast, PacketHandler.HandleStatDataBroadcast);
         handlerDict.Add((ushort)EMessageID.PlayerEnteredRoomResponse, PacketHandler.HandlePlayerEnteredRoomResponse);
@@ -47,6 +49,8 @@ public class PacketManager
         handlerDict.Add((ushort)EMessageID.PerformAttackBroadcast, PacketHandler.HandlePerformAttackBroadcast);
         handlerDict.Add((ushort)EMessageID.AttackCompleteBroadcast, PacketHandler.HandleAttackCompleteBroadcast);
         handlerDict.Add((ushort)EMessageID.HitBroadcast, PacketHandler.HandleHitBroadcast);
+        handlerDict.Add((ushort)EMessageID.ObjectDeadBroadcast, PacketHandler.HandleObjectDeadBroadcast);
+        handlerDict.Add((ushort)EMessageID.ObjectReviveBroadcast, PacketHandler.HandleObjectReviveBroadcast);
     }
 
     #endregion Constructor

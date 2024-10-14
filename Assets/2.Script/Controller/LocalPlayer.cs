@@ -54,7 +54,7 @@ public class LocalPlayer : MMORPG.Object
 
     #region Methods
 
-    public void SetState(EObjectState value, EPlayerInput input)
+    public void SetState(EObjectState value, EPlayerInput input = EPlayerInput.NONE)
     {
         if (ReferenceEquals(curState, null) == false)
         {
@@ -116,6 +116,27 @@ public class LocalPlayer : MMORPG.Object
 
         return input;
     }
+
+    #region Events
+
+    public override void OnDead(MMORPG.Object attacker)
+    {
+        base.OnDead(attacker);
+
+        SetState(EObjectState.Dead);
+
+        Managers.Resource.Instantiate("UI/DeadUI");
+    }
+
+    public override void OnRevive(Vector3Int revivePos)
+    {
+        base.OnRevive(revivePos);
+
+        IsCollidable = true;
+        SetState(EObjectState.Idle);
+    }
+
+    #endregion Events
 
     #endregion Methods
 }

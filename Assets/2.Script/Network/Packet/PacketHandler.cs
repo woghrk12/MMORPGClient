@@ -122,14 +122,41 @@ public class PacketHandler
         obj.OnDamaged(packet.CurHp, packet.Damage);
     }
 
-    public static void HandleUpdateObjectStatBroadcast(ServerSession session, IMessage message)
+    public static void HandleObjectDeadBroadcast(ServerSession session, IMessage message)
     {
-        UpdateObjectStatBroadcast packet = message as UpdateObjectStatBroadcast;
+        ObjectDeadBroadcast packet = message as ObjectDeadBroadcast;
+
+        Debug.Log($"ObjectDeadBroadcast. Object ID : {packet.ObjectID}, Attacker ID : {packet.AttackerID}");
+
+        if (Managers.Obj.TryFind(packet.ObjectID, out MMORPG.Object obj) == false) return;
+        if (Managers.Obj.TryFind(packet.AttackerID, out MMORPG.Object attacker) == false) return;
+
+        obj.OnDead(attacker);
+    }
+
+    public static void HandleObjectReviveBroadcast(ServerSession session, IMessage message)
+    {
+        ObjectReviveBroadcast packet = message as ObjectReviveBroadcast;
+
+        Debug.Log($"ObjectReviveBroadcast. Object ID : {packet.ObjectID}, Revive Pos : ({packet.RevivePosX}, {packet.RevivePosY})");
 
         if (Managers.Obj.TryFind(packet.ObjectID, out MMORPG.Object obj) == false) return;
 
-        obj.MaxHP = packet.Stat.MaxHP;
-        obj.CurHP = packet.Stat.CurHP;
-        obj.AttackPower = packet.Stat.AttackPower;
+        obj.OnRevive(new Vector3Int(packet.RevivePosX, packet.RevivePosY));
+        obj.MoveDirection = EMoveDirection.None;
+        obj.IsCollidable = true;
+        obj.Position = new Vector3Int(packet.RevivePosX, packet.RevivePosY);
+        obj.CurHP = obj.MaxHP;
+
+        obj.transform.position = new Vector3(packet.RevivePosX, packet.RevivePosY) + new Vector3(0.5f, 0.5f);
+
+        if (Managers.Obj.LocalPlayer.ID == packet.ObjectID)
+        {
+            (obj as LocalPlayer).SetState(EObjectState.Idle, EPlayerInput.NONE);
+        }
+        else
+        {
+            (obj as RemoteObject).SetState(EObjectState.Idle);
+        }
     }
 }

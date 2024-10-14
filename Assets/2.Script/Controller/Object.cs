@@ -9,8 +9,6 @@ namespace MMORPG
     {
         #region Variables
 
-        private SpriteRenderer spriteRenderer = null;
-
         private EMoveDirection moveDirection = EMoveDirection.None;
         private EMoveDirection facingDirection = EMoveDirection.Right;
 
@@ -21,6 +19,8 @@ namespace MMORPG
         #endregion Variables
 
         #region Properties
+
+        public SpriteRenderer SpriteRenderer { private set; get; }
 
         public int ID { set; get; } = -1;
 
@@ -113,12 +113,14 @@ namespace MMORPG
 
         protected virtual void Awake()
         {
-            spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+            SpriteRenderer = GetComponentInChildren<SpriteRenderer>();
         }
 
         #endregion Unity Events
 
         #region Methods
+
+        #region Events
 
         public virtual void OnDamaged(int remainHp, int damage)
         {
@@ -127,13 +129,31 @@ namespace MMORPG
             StartCoroutine(OnDamagedCo(damage));
         }
 
+        public virtual void OnDead(Object attacker)
+        {
+            Debug.Log($"{ID} object dies by {attacker.ID} object!");
+        }
+
+        public virtual void OnRevive(Vector3Int revivePos)
+        {
+            MoveDirection = EMoveDirection.None;
+            CurHP = MaxHP;
+
+            Managers.Map.MoveObject(ID, Position, revivePos);
+            Position = revivePos;
+
+            transform.position = new Vector3(Position.x, Position.y) + new Vector3(0.5f, 0.5f);
+        }
+
+        #endregion Events
+
         private IEnumerator OnDamagedCo(int damage)
         {
-            spriteRenderer.color = Color.red;
+            SpriteRenderer.color = Color.red;
 
             yield return new WaitForSeconds(0.2f);
 
-            spriteRenderer.color = Color.white;
+            SpriteRenderer.color = Color.white;
         }
 
         #endregion Methods

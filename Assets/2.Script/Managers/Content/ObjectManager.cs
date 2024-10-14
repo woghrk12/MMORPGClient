@@ -27,6 +27,11 @@ public class ObjectManager
         {
             LocalPlayer localPlayer = Managers.Resource.Instantiate("Object/LocalPlayer").GetComponent<LocalPlayer>();
 
+            HpBar hpBar = Managers.Resource.Instantiate("UI/HpBar").GetComponent<HpBar>();
+            hpBar.InitHpBar(localPlayer.transform, 0.65f);
+
+            localPlayer.CurHpModified += hpBar.SetHpBar;
+
             localPlayer.ID = info.ObjectID;
             localPlayer.Name = info.Name;
             localPlayer.Position = new Vector3Int(info.PosX, info.PosY, 0);
@@ -52,11 +57,6 @@ public class ObjectManager
             LocalPlayer = localPlayer;
             objectDict.Add(localPlayer.ID, localPlayer);
 
-            HpBar hpBar = Managers.Resource.Instantiate("UI/HpBar").GetComponent<HpBar>();
-            hpBar.InitHpBar(localPlayer.transform, 0.65f);
-
-            localPlayer.CurHpModified += hpBar.SetHpBar;
-
             return;
         }
 
@@ -76,6 +76,14 @@ public class ObjectManager
             case EGameObjectType.Projectile:
                 remoteObject = Managers.Resource.Instantiate("Object/Projectile").GetComponent<RemoteObject>();
                 break;
+        }
+
+        if (type != EGameObjectType.Projectile)
+        {
+            HpBar hpBar = Managers.Resource.Instantiate("UI/HpBar").GetComponent<HpBar>();
+            hpBar.InitHpBar(remoteObject.transform, 0.65f);
+
+            remoteObject.CurHpModified += hpBar.SetHpBar;
         }
 
         remoteObject.ID = info.ObjectID;
@@ -101,14 +109,6 @@ public class ObjectManager
         Managers.Map.AddObject(remoteObject);
 
         objectDict.Add(remoteObject.ID, remoteObject);
-
-        if (type != EGameObjectType.Projectile)
-        {
-            HpBar hpBar = Managers.Resource.Instantiate("UI/HpBar").GetComponent<HpBar>();
-            hpBar.InitHpBar(remoteObject.transform, 0.65f);
-
-            remoteObject.CurHpModified += hpBar.SetHpBar;
-        }
     }
 
     public void RemoveObject(int oldObjectID)

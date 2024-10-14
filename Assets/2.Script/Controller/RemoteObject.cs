@@ -1,4 +1,6 @@
 using Google.Protobuf.Protocol;
+using MMORPG;
+using UnityEngine;
 using System.Collections.Generic;
 
 public class RemoteObject : MMORPG.Object
@@ -62,6 +64,25 @@ public class RemoteObject : MMORPG.Object
 
         SetState(EObjectState.Attack);
     }
+
+    #region Events
+
+    public override void OnDead(MMORPG.Object attacker)
+    {
+        base.OnDead(attacker);
+
+        SetState(EObjectState.Dead);
+    }
+
+    public override void OnRevive(Vector3Int revivePos)
+    {
+        base.OnRevive(revivePos);
+
+        IsCollidable = true;
+        SetState(EObjectState.Idle);
+    }
+
+    #endregion Events
 
     #endregion Methods
 }
