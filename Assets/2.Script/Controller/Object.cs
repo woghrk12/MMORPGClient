@@ -137,10 +137,10 @@ namespace MMORPG
         public virtual void OnRevive(Vector3Int revivePos)
         {
             MoveDirection = EMoveDirection.None;
+            IsCollidable = true;
             CurHP = MaxHP;
 
-            Managers.Map.MoveObject(ID, Position, revivePos);
-            Position = revivePos;
+            Managers.Map.MoveObject(this, revivePos);
 
             transform.position = new Vector3(Position.x, Position.y) + new Vector3(0.5f, 0.5f);
         }

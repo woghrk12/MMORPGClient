@@ -64,14 +64,13 @@ public class PacketHandler
     {
         PerformMoveBroadcast packet = message as PerformMoveBroadcast;
 
-        Debug.Log($"PerformMoveBroadcast. Object ID : {packet.ObjectID}. Cur Pos : ({packet.CurPosX}, {packet.CurPosY}) / Target Pos : ({packet.TargetPosX}, {packet.TargetPosY})");
+        Debug.Log($"PerformMoveBroadcast. Object ID : {packet.ObjectID}. Target Pos : ({packet.TargetPosX}, {packet.TargetPosY})");
 
         if (Managers.Obj.TryFind(packet.ObjectID, out MMORPG.Object obj) == false) return;
 
         obj.MoveDirection = packet.MoveDirection;
-        obj.Position = new Vector3Int(packet.TargetPosX, packet.TargetPosY, 0);
 
-        Managers.Map.MoveObject(packet.ObjectID, new Vector3Int(packet.CurPosX, packet.CurPosY), new Vector3Int(packet.TargetPosX, packet.TargetPosY));
+        Managers.Map.MoveObject(obj, new Vector3Int(packet.TargetPosX, packet.TargetPosY));
 
         if (Managers.Obj.LocalPlayer.ID != packet.ObjectID)
         {
@@ -143,20 +142,5 @@ public class PacketHandler
         if (Managers.Obj.TryFind(packet.ObjectID, out MMORPG.Object obj) == false) return;
 
         obj.OnRevive(new Vector3Int(packet.RevivePosX, packet.RevivePosY));
-        obj.MoveDirection = EMoveDirection.None;
-        obj.IsCollidable = true;
-        obj.Position = new Vector3Int(packet.RevivePosX, packet.RevivePosY);
-        obj.CurHP = obj.MaxHP;
-
-        obj.transform.position = new Vector3(packet.RevivePosX, packet.RevivePosY) + new Vector3(0.5f, 0.5f);
-
-        if (Managers.Obj.LocalPlayer.ID == packet.ObjectID)
-        {
-            (obj as LocalPlayer).SetState(EObjectState.Idle, EPlayerInput.NONE);
-        }
-        else
-        {
-            (obj as RemoteObject).SetState(EObjectState.Idle);
-        }
     }
 }

@@ -132,7 +132,6 @@ public class LocalPlayer : MMORPG.Object
     {
         base.OnRevive(revivePos);
 
-        IsCollidable = true;
         SetState(EObjectState.Idle);
     }
 

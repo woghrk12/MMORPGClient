@@ -82,15 +82,17 @@ public class MapManager
         collision[cellPos.y, cellPos.x].Remove(obj.ID);
     }
 
-    public void MoveObject(int objectID, Vector3Int curPos, Vector3Int targetPos)
+    public void MoveObject(MMORPG.Object obj, Vector3Int targetPos)
     {
-        Vector2Int curCellPos = ConvertPosToCell(curPos);
+        if (ReferenceEquals(obj, null) == true) return;
+
+        Vector2Int curCellPos = ConvertPosToCell(obj.Position);
         Vector2Int targetCellPos = ConvertPosToCell(targetPos);
 
-        if (collision[curCellPos.y, curCellPos.x].TryGetValue(objectID, out MMORPG.Object obj) == false) return;
+        collision[curCellPos.y, curCellPos.x].Remove(obj.ID);
+        collision[targetCellPos.y, targetCellPos.x].Add(obj.ID, obj);
 
-        collision[curCellPos.y, curCellPos.x].Remove(objectID);
-        collision[targetCellPos.y, targetCellPos.x].Add(objectID, obj);
+        obj.Position = targetPos;
     }
 
     public bool CheckCanMove(Vector3Int position, bool isIgnoreWall = false, bool isIgnoreObject = false)
