@@ -17,6 +17,8 @@ public class PacketHandler
     {
         PlayerEnteredRoomResponse packet = message as PlayerEnteredRoomResponse;
 
+        Debug.Log($"PlayerEnteredRoomResponse. Player ID : {packet.NewPlayer.ObjectID}, # of Other Objects : {packet.OtherObjects.Count}");
+
         Managers.Obj.AddLocalPlayer(packet.NewPlayer);
 
         foreach(ObjectInfo info in packet.OtherObjects)
@@ -29,17 +31,23 @@ public class PacketHandler
     {
         PlayerEnteredRoomBroadcast packet = message as PlayerEnteredRoomBroadcast;
 
+        Debug.Log($"PlayerEnteredRoomBroadcast. New Player ID : {packet.NewPlayer.ObjectID}");
+
         Managers.Obj.AddObject(packet.NewPlayer);
     }
 
     public static void HandlePlayerLeftRoomResponse(ServerSession session, IMessage message)
     {
         PlayerLeftRoomResponse packet = message as PlayerLeftRoomResponse;
+
+        Debug.Log("PlayerLeftRoomResponse.");
     }
 
     public static void HandlePlayerLeftRoomBroadcast(ServerSession session, IMessage message)
     {
         PlayerLeftRoomBroadcast packet = message as PlayerLeftRoomBroadcast;
+
+        Debug.Log($"PlayerLeftRoomBroadcast. Left Player ID : {packet.OtherPlayerID}");
 
         Managers.Obj.RemoveObject(packet.OtherPlayerID);
     }
@@ -47,6 +55,8 @@ public class PacketHandler
     public static void HandleObjectSpawnedBroadcast(ServerSession session, IMessage message)
     {
         ObjectSpawnedBroadcast packet = message as ObjectSpawnedBroadcast;
+
+        Debug.Log($"ObjectSpawnedBroadcast. New Object ID : {packet.NewObjectInfo.ObjectID}");
 
         Managers.Obj.AddObject(packet.NewObjectInfo);
     }
@@ -82,6 +92,8 @@ public class PacketHandler
     {
         PerformAttackBroadcast packet = message as PerformAttackBroadcast;
 
+        Debug.Log($"PerformAttackBroadcast. Object ID : {packet.ObjectID}, Attack ID : {packet.AttackID}");
+
         if (Managers.Obj.TryFind(packet.ObjectID, out MMORPG.Object obj) == false) return;
 
         if (Managers.Obj.LocalPlayer.ID == packet.ObjectID)
@@ -97,6 +109,8 @@ public class PacketHandler
     public static void HandleAttackCompleteBroadcast(ServerSession session, IMessage message)
     {
         AttackCompleteBroadcast packet = message as AttackCompleteBroadcast;
+
+        Debug.Log($"AttackCompleteBroadcast. Object ID : {packet.ObjectID}");
 
         if (Managers.Obj.TryFind(packet.ObjectID, out MMORPG.Object obj) == false) return;
 
