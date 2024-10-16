@@ -112,12 +112,21 @@ namespace LocalPlayerState
                 packet.TargetPosY = position.y;
 
                 Managers.Network.Send(packet);
+                Managers.Map.MoveObject(controller, position);
 
                 controller.MoveDirection = moveDirection;
-                controller.Position = position;
             }
             else
             {
+                if (controller.MoveDirection == moveDirection) return;
+
+                packet.MoveDirection = moveDirection;
+                packet.CurPosX = controller.Position.x;
+                packet.CurPosY = controller.Position.y;
+
+                Managers.Network.Send(packet);
+
+                controller.MoveDirection = moveDirection;
                 // When the character's movement direction is not EMoveDirection.None,
                 // it indicates that the character is continuously attempting to move to an unreachable location
                 // When the player's character attempts to move to an unreachable location for the first time

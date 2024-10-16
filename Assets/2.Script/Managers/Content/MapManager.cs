@@ -85,6 +85,7 @@ public class MapManager
     public void MoveObject(MMORPG.Object obj, Vector3Int targetPos)
     {
         if (ReferenceEquals(obj, null) == true) return;
+        if (obj.Position == targetPos) return;
 
         Vector2Int curCellPos = ConvertPosToCell(obj.Position);
         Vector2Int targetCellPos = ConvertPosToCell(targetPos);
