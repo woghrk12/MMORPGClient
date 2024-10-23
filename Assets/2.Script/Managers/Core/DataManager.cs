@@ -8,6 +8,7 @@ public class DataManager
     #region Properties
 
     public Dictionary<int, Data.ObjectStat> ObjectStatDictionary { private set; get; } = new();
+    public Dictionary<int, Data.MonsterStat> MonsterStatDictionary { private set; get; } = new();
     public Dictionary<int, Data.AttackStat> AttackStatDictionary { private set; get; } = new();
     public Dictionary<int, Data.ProjectileStat> ProjectileStatDictionary { private set; get; } = new();
 
@@ -27,6 +28,16 @@ public class DataManager
                     ObjectStatDictionary.Add(stat.ID, stat);
                 }
                 
+                return;
+
+            case EStatType.MonsterData:
+                List<Data.MonsterStat> monsterStatList = JsonConvert.DeserializeObject<List<Data.MonsterStat>>(data);
+
+                foreach (Data.MonsterStat stat in monsterStatList)
+                {
+                    MonsterStatDictionary.Add(stat.ID, stat);
+                }
+
                 return;
 
             case EStatType.AttackData:
