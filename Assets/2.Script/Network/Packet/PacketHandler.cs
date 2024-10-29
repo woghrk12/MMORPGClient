@@ -70,6 +70,24 @@ public class PacketHandler
         Managers.Obj.RemoveObject(packet.OldObjectID);
     }
 
+    public static void HandleUpdateObjectStateBroadcast(ServerSession session, IMessage message)
+    {
+        UpdateObjectStateBroadcast packet = message as UpdateObjectStateBroadcast;
+
+        Debug.Log($"UpdateObjectStateBroadcast. Object ID : {packet.ObjectID}. New State : {packet.NewState}");
+
+        if (Managers.Obj.TryFind(packet.ObjectID, out MMORPG.Object obj) == false) return;
+
+        if (Managers.Obj.LocalPlayer.ID == obj.ID)
+        {
+            (obj as LocalPlayer).SetState(packet.NewState);
+        }
+        else
+        {
+            (obj as RemoteObject).SetState(packet.NewState);
+        }
+    }
+
     public static void HandlePerformMoveBroadcast(ServerSession session, IMessage message)
     {
         PerformMoveBroadcast packet = message as PerformMoveBroadcast;

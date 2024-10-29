@@ -31,6 +31,7 @@ public class PacketManager
         receivedPacketHandlerDict.Add((ushort)EMessageID.PlayerLeftRoomBroadcast, MakePacket<PlayerLeftRoomBroadcast>);
         receivedPacketHandlerDict.Add((ushort)EMessageID.ObjectSpawnedBroadcast, MakePacket<ObjectSpawnedBroadcast>);
         receivedPacketHandlerDict.Add((ushort)EMessageID.ObjectDespawnedBroadcast, MakePacket<ObjectDespawnedBroadcast>);
+        receivedPacketHandlerDict.Add((ushort)EMessageID.UpdateObjectStateBroadcast, MakePacket<UpdateObjectStateBroadcast>);
         receivedPacketHandlerDict.Add((ushort)EMessageID.PerformMoveBroadcast, MakePacket<PerformMoveBroadcast>);
         receivedPacketHandlerDict.Add((ushort)EMessageID.PerformAttackBroadcast, MakePacket<PerformAttackBroadcast>);
         receivedPacketHandlerDict.Add((ushort)EMessageID.AttackCompleteBroadcast, MakePacket<AttackCompleteBroadcast>);
@@ -45,6 +46,7 @@ public class PacketManager
         handlerDict.Add((ushort)EMessageID.PlayerLeftRoomBroadcast, PacketHandler.HandlePlayerLeftRoomBroadcast);
         handlerDict.Add((ushort)EMessageID.ObjectSpawnedBroadcast, PacketHandler.HandleObjectSpawnedBroadcast);
         handlerDict.Add((ushort)EMessageID.ObjectDespawnedBroadcast, PacketHandler.HandleObjectDespawnedBroadcast);
+        handlerDict.Add((ushort)EMessageID.UpdateObjectStateBroadcast, PacketHandler.HandleUpdateObjectStateBroadcast);
         handlerDict.Add((ushort)EMessageID.PerformMoveBroadcast, PacketHandler.HandlePerformMoveBroadcast);
         handlerDict.Add((ushort)EMessageID.PerformAttackBroadcast, PacketHandler.HandlePerformAttackBroadcast);
         handlerDict.Add((ushort)EMessageID.AttackCompleteBroadcast, PacketHandler.HandleAttackCompleteBroadcast);
