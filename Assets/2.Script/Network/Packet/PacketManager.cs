@@ -26,6 +26,7 @@ public class PacketManager
     {
         receivedPacketHandlerDict.Add((ushort)EMessageID.ConnectedResponse, MakePacket<ConnectedResponse>);
         receivedPacketHandlerDict.Add((ushort)EMessageID.LoginResponse, MakePacket<LoginResponse>);
+        receivedPacketHandlerDict.Add((ushort)EMessageID.CreateCharacterResponse, MakePacket<CreateCharacterResponse>);
         receivedPacketHandlerDict.Add((ushort)EMessageID.StatDataBroadcast, MakePacket<StatDataBroadcast>);
         receivedPacketHandlerDict.Add((ushort)EMessageID.PlayerEnteredRoomResponse, MakePacket<PlayerEnteredRoomResponse>);
         receivedPacketHandlerDict.Add((ushort)EMessageID.PlayerEnteredRoomBroadcast, MakePacket<PlayerEnteredRoomBroadcast>);
@@ -43,6 +44,7 @@ public class PacketManager
 
         handlerDict.Add((ushort)EMessageID.ConnectedResponse, PacketHandler.HandleConnectedResponse);
         handlerDict.Add((ushort)EMessageID.LoginResponse, PacketHandler.HandleLoginResponse);
+        handlerDict.Add((ushort)EMessageID.CreateCharacterResponse, PacketHandler.HandleCreateCharacterResponse);
         handlerDict.Add((ushort)EMessageID.StatDataBroadcast, PacketHandler.HandleStatDataBroadcast);
         handlerDict.Add((ushort)EMessageID.PlayerEnteredRoomResponse, PacketHandler.HandlePlayerEnteredRoomResponse);
         handlerDict.Add((ushort)EMessageID.PlayerEnteredRoomBroadcast, PacketHandler.HandlePlayerEnteredRoomBroadcast);

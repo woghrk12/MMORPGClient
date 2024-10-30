@@ -21,6 +21,13 @@ public class PacketHandler
         Debug.Log($"LoginResponse. Result code : {packet.ResultCode}");
     }
 
+    public static void HandleCreateCharacterResponse(ServerSession session, IMessage message)
+    {
+        CreateCharacterResponse packet = message as CreateCharacterResponse;
+
+        Debug.Log($"CreateCharacterResponse. Result Code : {packet.ResultCode}, New Character Name : {packet.NewCharacter.Name}");
+    }
+
     public static void HandleStatDataBroadcast(ServerSession session, IMessage message)
     {
         StatDataBroadcast packet = message as StatDataBroadcast;
