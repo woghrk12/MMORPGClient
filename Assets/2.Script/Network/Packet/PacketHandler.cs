@@ -4,6 +4,23 @@ using UnityEngine;
 
 public class PacketHandler
 {
+    public static void HandleConnectedResponse(ServerSession session, IMessage message)
+    {
+        ConnectedResponse packet = message as ConnectedResponse;
+
+        Debug.Log("ConnectedResponse.");
+
+        LoginRequest loginRequestPacket = new() { Id = SystemInfo.deviceUniqueIdentifier };
+        Managers.Network.Send(loginRequestPacket);
+    }
+
+    public static void HandleLoginResponse(ServerSession session, IMessage message)
+    {
+        LoginResponse packet = message as LoginResponse;
+
+        Debug.Log($"LoginResponse. Result code : {packet.ResultCode}");
+    }
+
     public static void HandleStatDataBroadcast(ServerSession session, IMessage message)
     {
         StatDataBroadcast packet = message as StatDataBroadcast;
