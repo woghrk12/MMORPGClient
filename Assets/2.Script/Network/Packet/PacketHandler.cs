@@ -28,6 +28,29 @@ public class PacketHandler
         Debug.Log($"CreateCharacterResponse. Result Code : {packet.ResultCode}, New Character Name : {packet.NewCharacter.Name}");
     }
 
+    public static void HandleCharacterEnterGameRoomResponse(ServerSession session, IMessage message)
+    {
+        CharacterEnterGameRoomResponse packet = message as CharacterEnterGameRoomResponse;
+
+        Debug.Log($"PlayerEnteredRoomResponse. Player ID : {packet.NewCharacter.ObjectID}, # of Other Objects : {packet.OtherObjects.Count}");
+
+        Managers.Obj.AddLocalPlayer(packet.NewCharacter);
+
+        foreach (ObjectInfo info in packet.OtherObjects)
+        {
+            Managers.Obj.AddObject(info);
+        }
+    }
+
+    public static void HandleCharacterEnterGameRoomBroadcast(ServerSession session, IMessage message)
+    {
+        CharacterEnterGameRoomBroadcast packet = message as CharacterEnterGameRoomBroadcast;
+
+        Debug.Log($"PlayerEnteredRoomBroadcast. New Player ID : {packet.NewCharacter.ObjectID}");
+
+        Managers.Obj.AddObject(packet.NewCharacter);
+    }
+
     public static void HandleStatDataBroadcast(ServerSession session, IMessage message)
     {
         StatDataBroadcast packet = message as StatDataBroadcast;
@@ -35,29 +58,6 @@ public class PacketHandler
         Debug.Log($"StatDataBroadcast. Data type : {packet.DataType}");
 
         Managers.Data.SetData(packet.DataType, packet.Data);
-    }
-
-    public static void HandlePlayerEnteredRoomResponse(ServerSession session, IMessage message)
-    {
-        PlayerEnteredRoomResponse packet = message as PlayerEnteredRoomResponse;
-
-        Debug.Log($"PlayerEnteredRoomResponse. Player ID : {packet.NewPlayer.ObjectID}, # of Other Objects : {packet.OtherObjects.Count}");
-
-        Managers.Obj.AddLocalPlayer(packet.NewPlayer);
-
-        foreach(ObjectInfo info in packet.OtherObjects)
-        {
-            Managers.Obj.AddObject(info);
-        }
-    }
-
-    public static void HandlePlayerEnteredRoomBroadcast(ServerSession session, IMessage message)
-    {
-        PlayerEnteredRoomBroadcast packet = message as PlayerEnteredRoomBroadcast;
-
-        Debug.Log($"PlayerEnteredRoomBroadcast. New Player ID : {packet.NewPlayer.ObjectID}");
-
-        Managers.Obj.AddObject(packet.NewPlayer);
     }
 
     public static void HandlePlayerLeftRoomResponse(ServerSession session, IMessage message)

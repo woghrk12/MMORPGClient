@@ -27,9 +27,9 @@ public class PacketManager
         receivedPacketHandlerDict.Add((ushort)EMessageID.ConnectedResponse, MakePacket<ConnectedResponse>);
         receivedPacketHandlerDict.Add((ushort)EMessageID.LoginResponse, MakePacket<LoginResponse>);
         receivedPacketHandlerDict.Add((ushort)EMessageID.CreateCharacterResponse, MakePacket<CreateCharacterResponse>);
+        receivedPacketHandlerDict.Add((ushort)EMessageID.CharacterEnterGameroomResponse, MakePacket<CharacterEnterGameRoomResponse>);
+        receivedPacketHandlerDict.Add((ushort)EMessageID.CharacterEnterGameroomBroadcast, MakePacket<CharacterEnterGameRoomBroadcast>);
         receivedPacketHandlerDict.Add((ushort)EMessageID.StatDataBroadcast, MakePacket<StatDataBroadcast>);
-        receivedPacketHandlerDict.Add((ushort)EMessageID.PlayerEnteredRoomResponse, MakePacket<PlayerEnteredRoomResponse>);
-        receivedPacketHandlerDict.Add((ushort)EMessageID.PlayerEnteredRoomBroadcast, MakePacket<PlayerEnteredRoomBroadcast>);
         receivedPacketHandlerDict.Add((ushort)EMessageID.PlayerLeftRoomResponse, MakePacket<PlayerLeftRoomResponse>);
         receivedPacketHandlerDict.Add((ushort)EMessageID.PlayerLeftRoomBroadcast, MakePacket<PlayerLeftRoomBroadcast>);
         receivedPacketHandlerDict.Add((ushort)EMessageID.ObjectSpawnedBroadcast, MakePacket<ObjectSpawnedBroadcast>);
@@ -45,9 +45,9 @@ public class PacketManager
         handlerDict.Add((ushort)EMessageID.ConnectedResponse, PacketHandler.HandleConnectedResponse);
         handlerDict.Add((ushort)EMessageID.LoginResponse, PacketHandler.HandleLoginResponse);
         handlerDict.Add((ushort)EMessageID.CreateCharacterResponse, PacketHandler.HandleCreateCharacterResponse);
+        handlerDict.Add((ushort)EMessageID.CharacterEnterGameroomResponse, PacketHandler.HandleCharacterEnterGameRoomResponse);
+        handlerDict.Add((ushort)EMessageID.CharacterEnterGameroomBroadcast, PacketHandler.HandleCharacterEnterGameRoomBroadcast);
         handlerDict.Add((ushort)EMessageID.StatDataBroadcast, PacketHandler.HandleStatDataBroadcast);
-        handlerDict.Add((ushort)EMessageID.PlayerEnteredRoomResponse, PacketHandler.HandlePlayerEnteredRoomResponse);
-        handlerDict.Add((ushort)EMessageID.PlayerEnteredRoomBroadcast, PacketHandler.HandlePlayerEnteredRoomBroadcast);
         handlerDict.Add((ushort)EMessageID.PlayerLeftRoomResponse, PacketHandler.HandlePlayerLeftRoomResponse);
         handlerDict.Add((ushort)EMessageID.PlayerLeftRoomBroadcast, PacketHandler.HandlePlayerLeftRoomBroadcast);
         handlerDict.Add((ushort)EMessageID.ObjectSpawnedBroadcast, PacketHandler.HandleObjectSpawnedBroadcast);
