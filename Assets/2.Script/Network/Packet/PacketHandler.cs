@@ -19,6 +19,25 @@ public class PacketHandler
         LoginResponse packet = message as LoginResponse;
 
         Debug.Log($"LoginResponse. Result code : {packet.ResultCode}");
+
+        if (ReferenceEquals(packet.Characters, null) == true || packet.Characters.Count == 0)
+        {
+            CreateCharacterRequest createCharacterRequestPacket = new()
+            {
+                Name = $"Player_{Random.Range(0, 10000).ToString("0000")}"
+            };
+
+            Managers.Network.Send(createCharacterRequestPacket);
+        }
+        else
+        {
+            CharacterEnterGameRoomRequest characterEnterGameRoomRequestPacket = new()
+            {
+                Name = packet.Characters[0].Name
+            };
+
+            Managers.Network.Send(characterEnterGameRoomRequestPacket);
+        }
     }
 
     public static void HandleCreateCharacterResponse(ServerSession session, IMessage message)
@@ -26,6 +45,13 @@ public class PacketHandler
         CreateCharacterResponse packet = message as CreateCharacterResponse;
 
         Debug.Log($"CreateCharacterResponse. Result Code : {packet.ResultCode}, New Character Name : {packet.NewCharacter.Name}");
+
+        CharacterEnterGameRoomRequest characterEnterGameRoomRequestPacket = new()
+        {
+            Name = packet.NewCharacter.Name
+        };
+
+        Managers.Network.Send(characterEnterGameRoomRequestPacket);
     }
 
     public static void HandleCharacterEnterGameRoomResponse(ServerSession session, IMessage message)
