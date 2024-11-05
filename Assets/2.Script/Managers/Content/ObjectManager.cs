@@ -13,7 +13,7 @@ public class ObjectManager
 
     #region Properties
 
-    public LocalPlayer LocalPlayer { set; get; } = null;
+    public LocalCharacter LocalCharacter { set; get; } = null;
 
     #endregion Properties
 
@@ -23,37 +23,37 @@ public class ObjectManager
 
     public void AddLocalPlayer(ObjectInfo info)
     {
-        LocalPlayer localPlayer = Managers.Resource.Instantiate("Object/LocalPlayer").GetComponent<LocalPlayer>();
+        LocalCharacter localCharacter = Managers.Resource.Instantiate("Object/LocalCharacter").GetComponent<LocalCharacter>();
 
         HpBar hpBar = Managers.Resource.Instantiate("UI/HpBar").GetComponent<HpBar>();
-        hpBar.InitHpBar(localPlayer.transform, 0.65f);
+        hpBar.InitHpBar(localCharacter.transform, 0.65f);
 
-        localPlayer.CurHpModified += hpBar.SetHpBar;
+        localCharacter.CurHpModified += hpBar.SetHpBar;
 
-        localPlayer.ID = info.ObjectID;
-        localPlayer.Name = info.Name;
-        localPlayer.Position = new Vector3Int(info.PosX, info.PosY, 0);
-        localPlayer.MoveDirection = info.MoveDirection;
-        localPlayer.FacingDirection = info.FacingDirection;
-        localPlayer.MoveSpeed = info.MoveSpeed;
-        localPlayer.IsCollidable = info.IsCollidable;
+        localCharacter.ID = info.ObjectID;
+        localCharacter.Name = info.Name;
+        localCharacter.Position = new Vector3Int(info.PosX, info.PosY, 0);
+        localCharacter.MoveDirection = info.MoveDirection;
+        localCharacter.FacingDirection = info.FacingDirection;
+        localCharacter.MoveSpeed = info.MoveSpeed;
+        localCharacter.IsCollidable = info.IsCollidable;
 
         if (ReferenceEquals(info.ObjectStat, null) == false)
         {
-            localPlayer.MaxHP = info.ObjectStat.MaxHP;
-            localPlayer.CurHP = info.ObjectStat.CurHP;
-            localPlayer.AttackPower = info.ObjectStat.AttackPower;
+            localCharacter.MaxHP = info.ObjectStat.MaxHP;
+            localCharacter.CurHP = info.ObjectStat.CurHP;
+            localCharacter.AttackPower = info.ObjectStat.AttackPower;
         }
 
-        localPlayer.gameObject.name = localPlayer.Name;
-        localPlayer.transform.position = new Vector3(localPlayer.Position.x, localPlayer.Position.y) + new Vector3(0.5f, 0.5f);
+        localCharacter.gameObject.name = localCharacter.Name;
+        localCharacter.transform.position = new Vector3(localCharacter.Position.x, localCharacter.Position.y) + new Vector3(0.5f, 0.5f);
 
-        localPlayer.SetState(info.CurState, EPlayerInput.NONE);
+        localCharacter.SetState(info.CurState, EPlayerInput.NONE);
 
-        Managers.Map.AddObject(localPlayer);
+        Managers.Map.AddObject(localCharacter);
 
-        LocalPlayer = localPlayer;
-        objectDict.Add(localPlayer.ID, localPlayer);
+        LocalCharacter = localCharacter;
+        objectDict.Add(localCharacter.ID, localCharacter);
     }
 
     public void AddObject(ObjectInfo info)
@@ -63,8 +63,8 @@ public class ObjectManager
 
         switch (type)
         {
-            case EGameObjectType.Player:
-                remoteObject = Managers.Resource.Instantiate("Object/Player").GetComponent<RemoteObject>();
+            case EGameObjectType.Character:
+                remoteObject = Managers.Resource.Instantiate("Object/Character").GetComponent<RemoteObject>();
                 break;
 
             case EGameObjectType.Monster:

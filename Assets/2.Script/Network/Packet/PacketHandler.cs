@@ -128,9 +128,9 @@ public class PacketHandler
 
         if (Managers.Obj.TryFind(packet.ObjectID, out MMORPG.Object obj) == false) return;
 
-        if (Managers.Obj.LocalPlayer.ID == obj.ID)
+        if (Managers.Obj.LocalCharacter.ID == obj.ID)
         {
-            (obj as LocalPlayer).SetState(packet.NewState);
+            (obj as LocalCharacter).SetState(packet.NewState);
         }
         else
         {
@@ -150,7 +150,7 @@ public class PacketHandler
 
         Managers.Map.MoveObject(obj, new Vector3Int(packet.TargetPosX, packet.TargetPosY));
 
-        if (Managers.Obj.LocalPlayer.ID != packet.ObjectID)
+        if (Managers.Obj.LocalCharacter.ID != packet.ObjectID)
         {
             (obj as RemoteObject).SetState(packet.MoveDirection == EMoveDirection.None ? EObjectState.Idle : EObjectState.Move);
         }
@@ -164,9 +164,9 @@ public class PacketHandler
 
         if (Managers.Obj.TryFind(packet.ObjectID, out MMORPG.Object obj) == false) return;
 
-        if (Managers.Obj.LocalPlayer.ID == packet.ObjectID)
+        if (Managers.Obj.LocalCharacter.ID == packet.ObjectID)
         {
-            (obj as LocalPlayer).PerformAttack(packet.AttackID);
+            (obj as LocalCharacter).PerformAttack(packet.AttackID);
         }
         else
         {
@@ -182,9 +182,9 @@ public class PacketHandler
 
         if (Managers.Obj.TryFind(packet.ObjectID, out MMORPG.Object obj) == false) return;
 
-        if (Managers.Obj.LocalPlayer.ID == packet.ObjectID)
+        if (Managers.Obj.LocalCharacter.ID == packet.ObjectID)
         {
-            (obj as LocalPlayer).SetState(EObjectState.Idle, EPlayerInput.NONE);
+            (obj as LocalCharacter).SetState(EObjectState.Idle, EPlayerInput.NONE);
         }
         else
         {

@@ -20,7 +20,7 @@ public class ReviveButton : MonoBehaviour
         {
             ObjectReviveRequest packet = new()
             {
-                ObjectID = Managers.Obj.LocalPlayer.ID
+                ObjectID = Managers.Obj.LocalCharacter.ID
             };
 
             Managers.Network.Send(packet);

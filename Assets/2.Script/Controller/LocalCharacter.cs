@@ -13,7 +13,7 @@ public enum EPlayerInput
     SKILL = 1 << 5,
 }
 
-public class LocalPlayer : MMORPG.Object
+public class LocalCharacter : MMORPG.Object
 {
     #region Variables
 

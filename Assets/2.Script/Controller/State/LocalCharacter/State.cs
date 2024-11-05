@@ -8,7 +8,7 @@ namespace LocalPlayerState
         #region Variables
 
         protected Animator animator = null;
-        protected LocalPlayer controller = null;
+        protected LocalCharacter controller = null;
 
         #endregion Variables
 
@@ -23,7 +23,7 @@ namespace LocalPlayerState
         protected virtual void Awake()
         {
             animator = GetComponent<Animator>();
-            controller = GetComponent<LocalPlayer>();
+            controller = GetComponent<LocalCharacter>();
         }
 
         #endregion Unity Events
