@@ -7,7 +7,7 @@ namespace LocalPlayerState
     {
         #region Properties
 
-        public sealed override EObjectState StateID => EObjectState.Move;
+        public sealed override ECreatureState StateID => ECreatureState.Move;
 
         #endregion Properties
 
@@ -56,7 +56,7 @@ namespace LocalPlayerState
                 Managers.Network.Send(packet);
 
                 controller.MoveDirection = EMoveDirection.None;
-                controller.SetState(EObjectState.Idle, input);
+                controller.SetState(ECreatureState.Idle, input);
                 return;
             }
 

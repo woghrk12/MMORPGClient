@@ -7,7 +7,7 @@ public class RemoteObject : MMORPG.Object
 {
     #region Variables
 
-    private Dictionary<EObjectState, RemoteObjectState.State> stateDictionary = new();
+    private Dictionary<ECreatureState, RemoteObjectState.State> stateDictionary = new();
     private RemoteObjectState.State curState = null;
 
     #endregion Variables
@@ -35,7 +35,7 @@ public class RemoteObject : MMORPG.Object
 
     #region Methods
 
-    public void SetState(EObjectState value)
+    public void SetState(ECreatureState value)
     {
         if (ReferenceEquals(curState, null) == false)
         {
@@ -50,19 +50,19 @@ public class RemoteObject : MMORPG.Object
         curState.OnEnter();
     }
 
-    public EObjectState GetState()
+    public ECreatureState GetState()
     {
-        return ReferenceEquals(curState, null) == false ? curState.StateID : EObjectState.Idle;
+        return ReferenceEquals(curState, null) == false ? curState.StateID : ECreatureState.Idle;
     }
 
     public void PerformAttack(int attackID)
     {
-        if (stateDictionary.TryGetValue(EObjectState.Attack, out RemoteObjectState.State state) == false) return;
+        if (stateDictionary.TryGetValue(ECreatureState.Attack, out RemoteObjectState.State state) == false) return;
 
         RemoteObjectState.AttackState attackState = state as RemoteObjectState.AttackState;
         attackState.SetAttackType(attackID);
 
-        SetState(EObjectState.Attack);
+        SetState(ECreatureState.Attack);
     }
 
     #region Events
@@ -71,14 +71,14 @@ public class RemoteObject : MMORPG.Object
     {
         base.OnDead(attacker);
 
-        SetState(EObjectState.Dead);
+        SetState(ECreatureState.Dead);
     }
 
     public override void OnRevive(Vector3Int revivePos)
     {
         base.OnRevive(revivePos);
 
-        SetState(EObjectState.Idle);
+        SetState(ECreatureState.Idle);
     }
 
     #endregion Events

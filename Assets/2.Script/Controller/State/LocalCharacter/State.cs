@@ -14,7 +14,7 @@ namespace LocalPlayerState
 
         #region Properties
         
-        public abstract EObjectState StateID { get; }
+        public abstract ECreatureState StateID { get; }
 
         #endregion Properties
 

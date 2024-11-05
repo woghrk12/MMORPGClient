@@ -13,7 +13,7 @@ namespace RemoteObjectState
 
         #region Properties
 
-        public sealed override EObjectState StateID => EObjectState.Attack;
+        public sealed override ECreatureState StateID => ECreatureState.Attack;
 
         #endregion Properties
 

@@ -7,7 +7,7 @@ namespace RemoteObjectState
     {
         #region Properties
 
-        public sealed override EObjectState StateID => EObjectState.Move;
+        public sealed override ECreatureState StateID => ECreatureState.Move;
 
         #endregion Properties
 

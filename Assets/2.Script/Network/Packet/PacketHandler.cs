@@ -152,7 +152,7 @@ public class PacketHandler
 
         if (Managers.Obj.LocalCharacter.ID != packet.ObjectID)
         {
-            (obj as RemoteObject).SetState(packet.MoveDirection == EMoveDirection.None ? EObjectState.Idle : EObjectState.Move);
+            (obj as RemoteObject).SetState(packet.MoveDirection == EMoveDirection.None ? ECreatureState.Idle : ECreatureState.Move);
         }
     }
 
@@ -184,11 +184,11 @@ public class PacketHandler
 
         if (Managers.Obj.LocalCharacter.ID == packet.ObjectID)
         {
-            (obj as LocalCharacter).SetState(EObjectState.Idle, EPlayerInput.NONE);
+            (obj as LocalCharacter).SetState(ECreatureState.Idle, EPlayerInput.NONE);
         }
         else
         {
-            (obj as RemoteObject).SetState(EObjectState.Idle);
+            (obj as RemoteObject).SetState(ECreatureState.Idle);
         }
     }
 

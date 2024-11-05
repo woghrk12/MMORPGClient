@@ -17,7 +17,7 @@ public class LocalCharacter : MMORPG.Object
 {
     #region Variables
 
-    private Dictionary<EObjectState, LocalPlayerState.State> stateDictionary = new();
+    private Dictionary<ECreatureState, LocalPlayerState.State> stateDictionary = new();
     private LocalPlayerState.State curState = null;
 
     private Camera mainCamera = null;
@@ -54,7 +54,7 @@ public class LocalCharacter : MMORPG.Object
 
     #region Methods
 
-    public void SetState(EObjectState value, EPlayerInput input = EPlayerInput.NONE)
+    public void SetState(ECreatureState value, EPlayerInput input = EPlayerInput.NONE)
     {
         if (ReferenceEquals(curState, null) == false)
         {
@@ -69,19 +69,19 @@ public class LocalCharacter : MMORPG.Object
         curState.OnEnter(input);
     }
 
-    public EObjectState GetState()
+    public ECreatureState GetState()
     {
-        return ReferenceEquals(curState, null) == false ? curState.StateID : EObjectState.Idle;
+        return ReferenceEquals(curState, null) == false ? curState.StateID : ECreatureState.Idle;
     }
 
     public void PerformAttack(int attackID)
     {
-        if (stateDictionary.TryGetValue(EObjectState.Attack, out LocalPlayerState.State state) == false) return;
+        if (stateDictionary.TryGetValue(ECreatureState.Attack, out LocalPlayerState.State state) == false) return;
 
         LocalPlayerState.AttackState attackState = state as LocalPlayerState.AttackState;
         attackState.SetAttackType(attackID);
 
-        SetState(EObjectState.Attack, EPlayerInput.NONE);
+        SetState(ECreatureState.Attack, EPlayerInput.NONE);
     }
 
     private EPlayerInput GetInput()
@@ -123,7 +123,7 @@ public class LocalCharacter : MMORPG.Object
     {
         base.OnDead(attacker);
 
-        SetState(EObjectState.Dead);
+        SetState(ECreatureState.Dead);
 
         Managers.Resource.Instantiate("UI/DeadUI");
     }
@@ -132,7 +132,7 @@ public class LocalCharacter : MMORPG.Object
     {
         base.OnRevive(revivePos);
 
-        SetState(EObjectState.Idle);
+        SetState(ECreatureState.Idle);
     }
 
     #endregion Events
