@@ -11,6 +11,9 @@ public class HpBar : MonoBehaviour
 
     private float yOffset = 0f;
 
+    private int maxHp = 1;
+    private int curHp = 0;
+
     #endregion Variables
 
     #region Unity Events
@@ -38,7 +41,21 @@ public class HpBar : MonoBehaviour
         hpBarTransform.position = targetTransform.position + new Vector3(0f, this.yOffset, 0f);
     }
 
-    public void SetHpBar(int curHp, int maxHp)
+    public void SetMaxHp(int maxHp)
+    {
+        this.maxHp = maxHp;
+
+        SetHpBar();
+    }
+
+    public void SetCurHp(int curHp)
+    {
+        this.curHp = curHp;
+
+        SetHpBar();
+    }
+
+    private void SetHpBar()
     {
         float ratio = Mathf.Clamp01((float)curHp / maxHp);
 
@@ -48,7 +65,11 @@ public class HpBar : MonoBehaviour
         }
         else
         {
-            gameObject.SetActive(true);
+            if (gameObject.activeSelf == false)
+            {
+                gameObject.SetActive(true);
+            }
+
             fillTransform.localScale = new Vector3(ratio, 1f, 1f);
         }
     }
