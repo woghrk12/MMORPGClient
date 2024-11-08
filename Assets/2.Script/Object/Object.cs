@@ -12,7 +12,7 @@ namespace MMORPG
         private EMoveDirection moveDirection = EMoveDirection.None;
         private EMoveDirection facingDirection = EMoveDirection.Right;
 
-        private ObjectStat stat = new();
+        private CreatureStat stat = new();
 
         private event Action<int, int> curHpModified = null;
 
