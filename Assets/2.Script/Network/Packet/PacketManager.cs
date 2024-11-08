@@ -33,13 +33,13 @@ public class PacketManager
         receivedPacketHandlerDict.Add((ushort)EMessageID.CharacterLeftGameRoomBroadcast, MakePacket<CharacterLeftGameRoomBroadcast>);
         receivedPacketHandlerDict.Add((ushort)EMessageID.ObjectSpawnedBroadcast, MakePacket<ObjectSpawnedBroadcast>);
         receivedPacketHandlerDict.Add((ushort)EMessageID.ObjectDespawnedBroadcast, MakePacket<ObjectDespawnedBroadcast>);
-        receivedPacketHandlerDict.Add((ushort)EMessageID.UpdateObjectStateBroadcast, MakePacket<UpdateObjectStateBroadcast>);
+        receivedPacketHandlerDict.Add((ushort)EMessageID.UpdateCreatureStateBroadcast, MakePacket<UpdateCreatureStateBroadcast>);
         receivedPacketHandlerDict.Add((ushort)EMessageID.PerformMoveBroadcast, MakePacket<PerformMoveBroadcast>);
         receivedPacketHandlerDict.Add((ushort)EMessageID.PerformAttackBroadcast, MakePacket<PerformAttackBroadcast>);
         receivedPacketHandlerDict.Add((ushort)EMessageID.AttackCompleteBroadcast, MakePacket<AttackCompleteBroadcast>);
         receivedPacketHandlerDict.Add((ushort)EMessageID.HitBroadcast, MakePacket<HitBroadcast>);
-        receivedPacketHandlerDict.Add((ushort)EMessageID.ObjectDeadBroadcast, MakePacket<ObjectDeadBroadcast>);
-        receivedPacketHandlerDict.Add((ushort)EMessageID.ObjectReviveBroadcast, MakePacket<ObjectReviveBroadcast>);
+        receivedPacketHandlerDict.Add((ushort)EMessageID.CreatureDeadBroadcast, MakePacket<CreatureDeadBroadcast>);
+        receivedPacketHandlerDict.Add((ushort)EMessageID.CharacterReviveBroadcast, MakePacket<CharacterReviveBroadcast>);
 
         handlerDict.Add((ushort)EMessageID.ConnectedResponse, PacketHandler.HandleConnectedResponse);
         handlerDict.Add((ushort)EMessageID.LoginResponse, PacketHandler.HandleLoginResponse);
@@ -50,13 +50,13 @@ public class PacketManager
         handlerDict.Add((ushort)EMessageID.CharacterLeftGameRoomBroadcast, PacketHandler.HandleCharacterLeftGameRoomBroadcast);
         handlerDict.Add((ushort)EMessageID.ObjectSpawnedBroadcast, PacketHandler.HandleObjectSpawnedBroadcast);
         handlerDict.Add((ushort)EMessageID.ObjectDespawnedBroadcast, PacketHandler.HandleObjectDespawnedBroadcast);
-        handlerDict.Add((ushort)EMessageID.UpdateObjectStateBroadcast, PacketHandler.HandleUpdateObjectStateBroadcast);
+        handlerDict.Add((ushort)EMessageID.UpdateCreatureStateBroadcast, PacketHandler.HandleUpdateCreatureStateBroadcast);
         handlerDict.Add((ushort)EMessageID.PerformMoveBroadcast, PacketHandler.HandlePerformMoveBroadcast);
         handlerDict.Add((ushort)EMessageID.PerformAttackBroadcast, PacketHandler.HandlePerformAttackBroadcast);
         handlerDict.Add((ushort)EMessageID.AttackCompleteBroadcast, PacketHandler.HandleAttackCompleteBroadcast);
         handlerDict.Add((ushort)EMessageID.HitBroadcast, PacketHandler.HandleHitBroadcast);
-        handlerDict.Add((ushort)EMessageID.ObjectDeadBroadcast, PacketHandler.HandleObjectDeadBroadcast);
-        handlerDict.Add((ushort)EMessageID.ObjectReviveBroadcast, PacketHandler.HandleObjectReviveBroadcast);
+        handlerDict.Add((ushort)EMessageID.CreatureDeadBroadcast, PacketHandler.HandleCreatureDeadBroadcast);
+        handlerDict.Add((ushort)EMessageID.CharacterReviveBroadcast, PacketHandler.HandleCharacterReviveBroadcast);
     }
 
     #endregion Constructor

@@ -9,6 +9,7 @@ namespace MMORPG
         #region Variables
 
         private event Action updated = null;
+        private event Action objectDestroyed = null;
 
         #endregion Variables
 
@@ -28,6 +29,8 @@ namespace MMORPG
 
         public event Action Updated { add { updated += value; } remove { updated -= value; } }
 
+        public event Action ObjectDestroyed { add { objectDestroyed += value; } remove { objectDestroyed -= value; } }
+
         #endregion Properties
 
         #region Unity Events
@@ -40,6 +43,11 @@ namespace MMORPG
         protected virtual void Update()
         {
             updated?.Invoke();
+        }
+
+        protected virtual void OnDestroy()
+        {
+            objectDestroyed?.Invoke();
         }
 
         #endregion Unity Events

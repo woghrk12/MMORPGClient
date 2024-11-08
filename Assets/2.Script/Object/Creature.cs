@@ -19,6 +19,7 @@ public abstract class Creature : MMORPG.Object
     private event Action<int> curHpModified = null;
     private event Action<int> maxHpModified = null;
     private event Action<int> attackPowerModified = null;
+    private event Action creatureDead = null;
 
     #endregion Variables
 
@@ -129,6 +130,8 @@ public abstract class Creature : MMORPG.Object
 
     public event Action<int> AttackPowerModified { add { attackPowerModified += value; } remove { attackPowerModified -= value; } }
 
+    public event Action CreatureDead { add { creatureDead += value; } remove { creatureDead -= value; } }
+
     public Data.AttackStat AttackStat { set; get; } = null;
 
     #endregion Properties
@@ -160,6 +163,13 @@ public abstract class Creature : MMORPG.Object
 
     public sealed override void Init(ObjectInfo info)
     {
+        HpBar hpBar = Managers.Resource.Instantiate("UI/HpBar").GetComponent<HpBar>();
+        hpBar.InitHpBar(transform, 0.65f);
+
+        MaxHpModified += hpBar.SetMaxHp;
+        CurHpModified += hpBar.SetCurHp;
+        ObjectDestroyed += () => Destroy(hpBar.gameObject);
+
         ID = info.ObjectID;
         Name = info.Name;
         Position = new Vector3Int(info.PosX, info.PosY);
@@ -176,16 +186,20 @@ public abstract class Creature : MMORPG.Object
         AttackPower = info.CreatureInfo.Stat.AttackPower;
     }
 
-    public virtual void OnDamaged(MMORPG.Object attacker, int damage)
+    public virtual void OnDamaged(int remaindHp, int damage)
     {
-        CurHp -= damage;
+        CurHp = remaindHp;
 
         StartCoroutine(OnDamagedCo());
     }
 
-    public virtual void OnDead(MMORPG.Object attacker)
+    public virtual void OnDead(int attackerID)
     {
-        Debug.Log($"{ID} object dies by {attacker.ID} object!");
+        Debug.Log($"{ID} object dies by {attackerID} object!");
+
+        CurState = ECreatureState.Dead;
+
+        creatureDead?.Invoke();
     }
 
     private IEnumerator OnDamagedCo()

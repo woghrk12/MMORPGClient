@@ -11,104 +11,44 @@ public class ObjectManager
 
     #endregion Variables
 
-    #region Properties
-
-    public LocalCharacter LocalCharacter { set; get; } = null;
-
-    #endregion Properties
-
     #region Methods
 
     public static EGameObjectType GetObjectTypeByID(int objectID) => (EGameObjectType)(objectID >> 24 & 0x7F);
 
-    public void AddLocalPlayer(ObjectInfo info)
-    {
-        LocalCharacter localCharacter = Managers.Resource.Instantiate("Object/LocalCharacter").GetComponent<LocalCharacter>();
-
-        HpBar hpBar = Managers.Resource.Instantiate("UI/HpBar").GetComponent<HpBar>();
-        hpBar.InitHpBar(localCharacter.transform, 0.65f);
-
-        localCharacter.CurHpModified += hpBar.SetHpBar;
-
-        localCharacter.ID = info.ObjectID;
-        localCharacter.Name = info.Name;
-        localCharacter.Position = new Vector3Int(info.PosX, info.PosY, 0);
-        localCharacter.IsCollidable = info.IsCollidable;
-
-        localCharacter.SetState(info.CreatureInfo.CurState, EPlayerInput.NONE);
-
-        localCharacter.MoveDirection = info.CreatureInfo.MoveDirection;
-        localCharacter.FacingDirection = info.CreatureInfo.FacingDirection;
-        localCharacter.MoveSpeed = info.CreatureInfo.MoveSpeed;
-
-        localCharacter.MaxHP = info.CreatureInfo.Stat.MaxHP;
-        localCharacter.CurHP = info.CreatureInfo.Stat.CurHP;
-        localCharacter.AttackPower = info.CreatureInfo.Stat.AttackPower;
-
-        localCharacter.gameObject.name = localCharacter.Name;
-        localCharacter.transform.position = new Vector3(localCharacter.Position.x, localCharacter.Position.y) + new Vector3(0.5f, 0.5f);
-
-
-        Managers.Map.AddObject(localCharacter);
-
-        LocalCharacter = localCharacter;
-        objectDict.Add(localCharacter.ID, localCharacter);
-    }
-
-    public void AddObject(ObjectInfo info)
+    public void AddObject(ObjectInfo info, bool isMine = false)
     {
         EGameObjectType type = GetObjectTypeByID(info.ObjectID);
-        RemoteObject remoteObject = null;
+        MMORPG.Object obj = null;
 
         switch (type)
         {
             case EGameObjectType.Character:
-                remoteObject = Managers.Resource.Instantiate("Object/Character").GetComponent<RemoteObject>();
+                obj = Managers.Resource.Instantiate("Object/Character").GetComponent<Character>();
                 break;
 
             case EGameObjectType.Monster:
-                remoteObject = Managers.Resource.Instantiate("Object/Monster").GetComponent<RemoteObject>();
+                obj = Managers.Resource.Instantiate("Object/Monster").GetComponent<Monster>();
                 break;
 
             case EGameObjectType.Projectile:
-                remoteObject = Managers.Resource.Instantiate("Object/Projectile").GetComponent<RemoteObject>();
+                obj = Managers.Resource.Instantiate("Object/Projectile").GetComponent<Projectile>();
                 break;
         }
 
-        if (type != EGameObjectType.Projectile)
+        if (isMine)
         {
-            HpBar hpBar = Managers.Resource.Instantiate("UI/HpBar").GetComponent<HpBar>();
-            hpBar.InitHpBar(remoteObject.transform, 0.65f);
+            // TODO : Add controller component to local character object
 
-            remoteObject.CurHpModified += hpBar.SetHpBar;
+            Character character = (Character)obj;
+            character.Updated += () => { Camera.main.transform.position = new Vector3(character.transform.position.x, character.transform.position.y, -10f); };
+            character.CreatureDead += () => Managers.Resource.Instantiate("UI/DeadUI");
         }
 
-        // TODO : Modify the hierarchy of the MMORPG.Object class 
-        /*
-        remoteObject.ID = info.ObjectID;
-        remoteObject.Name = info.Name;
-        remoteObject.Position = new Vector3Int(info.PosX, info.PosY);
-        remoteObject.MoveDirection = info.MoveDirection;
-        remoteObject.FacingDirection = info.FacingDirection;
-        remoteObject.MoveSpeed = info.MoveSpeed;
-        remoteObject.IsCollidable = info.IsCollidable;
+        obj.Init(info);
 
-        if (ReferenceEquals(info.ObjectStat, null) == false)
-        {
-            remoteObject.MaxHP = info.ObjectStat.MaxHP;
-            remoteObject.CurHP = info.ObjectStat.CurHP;
-            remoteObject.AttackPower = info.ObjectStat.AttackPower;
-        }
+        Managers.Map.AddObject(obj);
 
-        remoteObject.gameObject.name = remoteObject.Name;
-        remoteObject.transform.position = new Vector3(remoteObject.Position.x, remoteObject.Position.y) + new Vector3(0.5f, 0.5f);
-
-        remoteObject.SetState(info.CurState);
-        */
-
-        Managers.Map.AddObject(remoteObject);
-
-        objectDict.Add(remoteObject.ID, remoteObject);
+        objectDict.Add(obj.ID, obj);
     }
 
     public void RemoveObject(int oldObjectID)

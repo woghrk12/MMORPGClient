@@ -18,9 +18,10 @@ public class ReviveButton : MonoBehaviour
 
         button.onClick.AddListener(() =>
         {
-            ObjectReviveRequest packet = new()
+            // TODO : Insert the local character ID
+            CharacterReviveRequest packet = new()
             {
-                ObjectID = Managers.Obj.LocalCharacter.ID
+                //CharacterID = Managers.Obj.LocalCharacter.ID
             };
 
             Managers.Network.Send(packet);

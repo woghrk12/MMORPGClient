@@ -20,6 +20,8 @@ public class Character : Creature
         Managers.Map.MoveObject(this, revivePos);
 
         transform.position = new Vector3(Position.x, Position.y) + new Vector3(0.5f, 0.5f);
+
+        CurState = ECreatureState.Idle;
     }
 
     #endregion Methods

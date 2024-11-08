@@ -66,7 +66,7 @@ public class PacketHandler
 
         Debug.Log($"CharacterEnterGameRoomResponse. Character ID : {packet.NewCharacter.ObjectID}, # of Other Objects : {packet.OtherObjects.Count}");
 
-        Managers.Obj.AddLocalPlayer(packet.NewCharacter);
+        Managers.Obj.AddObject(packet.NewCharacter, isMine: true);
 
         foreach (ObjectInfo info in packet.OtherObjects)
         {
@@ -94,7 +94,7 @@ public class PacketHandler
     {
         CharacterLeftGameRoomBroadcast packet = message as CharacterLeftGameRoomBroadcast;
 
-        Debug.Log($"PlayerLeftRoomBroadcast. Left Player ID : {packet.LeftCharacterID}");
+        Debug.Log($"PlayerLeftRoomBroadcast. Left Character ID : {packet.LeftCharacterID}");
 
         Managers.Obj.RemoveObject(packet.LeftCharacterID);
     }
@@ -117,22 +117,18 @@ public class PacketHandler
         Managers.Obj.RemoveObject(packet.OldObjectID);
     }
 
-    public static void HandleUpdateObjectStateBroadcast(ServerSession session, IMessage message)
+    public static void HandleUpdateCreatureStateBroadcast(ServerSession session, IMessage message)
     {
-        UpdateObjectStateBroadcast packet = message as UpdateObjectStateBroadcast;
+        UpdateCreatureStateBroadcast packet = message as UpdateCreatureStateBroadcast;
 
-        Debug.Log($"UpdateObjectStateBroadcast. Object ID : {packet.ObjectID}. New State : {packet.NewState}");
+        Debug.Log($"UpdateObjectStateBroadcast. Creature ID : {packet.CreatureID}. New State : {packet.NewState}");
 
-        if (Managers.Obj.TryFind(packet.ObjectID, out MMORPG.Object obj) == false) return;
+        if (Managers.Obj.TryFind(packet.CreatureID, out MMORPG.Object obj) == false) return;
 
-        if (Managers.Obj.LocalCharacter.ID == obj.ID)
-        {
-            (obj as LocalCharacter).SetState(packet.NewState);
-        }
-        else
-        {
-            (obj as RemoteObject).SetState(packet.NewState);
-        }
+        Creature creature = obj as Creature;
+        if (ReferenceEquals(creature, null) == true) return;
+
+        creature.CurState = packet.NewState;
     }
 
     public static void HandlePerformMoveBroadcast(ServerSession session, IMessage message)
@@ -142,84 +138,109 @@ public class PacketHandler
         Debug.Log($"PerformMoveBroadcast. Object ID : {packet.ObjectID}. Target Pos : ({packet.TargetPosX}, {packet.TargetPosY})");
 
         if (Managers.Obj.TryFind(packet.ObjectID, out MMORPG.Object obj) == false) return;
+        
+        EGameObjectType type = ObjectManager.GetObjectTypeByID(packet.ObjectID);
 
-        obj.MoveDirection = packet.MoveDirection;
+        switch (type)
+        {
+            case EGameObjectType.Character:
+            case EGameObjectType.Monster:
+                Creature creature = obj as Creature;
+
+                if (ReferenceEquals(creature, null) == true) return;
+
+                creature.MoveDirection = packet.MoveDirection;
+                creature.CurState = packet.MoveDirection != EMoveDirection.None ? ECreatureState.Move : ECreatureState.Idle;
+
+                break;
+
+            case EGameObjectType.Projectile:
+                Projectile projectile = obj as Projectile;
+
+                if (ReferenceEquals(projectile, null) == true) return;
+
+                projectile.MoveDirection = packet.MoveDirection;
+
+                break;
+        }
 
         Managers.Map.MoveObject(obj, new Vector3Int(packet.TargetPosX, packet.TargetPosY));
-
-        if (Managers.Obj.LocalCharacter.ID != packet.ObjectID)
-        {
-            (obj as RemoteObject).SetState(packet.MoveDirection == EMoveDirection.None ? ECreatureState.Idle : ECreatureState.Move);
-        }
     }
 
     public static void HandlePerformAttackBroadcast(ServerSession session, IMessage message)
     {
         PerformAttackBroadcast packet = message as PerformAttackBroadcast;
 
-        Debug.Log($"PerformAttackBroadcast. Object ID : {packet.ObjectID}, Attack ID : {packet.AttackID}");
+        Debug.Log($"PerformAttackBroadcast. Creature ID : {packet.CreatureID}, Attack ID : {packet.AttackID}");
 
-        if (Managers.Obj.TryFind(packet.ObjectID, out MMORPG.Object obj) == false) return;
+        if (Managers.Obj.TryFind(packet.CreatureID, out MMORPG.Object obj) == false) return;
 
-        if (Managers.Obj.LocalCharacter.ID == packet.ObjectID)
-        {
-            (obj as LocalCharacter).PerformAttack(packet.AttackID);
-        }
-        else
-        {
-            (obj as RemoteObject).PerformAttack(packet.AttackID);
-        }
+        Creature creature = obj as Creature;
+        
+        if (ReferenceEquals(creature, null) == true) return;
+
+        creature.AttackStat = Managers.Data.AttackStatDictionary[packet.AttackID];
+        creature.CurState = ECreatureState.Attack;
     }
 
     public static void HandleAttackCompleteBroadcast(ServerSession session, IMessage message)
     {
         AttackCompleteBroadcast packet = message as AttackCompleteBroadcast;
 
-        Debug.Log($"AttackCompleteBroadcast. Object ID : {packet.ObjectID}");
+        Debug.Log($"AttackCompleteBroadcast. Creature ID : {packet.CreatureID}");
 
-        if (Managers.Obj.TryFind(packet.ObjectID, out MMORPG.Object obj) == false) return;
+        if (Managers.Obj.TryFind(packet.CreatureID, out MMORPG.Object obj) == false) return;
 
-        if (Managers.Obj.LocalCharacter.ID == packet.ObjectID)
-        {
-            (obj as LocalCharacter).SetState(ECreatureState.Idle, EPlayerInput.NONE);
-        }
-        else
-        {
-            (obj as RemoteObject).SetState(ECreatureState.Idle);
-        }
+        Creature creature = obj as Creature;
+
+        if (ReferenceEquals(creature, null) == true) return;
+
+        creature.AttackStat = null;
+        creature.CurState = ECreatureState.Idle;
     }
 
     public static void HandleHitBroadcast(ServerSession session, IMessage message)
     {
         HitBroadcast packet = message as HitBroadcast;
 
-        Debug.Log($"HitBroadcast. Object ID : {packet.ObjectID}, Remain HP : {packet.CurHp}, Damage : {packet.Damage}");
+        Debug.Log($"HitBroadcast. Attacker ID : {packet.AttackerID}, Defender ID : {packet.DefenderID} Remain HP : {packet.RemainHp}, Damage : {packet.Damage}");
 
-        if (Managers.Obj.TryFind(packet.ObjectID, out MMORPG.Object obj) == false) return;
+        if (Managers.Obj.TryFind(packet.DefenderID, out MMORPG.Object obj) == false) return;
 
-        obj.OnDamaged(packet.CurHp, packet.Damage);
+        Creature creature = obj as Creature;
+
+        if (ReferenceEquals(creature, null) == true) return;
+
+        creature.OnDamaged(packet.RemainHp, packet.Damage);
     }
 
-    public static void HandleObjectDeadBroadcast(ServerSession session, IMessage message)
+    public static void HandleCreatureDeadBroadcast(ServerSession session, IMessage message)
     {
-        ObjectDeadBroadcast packet = message as ObjectDeadBroadcast;
+        CreatureDeadBroadcast packet = message as CreatureDeadBroadcast;
 
-        Debug.Log($"ObjectDeadBroadcast. Object ID : {packet.ObjectID}, Attacker ID : {packet.AttackerID}");
+        Debug.Log($"ObjectDeadBroadcast. Object ID : {packet.CreatureID}, Attacker ID : {packet.AttackerID}");
 
-        if (Managers.Obj.TryFind(packet.ObjectID, out MMORPG.Object obj) == false) return;
-        if (Managers.Obj.TryFind(packet.AttackerID, out MMORPG.Object attacker) == false) return;
+        if (Managers.Obj.TryFind(packet.CreatureID, out MMORPG.Object obj) == false) return;
 
-        obj.OnDead(attacker);
+        Creature creature = obj as Creature;
+
+        if (ReferenceEquals(creature, null) == true) return;
+
+        creature.OnDead(packet.AttackerID);
     }
 
-    public static void HandleObjectReviveBroadcast(ServerSession session, IMessage message)
+    public static void HandleCharacterReviveBroadcast(ServerSession session, IMessage message)
     {
-        ObjectReviveBroadcast packet = message as ObjectReviveBroadcast;
+        CharacterReviveBroadcast packet = message as CharacterReviveBroadcast;
 
-        Debug.Log($"ObjectReviveBroadcast. Object ID : {packet.ObjectID}, Revive Pos : ({packet.RevivePosX}, {packet.RevivePosY})");
+        Debug.Log($"ObjectReviveBroadcast. Object ID : {packet.CharacterID}, Revive Pos : ({packet.RevivePosX}, {packet.RevivePosY})");
 
-        if (Managers.Obj.TryFind(packet.ObjectID, out MMORPG.Object obj) == false) return;
+        if (Managers.Obj.TryFind(packet.CharacterID, out MMORPG.Object obj) == false) return;
 
-        obj.OnRevive(new Vector3Int(packet.RevivePosX, packet.RevivePosY));
+        Character character = obj as Character;
+
+        if (ReferenceEquals(character, null) == true) return;
+
+        character.OnRevive(new Vector3Int(packet.RevivePosX, packet.RevivePosY));
     }
 }
