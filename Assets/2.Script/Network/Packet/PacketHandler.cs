@@ -10,6 +10,12 @@ public class PacketHandler
 
         Debug.Log("ConnectedResponse.");
 
+        foreach (StatData statData in packet.Stats)
+        {
+            Managers.Data.SetData(statData.StatType, statData.Data);
+            Debug.Log($"SetData. Type : {statData.StatType}");
+        }
+
         LoginRequest loginRequestPacket = new() { Id = SystemInfo.deviceUniqueIdentifier };
         Managers.Network.Send(loginRequestPacket);
     }
@@ -58,7 +64,7 @@ public class PacketHandler
     {
         CharacterEnterGameRoomResponse packet = message as CharacterEnterGameRoomResponse;
 
-        Debug.Log($"PlayerEnteredRoomResponse. Player ID : {packet.NewCharacter.ObjectID}, # of Other Objects : {packet.OtherObjects.Count}");
+        Debug.Log($"CharacterEnterGameRoomResponse. Character ID : {packet.NewCharacter.ObjectID}, # of Other Objects : {packet.OtherObjects.Count}");
 
         Managers.Obj.AddLocalPlayer(packet.NewCharacter);
 
@@ -72,34 +78,25 @@ public class PacketHandler
     {
         CharacterEnterGameRoomBroadcast packet = message as CharacterEnterGameRoomBroadcast;
 
-        Debug.Log($"PlayerEnteredRoomBroadcast. New Player ID : {packet.NewCharacter.ObjectID}");
+        Debug.Log($"CharacterEnterGameRoomBroadcast. New Character ID : {packet.NewCharacter.ObjectID}");
 
         Managers.Obj.AddObject(packet.NewCharacter);
     }
 
-    public static void HandleStatDataBroadcast(ServerSession session, IMessage message)
+    public static void HandleCharacterLeftGameRoomResponse(ServerSession session, IMessage message)
     {
-        StatDataBroadcast packet = message as StatDataBroadcast;
+        CharacterLeftGameRoomResponse packet = message as CharacterLeftGameRoomResponse;
 
-        Debug.Log($"StatDataBroadcast. Data type : {packet.DataType}");
-
-        Managers.Data.SetData(packet.DataType, packet.Data);
+        Debug.Log("CharacterLeftGameRoomResponse.");
     }
 
-    public static void HandlePlayerLeftRoomResponse(ServerSession session, IMessage message)
+    public static void HandleCharacterLeftGameRoomBroadcast(ServerSession session, IMessage message)
     {
-        PlayerLeftRoomResponse packet = message as PlayerLeftRoomResponse;
+        CharacterLeftGameRoomBroadcast packet = message as CharacterLeftGameRoomBroadcast;
 
-        Debug.Log("PlayerLeftRoomResponse.");
-    }
+        Debug.Log($"PlayerLeftRoomBroadcast. Left Player ID : {packet.LeftCharacterID}");
 
-    public static void HandlePlayerLeftRoomBroadcast(ServerSession session, IMessage message)
-    {
-        PlayerLeftRoomBroadcast packet = message as PlayerLeftRoomBroadcast;
-
-        Debug.Log($"PlayerLeftRoomBroadcast. Left Player ID : {packet.OtherPlayerID}");
-
-        Managers.Obj.RemoveObject(packet.OtherPlayerID);
+        Managers.Obj.RemoveObject(packet.LeftCharacterID);
     }
 
     public static void HandleObjectSpawnedBroadcast(ServerSession session, IMessage message)

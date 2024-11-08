@@ -33,22 +33,21 @@ public class ObjectManager
         localCharacter.ID = info.ObjectID;
         localCharacter.Name = info.Name;
         localCharacter.Position = new Vector3Int(info.PosX, info.PosY, 0);
-        localCharacter.MoveDirection = info.MoveDirection;
-        localCharacter.FacingDirection = info.FacingDirection;
-        localCharacter.MoveSpeed = info.MoveSpeed;
         localCharacter.IsCollidable = info.IsCollidable;
 
-        if (ReferenceEquals(info.ObjectStat, null) == false)
-        {
-            localCharacter.MaxHP = info.ObjectStat.MaxHP;
-            localCharacter.CurHP = info.ObjectStat.CurHP;
-            localCharacter.AttackPower = info.ObjectStat.AttackPower;
-        }
+        localCharacter.SetState(info.CreatureInfo.CurState, EPlayerInput.NONE);
+
+        localCharacter.MoveDirection = info.CreatureInfo.MoveDirection;
+        localCharacter.FacingDirection = info.CreatureInfo.FacingDirection;
+        localCharacter.MoveSpeed = info.CreatureInfo.MoveSpeed;
+
+        localCharacter.MaxHP = info.CreatureInfo.Stat.MaxHP;
+        localCharacter.CurHP = info.CreatureInfo.Stat.CurHP;
+        localCharacter.AttackPower = info.CreatureInfo.Stat.AttackPower;
 
         localCharacter.gameObject.name = localCharacter.Name;
         localCharacter.transform.position = new Vector3(localCharacter.Position.x, localCharacter.Position.y) + new Vector3(0.5f, 0.5f);
 
-        localCharacter.SetState(info.CurState, EPlayerInput.NONE);
 
         Managers.Map.AddObject(localCharacter);
 
@@ -84,6 +83,8 @@ public class ObjectManager
             remoteObject.CurHpModified += hpBar.SetHpBar;
         }
 
+        // TODO : Modify the hierarchy of the MMORPG.Object class 
+        /*
         remoteObject.ID = info.ObjectID;
         remoteObject.Name = info.Name;
         remoteObject.Position = new Vector3Int(info.PosX, info.PosY);
@@ -103,6 +104,7 @@ public class ObjectManager
         remoteObject.transform.position = new Vector3(remoteObject.Position.x, remoteObject.Position.y) + new Vector3(0.5f, 0.5f);
 
         remoteObject.SetState(info.CurState);
+        */
 
         Managers.Map.AddObject(remoteObject);
 
