@@ -8,8 +8,8 @@ public abstract class Creature : MMORPG.Object
 {
     #region Variables
 
-    protected Dictionary<ECreatureState, State> stateDictionary = new();
-    protected State curState = null;
+    protected Dictionary<ECreatureState, CreatureState> stateDictionary = new();
+    protected CreatureState curState = null;
 
     private EMoveDirection moveDirection = EMoveDirection.None;
     private EMoveDirection facingDirection = EMoveDirection.Right;  
@@ -142,12 +142,10 @@ public abstract class Creature : MMORPG.Object
     {
         base.Awake();
 
-        State[] states = GetComponents<State>();
-
-        foreach (State state in states)
-        {
-            stateDictionary.Add(state.StateID, state);
-        }
+        stateDictionary.Add(ECreatureState.Idle, gameObject.AddComponent<IdleState>());
+        stateDictionary.Add(ECreatureState.Move, gameObject.AddComponent<MoveState>());
+        stateDictionary.Add(ECreatureState.Attack, gameObject.AddComponent<AttackState>());
+        stateDictionary.Add(ECreatureState.Dead, gameObject.AddComponent<DeadState>());
     }
 
     protected override void Update()
