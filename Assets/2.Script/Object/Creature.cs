@@ -8,8 +8,8 @@ public abstract class Creature : MMORPG.Object
 {
     #region Variables
 
-    protected Dictionary<ECreatureState, CreatureState> stateDictionary = new();
-    protected CreatureState curState = null;
+    protected Dictionary<ECreatureState, State> stateDictionary = new();
+    protected State curState = null;
 
     private EMoveDirection moveDirection = EMoveDirection.None;
     private EMoveDirection facingDirection = EMoveDirection.Right;  
@@ -142,10 +142,10 @@ public abstract class Creature : MMORPG.Object
     {
         base.Awake();
 
-        stateDictionary.Add(ECreatureState.Idle, gameObject.AddComponent<IdleState>());
-        stateDictionary.Add(ECreatureState.Move, gameObject.AddComponent<MoveState>());
-        stateDictionary.Add(ECreatureState.Attack, gameObject.AddComponent<AttackState>());
-        stateDictionary.Add(ECreatureState.Dead, gameObject.AddComponent<DeadState>());
+        stateDictionary.Add(ECreatureState.Idle, gameObject.AddComponent<CreatureState.IdleState>());
+        stateDictionary.Add(ECreatureState.Move, gameObject.AddComponent<CreatureState.MoveState>());
+        stateDictionary.Add(ECreatureState.Attack, gameObject.AddComponent<CreatureState.AttackState>());
+        stateDictionary.Add(ECreatureState.Dead, gameObject.AddComponent<CreatureState.DeadState>());
     }
 
     protected override void Update()
