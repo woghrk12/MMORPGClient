@@ -51,6 +51,27 @@ public class Projectile : MMORPG.Object
 
     #endregion Properties
 
+    #region Unity Events
+
+    protected override void Update()
+    {
+        base.Update();
+
+        Vector3 destPos = new Vector3(Position.x, Position.y) + new Vector3(0.5f, 0.5f);
+        Vector3 moveDir = destPos - transform.position;
+
+        if (moveDir.sqrMagnitude < (MoveSpeed * Time.deltaTime) * (MoveSpeed * Time.deltaTime))
+        {
+            transform.position = destPos;
+        }
+        else
+        {
+            transform.position += MoveSpeed * Time.deltaTime * moveDir.normalized;
+        }
+    }
+
+    #endregion Unity Events
+
     #region Methods
 
     public override void Init(ObjectInfo info)
