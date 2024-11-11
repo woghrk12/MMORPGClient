@@ -23,7 +23,7 @@ namespace MMORPG
 
         public abstract EGameObjectType GameObjectType { get; }
 
-        public Vector3Int Position { set; get; } = Vector3Int.zero;
+        public Vector2Int Position { set; get; } = Vector2Int.zero;
 
         public bool IsCollidable { set; get; }
 

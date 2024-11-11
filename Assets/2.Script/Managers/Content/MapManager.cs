@@ -82,7 +82,7 @@ public class MapManager
         collision[cellPos.y, cellPos.x].Remove(obj.ID);
     }
 
-    public void MoveObject(MMORPG.Object obj, Vector3Int targetPos)
+    public void MoveObject(MMORPG.Object obj, Vector2Int targetPos)
     {
         if (ReferenceEquals(obj, null) == true) return;
         if (obj.Position == targetPos) return;
@@ -96,7 +96,7 @@ public class MapManager
         obj.Position = targetPos;
     }
 
-    public bool CheckCanMove(Vector3Int position, bool isIgnoreWall = false, bool isIgnoreObject = false)
+    public bool CheckCanMove(Vector2Int position, bool isIgnoreWall = false, bool isIgnoreObject = false)
     {
         if (position.x < minX || position.x > maxX || position.y < minY || position.y > maxY) return false;
 
@@ -110,7 +110,7 @@ public class MapManager
         return true;
     }
 
-    private Vector2Int ConvertPosToCell(Vector3Int Pos) => new Vector2Int(Pos.x - minX, Pos.y - minY);
+    private Vector2Int ConvertPosToCell(Vector2Int Pos) => new Vector2Int(Pos.x - minX, Pos.y - minY);
 
     #endregion Methods
 }

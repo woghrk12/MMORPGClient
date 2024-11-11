@@ -11,7 +11,7 @@ public class Character : Creature
 
     #region Methods
 
-    public virtual void OnRevive(Vector3Int revivePos)
+    public virtual void OnRevive(Vector2Int revivePos)
     {
         MoveDirection = EMoveDirection.None;
         IsCollidable = true;

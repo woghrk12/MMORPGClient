@@ -164,7 +164,7 @@ public class PacketHandler
                 break;
         }
 
-        Managers.Map.MoveObject(obj, new Vector3Int(packet.TargetPosX, packet.TargetPosY));
+        Managers.Map.MoveObject(obj, new Vector2Int(packet.TargetPosX, packet.TargetPosY));
     }
 
     public static void HandlePerformAttackBroadcast(ServerSession session, IMessage message)
@@ -241,6 +241,6 @@ public class PacketHandler
 
         if (ReferenceEquals(character, null) == true) return;
 
-        character.OnRevive(new Vector3Int(packet.RevivePosX, packet.RevivePosY));
+        character.OnRevive(new Vector2Int(packet.RevivePosX, packet.RevivePosY));
     }
 }

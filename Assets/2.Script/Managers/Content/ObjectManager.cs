@@ -76,7 +76,7 @@ public class ObjectManager
         return true;
     }
 
-    public bool TryFind(Vector3Int position, out MMORPG.Object result)
+    public bool TryFind(Vector2Int position, out MMORPG.Object result)
     {
         result = null;
 
@@ -91,7 +91,7 @@ public class ObjectManager
         return false;
     }
 
-    public MMORPG.Object Find(Vector3Int position)
+    public MMORPG.Object Find(Vector2Int position)
     {
         foreach (MMORPG.Object obj in objectDict.Values)
         {
