@@ -55,10 +55,7 @@ public class Projectile : MMORPG.Object
 
     public override void Init(ObjectInfo info)
     {
-        ID = info.ObjectID;
-        Name = info.Name;
-        Position = new Vector3Int(info.PosX, info.PosY);
-        IsCollidable = info.IsCollidable;
+        base.Init(info);
 
         MoveDirection = info.CreatureInfo.MoveDirection;
         MoveSpeed = info.CreatureInfo.MoveSpeed;

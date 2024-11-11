@@ -161,17 +161,14 @@ public abstract class Creature : MMORPG.Object
 
     public sealed override void Init(ObjectInfo info)
     {
+        base.Init(info);
+
         HpBar hpBar = Managers.Resource.Instantiate("UI/HpBar").GetComponent<HpBar>();
         hpBar.InitHpBar(transform, 0.65f);
 
         MaxHpModified += hpBar.SetMaxHp;
         CurHpModified += hpBar.SetCurHp;
         ObjectDestroyed += () => Destroy(hpBar.gameObject);
-
-        ID = info.ObjectID;
-        Name = info.Name;
-        Position = new Vector3Int(info.PosX, info.PosY);
-        IsCollidable = info.IsCollidable;
 
         CurState = info.CreatureInfo.CurState;
         MoveDirection = info.CreatureInfo.MoveDirection;

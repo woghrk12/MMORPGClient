@@ -54,7 +54,16 @@ namespace MMORPG
 
         #region Methods
 
-        public abstract void Init(ObjectInfo info);
+        public virtual void Init(ObjectInfo info)
+        {
+            ID = info.ObjectID;
+            Name = info.Name;
+            Position = new Vector2Int(info.PosX, info.PosY);
+            IsCollidable = info.IsCollidable;
+
+            transform.name = Name;
+            transform.position = new Vector3(Position.x, Position.y) + new Vector3(0.5f, 0.5f);
+        }
 
         #endregion Methods
     }
