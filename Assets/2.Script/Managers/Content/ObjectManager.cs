@@ -15,7 +15,17 @@ public class ObjectManager
 
     public static EGameObjectType GetObjectTypeByID(int objectID) => (EGameObjectType)(objectID >> 24 & 0x7F);
 
-    public void AddObject(ObjectInfo info, bool isMine = false)
+    public void AddLocalCharacter(ObjectInfo info)
+    {
+        LocalCharacter localCharacter = Managers.Resource.Instantiate("Object/LocalCharacter").GetComponent<LocalCharacter>();
+        localCharacter.Init(info);
+
+        Managers.Map.AddObject(localCharacter);
+
+        objectDict.Add(localCharacter.ID, localCharacter);
+    }
+
+    public void AddObject(ObjectInfo info)
     {
         EGameObjectType type = GetObjectTypeByID(info.ObjectID);
         MMORPG.Object obj = null;
@@ -33,15 +43,6 @@ public class ObjectManager
             case EGameObjectType.Projectile:
                 obj = Managers.Resource.Instantiate("Object/Projectile").GetComponent<Projectile>();
                 break;
-        }
-
-        if (isMine)
-        {
-            // TODO : Add controller component to local character object
-
-            Character character = (Character)obj;
-            character.Updated += () => { Camera.main.transform.position = new Vector3(character.transform.position.x, character.transform.position.y, -10f); };
-            character.CreatureDead += () => Managers.Resource.Instantiate("UI/DeadUI");
         }
 
         obj.Init(info);

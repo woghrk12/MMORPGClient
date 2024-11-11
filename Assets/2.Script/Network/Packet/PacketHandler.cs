@@ -66,7 +66,7 @@ public class PacketHandler
 
         Debug.Log($"CharacterEnterGameRoomResponse. Character ID : {packet.NewCharacter.ObjectID}, # of Other Objects : {packet.OtherObjects.Count}");
 
-        Managers.Obj.AddObject(packet.NewCharacter, isMine: true);
+        Managers.Obj.AddLocalCharacter(packet.NewCharacter);
 
         foreach (ObjectInfo info in packet.OtherObjects)
         {
@@ -163,6 +163,8 @@ public class PacketHandler
 
                 break;
         }
+
+        Debug.Log(obj.transform.position);
 
         Managers.Map.MoveObject(obj, new Vector2Int(packet.TargetPosX, packet.TargetPosY));
     }
