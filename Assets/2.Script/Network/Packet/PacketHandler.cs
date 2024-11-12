@@ -136,6 +136,13 @@ public class PacketHandler
         MoveResponse packet = message as MoveResponse;
 
         Debug.Log($"MoveResponse. Result Code : {packet.ResultCode}");
+
+        if (packet.ResultCode == 0) return;
+
+        LocalCharacter localCharacter = Managers.Obj.LocalCharacter;
+        if (ReferenceEquals(localCharacter, null) == true) return;
+
+        Managers.Map.MoveObject(localCharacter, new Vector2Int(packet.FixedPosX, packet.FixedPosY));
     }
 
     public static void HandleMoveBroadcast(ServerSession session, IMessage message)

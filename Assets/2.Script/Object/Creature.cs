@@ -152,6 +152,11 @@ public abstract class Creature : MMORPG.Object
     {
         base.Update();
 
+        curState?.OnUpdate();
+    }
+
+    private void FixedUpdate()
+    {
         Vector3 destPos = new Vector3(Position.x, Position.y) + new Vector3(0.5f, 0.5f);
         Vector3 moveDir = destPos - transform.position;
 
@@ -163,8 +168,6 @@ public abstract class Creature : MMORPG.Object
         {
             transform.position += MoveSpeed * Time.deltaTime * moveDir.normalized;
         }
-
-        curState?.OnUpdate();
     }
 
     #endregion Unity Events

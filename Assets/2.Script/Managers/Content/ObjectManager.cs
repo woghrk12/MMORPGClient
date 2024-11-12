@@ -11,6 +11,12 @@ public class ObjectManager
 
     #endregion Variables
 
+    #region Properties
+
+    public LocalCharacter LocalCharacter { private set; get; }
+
+    #endregion Properties
+
     #region Methods
 
     public static EGameObjectType GetObjectTypeByID(int objectID) => (EGameObjectType)(objectID >> 24 & 0x7F);
@@ -23,6 +29,8 @@ public class ObjectManager
         Managers.Map.AddObject(localCharacter);
 
         objectDict.Add(localCharacter.ID, localCharacter);
+
+        LocalCharacter = localCharacter;
     }
 
     public void AddObject(ObjectInfo info)

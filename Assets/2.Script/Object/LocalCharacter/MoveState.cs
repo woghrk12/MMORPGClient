@@ -28,6 +28,20 @@ namespace LocalCharacterState
             EPlayerInput directionInput = controller.PlayerInput & (EPlayerInput.UP | EPlayerInput.DOWN | EPlayerInput.LEFT | EPlayerInput.RIGHT);
             EMoveDirection moveDirection = EMoveDirection.None;
             Vector2Int targetPos = controller.Position;
+            MoveRequest packet = new();
+
+            if (directionInput == EPlayerInput.NONE)
+            {
+                packet.MoveDirection = EMoveDirection.None;
+                packet.TargetPosX = targetPos.x;
+                packet.TargetPosY = targetPos.y;
+
+                Managers.Network.Send(packet);
+
+                controller.CurState = ECreatureState.Idle;
+
+                return;
+            }
 
             if ((directionInput & EPlayerInput.UP) != EPlayerInput.NONE)
             {
@@ -49,30 +63,16 @@ namespace LocalCharacterState
                 moveDirection = EMoveDirection.Right;
                 targetPos += Vector2Int.right;
             }
-            else
-            {
-                UpdateCreatureStateBroadcast updateCreatureStateBroadcastPacket = new()
-                {
-                    CreatureID = controller.ID,
-                    NewState = ECreatureState.Idle
-                };
-
-                Managers.Network.Send(updateCreatureStateBroadcastPacket);
-
-                controller.CurState = ECreatureState.Idle;
-                return;
-            }
 
             if (Managers.Map.CheckCanMove(targetPos) == false) return;
 
-            MoveRequest packet = new()
-            {
-                MoveDirection = moveDirection,
-                TargetPosX = targetPos.x,
-                TargetPosY = targetPos.y
-            };
+            packet.MoveDirection = moveDirection;
+            packet.TargetPosX = targetPos.x;
+            packet.TargetPosY = targetPos.y;
 
             Managers.Network.Send(packet);
+
+            controller.MoveDirection = moveDirection;
             Managers.Map.MoveObject(controller, targetPos);
         }
 
