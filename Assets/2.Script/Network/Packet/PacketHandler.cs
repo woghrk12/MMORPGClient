@@ -131,11 +131,18 @@ public class PacketHandler
         creature.CurState = packet.NewState;
     }
 
-    public static void HandlePerformMoveBroadcast(ServerSession session, IMessage message)
+    public static void HandleMoveResponse(ServerSession session, IMessage message)
     {
-        PerformMoveBroadcast packet = message as PerformMoveBroadcast;
+        MoveResponse packet = message as MoveResponse;
 
-        Debug.Log($"PerformMoveBroadcast. Object ID : {packet.ObjectID}. Target Pos : ({packet.TargetPosX}, {packet.TargetPosY})");
+        Debug.Log($"MoveResponse. Result Code : {packet.ResultCode}");
+    }
+
+    public static void HandleMoveBroadcast(ServerSession session, IMessage message)
+    {
+        MoveBroadcast packet = message as MoveBroadcast;
+
+        Debug.Log($"MoveBroadcast. Object ID : {packet.ObjectID}. Target Pos : ({packet.TargetPosX}, {packet.TargetPosY})");
 
         if (Managers.Obj.TryFind(packet.ObjectID, out MMORPG.Object obj) == false) return;
         

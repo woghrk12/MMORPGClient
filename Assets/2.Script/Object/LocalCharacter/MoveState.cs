@@ -65,11 +65,11 @@ namespace LocalCharacterState
 
             if (Managers.Map.CheckCanMove(targetPos) == false) return;
 
-            PerformMoveRequest packet = new()
+            MoveRequest packet = new()
             {
                 MoveDirection = moveDirection,
-                CurPosX = controller.Position.x,
-                CurPosY = controller.Position.y
+                TargetPosX = targetPos.x,
+                TargetPosY = targetPos.y
             };
 
             Managers.Network.Send(packet);

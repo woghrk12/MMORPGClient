@@ -34,7 +34,8 @@ public class PacketManager
         receivedPacketHandlerDict.Add((ushort)EMessageID.ObjectSpawnedBroadcast, MakePacket<ObjectSpawnedBroadcast>);
         receivedPacketHandlerDict.Add((ushort)EMessageID.ObjectDespawnedBroadcast, MakePacket<ObjectDespawnedBroadcast>);
         receivedPacketHandlerDict.Add((ushort)EMessageID.UpdateCreatureStateBroadcast, MakePacket<UpdateCreatureStateBroadcast>);
-        receivedPacketHandlerDict.Add((ushort)EMessageID.PerformMoveBroadcast, MakePacket<PerformMoveBroadcast>);
+        receivedPacketHandlerDict.Add((ushort)EMessageID.MoveResponse, MakePacket<MoveResponse>);
+        receivedPacketHandlerDict.Add((ushort)EMessageID.MoveBroadcast, MakePacket<MoveBroadcast>);
         receivedPacketHandlerDict.Add((ushort)EMessageID.PerformAttackBroadcast, MakePacket<PerformAttackBroadcast>);
         receivedPacketHandlerDict.Add((ushort)EMessageID.AttackCompleteBroadcast, MakePacket<AttackCompleteBroadcast>);
         receivedPacketHandlerDict.Add((ushort)EMessageID.HitBroadcast, MakePacket<HitBroadcast>);
@@ -51,7 +52,8 @@ public class PacketManager
         handlerDict.Add((ushort)EMessageID.ObjectSpawnedBroadcast, PacketHandler.HandleObjectSpawnedBroadcast);
         handlerDict.Add((ushort)EMessageID.ObjectDespawnedBroadcast, PacketHandler.HandleObjectDespawnedBroadcast);
         handlerDict.Add((ushort)EMessageID.UpdateCreatureStateBroadcast, PacketHandler.HandleUpdateCreatureStateBroadcast);
-        handlerDict.Add((ushort)EMessageID.PerformMoveBroadcast, PacketHandler.HandlePerformMoveBroadcast);
+        handlerDict.Add((ushort)EMessageID.MoveResponse, PacketHandler.HandleMoveResponse);
+        handlerDict.Add((ushort)EMessageID.MoveBroadcast, PacketHandler.HandleMoveBroadcast);
         handlerDict.Add((ushort)EMessageID.PerformAttackBroadcast, PacketHandler.HandlePerformAttackBroadcast);
         handlerDict.Add((ushort)EMessageID.AttackCompleteBroadcast, PacketHandler.HandleAttackCompleteBroadcast);
         handlerDict.Add((ushort)EMessageID.HitBroadcast, PacketHandler.HandleHitBroadcast);
