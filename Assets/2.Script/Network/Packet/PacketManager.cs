@@ -37,7 +37,6 @@ public class PacketManager
         receivedPacketHandlerDict.Add((ushort)EMessageID.MoveResponse, MakePacket<MoveResponse>);
         receivedPacketHandlerDict.Add((ushort)EMessageID.MoveBroadcast, MakePacket<MoveBroadcast>);
         receivedPacketHandlerDict.Add((ushort)EMessageID.PerformAttackBroadcast, MakePacket<PerformAttackBroadcast>);
-        receivedPacketHandlerDict.Add((ushort)EMessageID.AttackCompleteBroadcast, MakePacket<AttackCompleteBroadcast>);
         receivedPacketHandlerDict.Add((ushort)EMessageID.HitBroadcast, MakePacket<HitBroadcast>);
         receivedPacketHandlerDict.Add((ushort)EMessageID.CreatureDeadBroadcast, MakePacket<CreatureDeadBroadcast>);
         receivedPacketHandlerDict.Add((ushort)EMessageID.CharacterReviveBroadcast, MakePacket<CharacterReviveBroadcast>);
@@ -55,7 +54,6 @@ public class PacketManager
         handlerDict.Add((ushort)EMessageID.MoveResponse, PacketHandler.HandleMoveResponse);
         handlerDict.Add((ushort)EMessageID.MoveBroadcast, PacketHandler.HandleMoveBroadcast);
         handlerDict.Add((ushort)EMessageID.PerformAttackBroadcast, PacketHandler.HandlePerformAttackBroadcast);
-        handlerDict.Add((ushort)EMessageID.AttackCompleteBroadcast, PacketHandler.HandleAttackCompleteBroadcast);
         handlerDict.Add((ushort)EMessageID.HitBroadcast, PacketHandler.HandleHitBroadcast);
         handlerDict.Add((ushort)EMessageID.CreatureDeadBroadcast, PacketHandler.HandleCreatureDeadBroadcast);
         handlerDict.Add((ushort)EMessageID.CharacterReviveBroadcast, PacketHandler.HandleCharacterReviveBroadcast);
