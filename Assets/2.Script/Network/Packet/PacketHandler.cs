@@ -195,24 +195,7 @@ public class PacketHandler
         
         if (ReferenceEquals(creature, null) == true) return;
 
-        creature.AttackStat = Managers.Data.AttackStatDictionary[packet.AttackID];
-        creature.CurState = ECreatureState.Attack;
-    }
-
-    public static void HandleAttackCompleteBroadcast(ServerSession session, IMessage message)
-    {
-        AttackCompleteBroadcast packet = message as AttackCompleteBroadcast;
-
-        Debug.Log($"AttackCompleteBroadcast. Creature ID : {packet.CreatureID}");
-
-        if (Managers.Obj.TryFind(packet.CreatureID, out MMORPG.Object obj) == false) return;
-
-        Creature creature = obj as Creature;
-
-        if (ReferenceEquals(creature, null) == true) return;
-
-        creature.AttackStat = null;
-        creature.CurState = ECreatureState.Idle;
+        creature.Attack(packet.AttackID);
     }
 
     public static void HandleHitBroadcast(ServerSession session, IMessage message)

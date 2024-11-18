@@ -196,6 +196,14 @@ public abstract class Creature : MMORPG.Object
         AttackPower = info.CreatureInfo.Stat.AttackPower;
     }
 
+    public virtual void Attack(int attackID)
+    {
+        if (Managers.Data.AttackStatDictionary.TryGetValue(attackID, out Data.AttackStat attackStat) == false) return;
+
+        AttackStat = attackStat;
+        CurState = ECreatureState.Attack;
+    }
+
     public virtual void OnDamaged(int remaindHp, int damage)
     {
         CurHp = remaindHp;

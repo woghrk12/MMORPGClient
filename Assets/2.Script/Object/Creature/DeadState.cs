@@ -6,7 +6,7 @@ namespace CreatureState
     {
         #region Properties
 
-        public sealed override ECreatureState StateID => ECreatureState.Move;
+        public sealed override ECreatureState StateID => ECreatureState.Dead;
 
         #endregion Properties
 
