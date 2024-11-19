@@ -195,7 +195,7 @@ public class PacketHandler
         
         if (ReferenceEquals(creature, null) == true) return;
 
-        creature.Attack(packet.AttackID);
+        creature.Attack(packet.AttackID, packet.FacingDirection);
     }
 
     public static void HandleHitBroadcast(ServerSession session, IMessage message)

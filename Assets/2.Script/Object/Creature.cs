@@ -196,11 +196,13 @@ public abstract class Creature : MMORPG.Object
         AttackPower = info.CreatureInfo.Stat.AttackPower;
     }
 
-    public virtual void Attack(int attackID)
+    public virtual void Attack(int attackID, EMoveDirection facingDirection)
     {
         if (Managers.Data.AttackStatDictionary.TryGetValue(attackID, out Data.AttackStat attackStat) == false) return;
 
         AttackStat = attackStat;
+        FacingDirection = facingDirection;
+
         CurState = ECreatureState.Attack;
     }
 
