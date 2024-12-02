@@ -158,7 +158,7 @@ public abstract class Creature : MMORPG.Object
 
     public virtual void Move(Vector2Int targetPos, EMoveDirection moveDirection)
     {
-        Managers.Map.MoveObject(this, Position);
+        Managers.Map.MoveObject(this, targetPos);
         MoveDirection = moveDirection;
 
         Animator.SetBool(AnimatorKey.Creature.IS_MOVE_HASH, MoveDirection != EMoveDirection.None);
