@@ -1,15 +1,11 @@
 using Google.Protobuf.Protocol;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class Creature : MMORPG.Object
 {
     #region Variables
-
-    protected Dictionary<ECreatureState, State> stateDictionary = new();
-    protected State curState = null;
 
     private EMoveDirection moveDirection = EMoveDirection.None;
     private EMoveDirection facingDirection = EMoveDirection.Right;  
@@ -25,24 +21,7 @@ public abstract class Creature : MMORPG.Object
 
     #region Properties
 
-    public ECreatureState CurState
-    {
-        set 
-        {
-            if (stateDictionary.ContainsKey(value) == false) return;
-
-            if (ReferenceEquals(curState, null) == false)
-            {
-                if (curState.StateID == value) return;
-
-                curState.OnExit();
-            }
-
-            curState = stateDictionary[value];
-            curState.OnEnter();
-        }
-        get => ReferenceEquals(curState, null) == false ? curState.StateID : ECreatureState.Idle;
-    }
+    public virtual ECreatureState CurState { set; get; }
 
     public EMoveDirection MoveDirection
     {
@@ -132,28 +111,9 @@ public abstract class Creature : MMORPG.Object
 
     public event Action CreatureDead { add { creatureDead += value; } remove { creatureDead -= value; } }
 
-    public Data.AttackStat AttackStat { set; get; } = null;
-
     #endregion Properties
 
     #region Unity Events
-
-    protected override void Awake()
-    {
-        base.Awake();
-
-        stateDictionary.Add(ECreatureState.Idle, gameObject.AddComponent<CreatureState.IdleState>());
-        stateDictionary.Add(ECreatureState.Move, gameObject.AddComponent<CreatureState.MoveState>());
-        stateDictionary.Add(ECreatureState.Attack, gameObject.AddComponent<CreatureState.AttackState>());
-        stateDictionary.Add(ECreatureState.Dead, gameObject.AddComponent<CreatureState.DeadState>());
-    }
-
-    protected override void Update()
-    {
-        base.Update();
-
-        curState?.OnUpdate();
-    }
 
     private void FixedUpdate()
     {
@@ -196,12 +156,22 @@ public abstract class Creature : MMORPG.Object
         AttackPower = info.CreatureInfo.Stat.AttackPower;
     }
 
+    public virtual void Move(Vector2Int targetPos, EMoveDirection moveDirection)
+    {
+        Managers.Map.MoveObject(this, Position);
+        MoveDirection = moveDirection;
+
+        Animator.SetBool(AnimatorKey.Creature.IS_MOVE_HASH, MoveDirection != EMoveDirection.None);
+
+        CurState = MoveDirection != EMoveDirection.None ? ECreatureState.Move : ECreatureState.Idle;
+    }
+
     public virtual void Attack(int attackID, EMoveDirection facingDirection)
     {
         if (Managers.Data.AttackStatDictionary.TryGetValue(attackID, out Data.AttackStat attackStat) == false) return;
 
-        AttackStat = attackStat;
         FacingDirection = facingDirection;
+        Animator.SetTrigger(attackStat.AnimationKey);
 
         CurState = ECreatureState.Attack;
     }

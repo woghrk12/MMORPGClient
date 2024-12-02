@@ -149,7 +149,7 @@ public class PacketHandler
     {
         MoveBroadcast packet = message as MoveBroadcast;
 
-        Debug.Log($"MoveBroadcast. Object ID : {packet.ObjectID}. Target Pos : ({packet.TargetPosX}, {packet.TargetPosY})");
+        Debug.Log($"MoveBroadcast. Object ID : {packet.ObjectID}. Target Pos : ({packet.TargetPosX}, {packet.TargetPosY}), MoveDirection : {packet.MoveDirection}");
 
         if (Managers.Obj.TryFind(packet.ObjectID, out MMORPG.Object obj) == false) return;
         
@@ -163,8 +163,7 @@ public class PacketHandler
 
                 if (ReferenceEquals(creature, null) == true) return;
 
-                creature.MoveDirection = packet.MoveDirection;
-                creature.CurState = packet.MoveDirection != EMoveDirection.None ? ECreatureState.Move : ECreatureState.Idle;
+                creature.Move(new Vector2Int(packet.TargetPosX, packet.TargetPosY), packet.MoveDirection);
 
                 break;
 
@@ -177,10 +176,6 @@ public class PacketHandler
 
                 break;
         }
-
-        Debug.Log(obj.transform.position);
-
-        Managers.Map.MoveObject(obj, new Vector2Int(packet.TargetPosX, packet.TargetPosY));
     }
 
     public static void HandlePerformAttackBroadcast(ServerSession session, IMessage message)

@@ -15,6 +15,7 @@ namespace MMORPG
 
         #region Properties
 
+        public Animator Animator { private set; get; }
         public SpriteRenderer SpriteRenderer { private set; get; }
 
         public int ID { set; get; } = -1;
@@ -37,6 +38,7 @@ namespace MMORPG
 
         protected virtual void Awake()
         {
+            Animator = GetComponent<Animator>();
             SpriteRenderer = GetComponentInChildren<SpriteRenderer>();
         }
 

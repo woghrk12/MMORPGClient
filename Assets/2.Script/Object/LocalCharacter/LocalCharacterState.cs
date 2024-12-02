@@ -1,11 +1,12 @@
 using Google.Protobuf.Protocol;
 using UnityEngine;
 
-public abstract class State : MonoBehaviour
+public abstract class LocalCharacterState : MonoBehaviour
 {
     #region Variables
 
     protected Animator animator = null;
+    protected LocalCharacter controller = null;
 
     #endregion Variables
 
@@ -20,6 +21,7 @@ public abstract class State : MonoBehaviour
     protected virtual void Awake()
     {
         animator = GetComponent<Animator>();
+        controller = GetComponent<LocalCharacter>();
     }
 
     #endregion Unity Events
