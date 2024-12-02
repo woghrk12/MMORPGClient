@@ -44,3 +44,6 @@ TagManager:
   - name: WorldUI
     uniqueID: 1157908225
     locked: 0
+  - name: DebugUI
+    uniqueID: 1049251813
+    locked: 0

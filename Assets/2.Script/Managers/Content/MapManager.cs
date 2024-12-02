@@ -72,6 +72,10 @@ public class MapManager
 
         Vector2Int cellPos = ConvertPosToCell(obj.Position);
         collision[cellPos.y, cellPos.x].Add(obj.ID, obj);
+
+        // Debug
+        var debuggingObj = Managers.Resource.Instantiate("Debugging_Object").GetComponent<DebuggingObject>();
+        debuggingObj.Init(obj);
     }
 
     public void RemoveObject(MMORPG.Object obj)
