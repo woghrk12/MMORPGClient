@@ -1,5 +1,4 @@
 using Google.Protobuf.Protocol;
-using System.Collections.Generic;
 using UnityEngine;
 
 public enum EPlayerInput
@@ -13,41 +12,22 @@ public enum EPlayerInput
     SKILL = 1 << 5,
 }
 
+public interface IInputHandler
+{
+    public void HandleInput(EPlayerInput input);
+}
+
 public class LocalCharacter : Character
 {
     #region Variables
 
-    private Transform cachedTransform = null;
     private Camera mainCamera = null;
-
-    private Dictionary<ECreatureState, LocalCharacterState> stateDictionary = new();
-    private LocalCharacterState curState = null;
 
     #endregion Variables
 
     #region Properties
 
     public EPlayerInput PlayerInput { protected set; get; } = EPlayerInput.NONE;
-
-
-    public override ECreatureState CurState
-    {
-        set
-        {
-            if (stateDictionary.ContainsKey(value) == false) return;
-
-            if (ReferenceEquals(curState, null) == false)
-            {
-                if (curState.StateID == value) return;
-
-                curState.OnExit();
-            }
-
-            curState = stateDictionary[value];
-            curState.OnEnter();
-        }
-        get => ReferenceEquals(curState, null) == false ? curState.StateID : ECreatureState.Idle;
-    }
 
     #endregion Properties
 
@@ -57,31 +37,31 @@ public class LocalCharacter : Character
     {
         base.Awake();
 
-        stateDictionary.Add(ECreatureState.Idle, gameObject.AddComponent<IdleState>());
-        stateDictionary.Add(ECreatureState.Move, gameObject.AddComponent<MoveState>());
-        stateDictionary.Add(ECreatureState.Attack, gameObject.AddComponent<AttackState>());
-        stateDictionary.Add(ECreatureState.Dead, gameObject.AddComponent<DeadState>());
-
-        cachedTransform = GetComponent<Transform>();
         mainCamera = Camera.main;
-
-        CreatureDead += () => Managers.Resource.Instantiate("UI/DeadUI");
     }
 
     protected override void Update()
     {
         PlayerInput = GetInput();
 
-        mainCamera.transform.position = new Vector3(cachedTransform.position.x, cachedTransform.position.y, -10f);
+        mainCamera.transform.position = new Vector3(CachedTransform.position.x, CachedTransform.position.y, -10f);
 
         base.Update();
-
-        curState?.OnUpdate();
     }
 
     #endregion Unity Events
 
     #region Methods
+
+    public override void Init(ObjectInfo info)
+    {
+        base.Init(info);
+
+        AddState(ECreatureState.Idle, new LocalCharacterIdleState(this));
+        AddState(ECreatureState.Move, new LocalCharacterMoveState(this));
+
+        CreatureDead += () => Managers.Resource.Instantiate("UI/DeadUI");
+    }
 
     private EPlayerInput GetInput()
     {

@@ -1,11 +1,16 @@
 using Google.Protobuf.Protocol;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class Creature : MMORPG.Object
 {
     #region Variables
+
+    private Dictionary<ECreatureState, IBaseState<Creature>> stateDictionary = new();
+    private IBaseState<Creature> curState = null;
+    private ECreatureState curStateID = ECreatureState.Idle;
 
     private EMoveDirection moveDirection = EMoveDirection.None;
     private EMoveDirection facingDirection = EMoveDirection.Right;  
@@ -21,7 +26,27 @@ public abstract class Creature : MMORPG.Object
 
     #region Properties
 
-    public virtual ECreatureState CurState { set; get; }
+    public ECreatureState CurState 
+    { 
+        set
+        {
+            if (curStateID == value) return;
+
+            curStateID = value;
+
+            if (ReferenceEquals(curState, null) == false)
+            {
+                curState.OnExit();
+                curState = null;
+            }
+
+            if (stateDictionary.ContainsKey(value) == false) return;
+
+            curState = stateDictionary[value];
+            curState.OnEnter();
+        }
+        get => curStateID;
+    }
 
     public EMoveDirection MoveDirection
     {
@@ -115,6 +140,13 @@ public abstract class Creature : MMORPG.Object
 
     #region Unity Events
 
+    protected override void Update()
+    {
+        base.Update();
+
+        curState?.OnUpdate();
+    }
+
     private void FixedUpdate()
     {
         Vector3 destPos = new Vector3(Position.x, Position.y) + new Vector3(0.5f, 0.5f);
@@ -134,7 +166,7 @@ public abstract class Creature : MMORPG.Object
 
     #region Methods
 
-    public sealed override void Init(ObjectInfo info)
+    public override void Init(ObjectInfo info)
     {
         base.Init(info);
 
@@ -154,6 +186,21 @@ public abstract class Creature : MMORPG.Object
         MaxHp = info.CreatureInfo.Stat.MaxHP;
         CurHp = info.CreatureInfo.Stat.CurHP;
         AttackPower = info.CreatureInfo.Stat.AttackPower;
+
+        AddState(ECreatureState.Idle, new BaseIdleState<Creature>(this));
+        AddState(ECreatureState.Move, new BaseMoveState<Creature>(this));
+        AddState(ECreatureState.Attack, new BaseAttackState<Creature>(this));
+        AddState(ECreatureState.Dead, new BaseDeadState<Creature>(this));
+    }
+
+    public void AddState(ECreatureState stateID, IBaseState<Creature> state)
+    {
+        if(stateDictionary.ContainsKey(stateID) == true)
+        {
+             stateDictionary.Remove(stateID);
+        }
+
+        stateDictionary.Add(stateID, state);
     }
 
     public virtual void Move(Vector2Int targetPos, EMoveDirection moveDirection)
@@ -161,7 +208,7 @@ public abstract class Creature : MMORPG.Object
         Managers.Map.MoveObject(this, targetPos);
         MoveDirection = moveDirection;
 
-        Animator.SetBool(AnimatorKey.Creature.IS_MOVE_HASH, MoveDirection != EMoveDirection.None);
+        CachedAnimator.SetBool(AnimatorKey.Creature.IS_MOVE_HASH, MoveDirection != EMoveDirection.None);
 
         CurState = MoveDirection != EMoveDirection.None ? ECreatureState.Move : ECreatureState.Idle;
     }
@@ -171,7 +218,7 @@ public abstract class Creature : MMORPG.Object
         if (Managers.Data.AttackStatDictionary.TryGetValue(attackID, out Data.AttackStat attackStat) == false) return;
 
         FacingDirection = facingDirection;
-        Animator.SetTrigger(attackStat.AnimationKey);
+        CachedAnimator.SetTrigger(attackStat.AnimationKey);
 
         CurState = ECreatureState.Attack;
     }
@@ -194,11 +241,11 @@ public abstract class Creature : MMORPG.Object
 
     private IEnumerator OnDamagedCo()
     {
-        SpriteRenderer.color = Color.red;
+        CachedSpriteRenderer.color = Color.red;
 
         yield return new WaitForSeconds(0.2f);
 
-        SpriteRenderer.color = Color.white;
+        CachedSpriteRenderer.color = Color.white;
     }
 
     #endregion Methods

@@ -15,8 +15,9 @@ namespace MMORPG
 
         #region Properties
 
-        public Animator Animator { private set; get; }
-        public SpriteRenderer SpriteRenderer { private set; get; }
+        public Animator CachedAnimator { private set; get; }
+        public Transform CachedTransform { private set; get; }
+        public SpriteRenderer CachedSpriteRenderer { private set; get; }
 
         public int ID { set; get; } = -1;
 
@@ -38,8 +39,9 @@ namespace MMORPG
 
         protected virtual void Awake()
         {
-            Animator = GetComponent<Animator>();
-            SpriteRenderer = GetComponentInChildren<SpriteRenderer>();
+            CachedAnimator= GetComponent<Animator>();
+            CachedTransform = GetComponent<Transform>();
+            CachedSpriteRenderer = GetComponentInChildren<SpriteRenderer>();
         }
 
         protected virtual void Update()

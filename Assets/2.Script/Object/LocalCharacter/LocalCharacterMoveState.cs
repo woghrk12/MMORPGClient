@@ -1,29 +1,31 @@
 using Google.Protobuf.Protocol;
 using UnityEngine;
 
-public class MoveState : LocalCharacterState
+public class LocalCharacterMoveState : BaseMoveState<LocalCharacter>, IInputHandler
 {
-    #region Properties
+    #region Constructor
 
-    public sealed override ECreatureState StateID => ECreatureState.Move;
+    public LocalCharacterMoveState(LocalCharacter controller) : base(controller) { }
 
-    #endregion Properties
+    #endregion Constructor
 
     #region Methods
 
-    public override void OnEnter()
-    {
-        animator.SetBool(AnimatorKey.Creature.IS_MOVE_HASH, true);
-    }
-
     public override void OnUpdate()
     {
+        HandleInput(controller.PlayerInput);
+    }
+
+    #region IInputHandler Implement
+
+    public void HandleInput(EPlayerInput input)
+    {
         Vector3 destPos = new Vector3(controller.Position.x, controller.Position.y) + new Vector3(0.5f, 0.5f);
-        Vector3 moveDir = destPos - transform.position;
+        Vector3 moveDir = destPos - cachedTransform.position;
 
         if (moveDir.sqrMagnitude >= (controller.MoveSpeed * Time.deltaTime) * (controller.MoveSpeed * Time.deltaTime)) return;
 
-        EPlayerInput directionInput = controller.PlayerInput & (EPlayerInput.UP | EPlayerInput.DOWN | EPlayerInput.LEFT | EPlayerInput.RIGHT);
+        EPlayerInput directionInput = input & (EPlayerInput.UP | EPlayerInput.DOWN | EPlayerInput.LEFT | EPlayerInput.RIGHT);
         EMoveDirection moveDirection = EMoveDirection.None;
         Vector2Int targetPos = controller.Position;
         MoveRequest packet = new();
@@ -74,10 +76,7 @@ public class MoveState : LocalCharacterState
         Managers.Map.MoveObject(controller, targetPos);
     }
 
-    public override void OnExit()
-    {
-        animator.SetBool(AnimatorKey.Creature.IS_MOVE_HASH, false);
-    }
+    #endregion IInputHandler Implement
 
     #endregion Methods
 }

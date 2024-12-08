@@ -1,28 +1,24 @@
 using Google.Protobuf.Protocol;
-using System.Collections;
-using UnityEngine;
 
-public class IdleState : LocalCharacterState
+public class LocalCharacterIdleState : BaseIdleState<LocalCharacter>, IInputHandler
 {
-    #region Variables
+    #region Constructor
 
-    private Coroutine coCooldownInput = null;
+    public LocalCharacterIdleState(LocalCharacter controller) : base(controller) { }
 
-    #endregion Variables
-
-    #region Properties
-
-    public sealed override ECreatureState StateID => ECreatureState.Idle;
-
-    #endregion Properties
+    #endregion Constructor
 
     #region Methods
 
     public override void OnUpdate()
     {
-        if (ReferenceEquals(coCooldownInput, null) == false) return;
+        HandleInput(controller.PlayerInput);
+    }
 
-        EPlayerInput input = controller.PlayerInput;
+    #region IInputHandler Implement
+
+    public void HandleInput(EPlayerInput input)
+    {
         EPlayerInput attackInput = input & (EPlayerInput.ATTACK | EPlayerInput.SKILL);
 
         if (attackInput != EPlayerInput.NONE)
@@ -34,7 +30,6 @@ public class IdleState : LocalCharacterState
 
             Managers.Network.Send(packet);
 
-            coCooldownInput = StartCoroutine(CooldownInputCo(0.2f));
             return;
         }
 
@@ -47,12 +42,7 @@ public class IdleState : LocalCharacterState
         }
     }
 
-    private IEnumerator CooldownInputCo(float time)
-    {
-        yield return new WaitForSeconds(time);
-
-        coCooldownInput = null;
-    }
+    #endregion IInputHandler Implement
 
     #endregion Methods
 }
