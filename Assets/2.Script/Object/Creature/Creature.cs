@@ -10,7 +10,6 @@ public abstract class Creature : MMORPG.Object
 
     private Dictionary<ECreatureState, IBaseState<Creature>> stateDictionary = new();
     private IBaseState<Creature> curState = null;
-    private ECreatureState curStateID = ECreatureState.Idle;
 
     private EMoveDirection moveDirection = EMoveDirection.None;
     private EMoveDirection facingDirection = EMoveDirection.Right;  
@@ -30,12 +29,10 @@ public abstract class Creature : MMORPG.Object
     { 
         set
         {
-            if (curStateID == value) return;
-
-            curStateID = value;
-
             if (ReferenceEquals(curState, null) == false)
             {
+                if (curState.StateID == value) return;
+
                 curState.OnExit();
                 curState = null;
             }
@@ -45,7 +42,7 @@ public abstract class Creature : MMORPG.Object
             curState = stateDictionary[value];
             curState.OnEnter();
         }
-        get => curStateID;
+        get => ReferenceEquals(curState, null) == false ? curState.StateID : ECreatureState.Idle;
     }
 
     public EMoveDirection MoveDirection
@@ -140,6 +137,16 @@ public abstract class Creature : MMORPG.Object
 
     #region Unity Events
 
+    protected override void Awake()
+    {
+        base.Awake();
+
+        AddState(ECreatureState.Idle, new BaseIdleState<Creature>(this));
+        AddState(ECreatureState.Move, new BaseMoveState<Creature>(this));
+        AddState(ECreatureState.Attack, new BaseAttackState<Creature>(this));
+        AddState(ECreatureState.Dead, new BaseDeadState<Creature>(this));
+    }
+
     protected override void Update()
     {
         base.Update();
@@ -186,11 +193,6 @@ public abstract class Creature : MMORPG.Object
         MaxHp = info.CreatureInfo.Stat.MaxHP;
         CurHp = info.CreatureInfo.Stat.CurHP;
         AttackPower = info.CreatureInfo.Stat.AttackPower;
-
-        AddState(ECreatureState.Idle, new BaseIdleState<Creature>(this));
-        AddState(ECreatureState.Move, new BaseMoveState<Creature>(this));
-        AddState(ECreatureState.Attack, new BaseAttackState<Creature>(this));
-        AddState(ECreatureState.Dead, new BaseDeadState<Creature>(this));
     }
 
     public void AddState(ECreatureState stateID, IBaseState<Creature> state)

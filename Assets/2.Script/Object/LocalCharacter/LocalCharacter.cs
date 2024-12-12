@@ -37,6 +37,9 @@ public class LocalCharacter : Character
     {
         base.Awake();
 
+        AddState(ECreatureState.Idle, new LocalCharacterIdleState(this));
+        AddState(ECreatureState.Move, new LocalCharacterMoveState(this));
+
         mainCamera = Camera.main;
     }
 
@@ -56,9 +59,6 @@ public class LocalCharacter : Character
     public override void Init(ObjectInfo info)
     {
         base.Init(info);
-
-        AddState(ECreatureState.Idle, new LocalCharacterIdleState(this));
-        AddState(ECreatureState.Move, new LocalCharacterMoveState(this));
 
         CreatureDead += () => Managers.Resource.Instantiate("UI/DeadUI");
     }

@@ -3,6 +3,8 @@ using UnityEngine;
 
 public interface IBaseState<out T> where T : Creature
 {
+    public ECreatureState StateID { get; }
+
     public void OnEnter();
     public void OnUpdate();
     public void OnExit();
