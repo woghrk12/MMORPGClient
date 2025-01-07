@@ -1,7 +1,14 @@
 using Google.Protobuf.Protocol;
+using System;
 
 public class LocalCharacterIdleState : BaseIdleState<LocalCharacter>, IInputHandler
 {
+    #region Variables
+
+    private int nextInputTick = 0;
+
+    #endregion Variables
+
     #region Constructor
 
     public LocalCharacterIdleState(LocalCharacter controller) : base(controller) { }
@@ -9,6 +16,13 @@ public class LocalCharacterIdleState : BaseIdleState<LocalCharacter>, IInputHand
     #endregion Constructor
 
     #region Methods
+
+    public override void OnEnter()
+    {
+        base.OnEnter();
+
+        nextInputTick = Environment.TickCount;
+    }
 
     public override void OnUpdate()
     {
@@ -21,8 +35,12 @@ public class LocalCharacterIdleState : BaseIdleState<LocalCharacter>, IInputHand
     {
         EPlayerInput attackInput = input & (EPlayerInput.ATTACK | EPlayerInput.SKILL);
 
+        if (nextInputTick > Environment.TickCount) return;
+
         if (attackInput != EPlayerInput.NONE)
         {
+            nextInputTick = Environment.TickCount + 200;
+
             PerformAttackRequest packet = new()
             {
                 AttackID = attackInput == EPlayerInput.ATTACK ? 1 : 2
