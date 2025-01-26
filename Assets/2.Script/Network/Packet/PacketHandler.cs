@@ -39,7 +39,7 @@ public class PacketHandler
         {
             CharacterEnterGameRoomRequest characterEnterGameRoomRequestPacket = new()
             {
-                Name = packet.Characters[0].Name
+                CharacterID = packet.Characters[0].CharacterID
             };
 
             Managers.Network.Send(characterEnterGameRoomRequestPacket);
@@ -54,7 +54,7 @@ public class PacketHandler
 
         CharacterEnterGameRoomRequest characterEnterGameRoomRequestPacket = new()
         {
-            Name = packet.NewCharacter.Name
+            CharacterID = packet.NewCharacter.CharacterID
         };
 
         Managers.Network.Send(characterEnterGameRoomRequestPacket);
