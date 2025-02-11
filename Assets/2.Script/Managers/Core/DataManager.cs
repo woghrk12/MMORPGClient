@@ -11,6 +11,9 @@ public class DataManager
     public Dictionary<int, Data.MonsterStat> MonsterStatDictionary { private set; get; } = new();
     public Dictionary<int, Data.AttackStat> AttackStatDictionary { private set; get; } = new();
     public Dictionary<int, Data.ProjectileStat> ProjectileStatDictionary { private set; get; } = new();
+    public Dictionary<int, Data.WeaponStat> WeaponStatDictionary { private set; get; }
+    public Dictionary<int, Data.ArmorStat> ArmorStatDictionary { private set; get; }
+    public Dictionary<int, Data.ConsumableStat> ConsumableStatDictionary { private set; get; }
 
     #endregion Properties
 
@@ -56,6 +59,33 @@ public class DataManager
                 foreach (Data.ProjectileStat stat in projectileStatList)
                 {
                     ProjectileStatDictionary.Add(stat.ID, stat);
+                }
+
+                return;
+
+            case EStatType.ItemData:
+                List<Data.ItemStat> itemStatList = JsonConvert.DeserializeObject<List<Data.ItemStat>>(data);
+
+                foreach (Data.ItemStat stat in itemStatList)
+                {
+                    switch (stat.ItemType)
+                    {
+                        case EItemType.ItemTypeWeapon:
+                            WeaponStatDictionary.Add(stat.TemplateID, stat as Data.WeaponStat);
+                            break;
+
+                        case EItemType.ItemTypeArmor:
+                            ArmorStatDictionary.Add(stat.TemplateID, stat as Data.ArmorStat);
+                            break;
+
+                        case EItemType.ItemTypeConsumable:
+                            ConsumableStatDictionary.Add(stat.TemplateID, stat as Data.ConsumableStat);
+                            break;
+
+                        default:
+                            Debug.LogError($"Not supported data type. Input type : {stat.ItemType}");
+                            break;
+                    }
                 }
 
                 return;
