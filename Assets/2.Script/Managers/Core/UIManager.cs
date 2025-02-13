@@ -38,7 +38,8 @@ public class UIManager
 
     public void Clear()
     {
-        CloseAllPopupUI();
+        RemoveAllPopupUI();
+
         CloseSceneUI();
     }
 
@@ -79,6 +80,25 @@ public class UIManager
         go.gameObject.SetActive(false);
 
         return popupUI;
+    }
+
+    public void RemoveAllPopupUI()
+    {
+        foreach (UIPopup popupUI in popupUIList)
+        {
+            Managers.Resource.Destory(popupUI.gameObject);
+        }
+
+        popupUIList.Clear();
+
+        foreach (UIPopup popupUI in popupUIDIctionary.Values)
+        {
+            Managers.Resource.Destory(popupUI.gameObject);
+        }
+
+        popupUIDIctionary.Clear();
+
+        sortingOrder = baseSortingOrder;
     }
 
     public T OpenPopupUI<T>() where T : UIPopup
