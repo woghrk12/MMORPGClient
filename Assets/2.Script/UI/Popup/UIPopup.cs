@@ -1,11 +1,6 @@
-public class UIPopup : UIBase
+public abstract class UIPopup : UIBase
 {
     #region Methods
-
-    protected virtual void Init()
-    { 
-        Managers.UI.SetCanvas(gameObject);
-    }
 
     public virtual void CloseUI()
     {

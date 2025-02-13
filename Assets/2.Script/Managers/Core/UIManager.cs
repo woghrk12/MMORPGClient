@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,10 +5,13 @@ public class UIManager
 {
     #region Variables
 
-    private int sortingOrder = 10;
+    private static readonly int baseSortingOrder = 10;
 
     private UIScene sceneUI = null;
-    private Stack<UIPopup> popupUIStack = new();
+    private Dictionary<int, UIPopup> popupUIDIctionary = new();
+
+    private int sortingOrder = 0;
+    private List<UIPopup> popupUIList = new();
 
     #endregion Variables
 
@@ -34,15 +36,6 @@ public class UIManager
 
     #region Methods
 
-    public void SetCanvas(GameObject go, bool isSort = true)
-    {
-        Canvas canvas = go.GetOrAddComponent<Canvas>();
-
-        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-        canvas.overrideSorting = true;
-        canvas.sortingOrder = isSort ? sortingOrder++ : 0;
-    }
-
     public void Clear()
     {
         CloseAllPopupUI();
@@ -51,14 +44,9 @@ public class UIManager
 
     #region Scene UI
 
-    public T ShowSceneUI<T>(string name = null) where T : UIScene
+    public T OpenSceneUI<T>() where T : UIScene
     {
-        if (string.IsNullOrEmpty(name))
-        {
-            name = typeof(T).Name;
-        }
-
-        GameObject go = Managers.Resource.Instantiate($"UI/Scene/{name}");
+        GameObject go = Managers.Resource.Instantiate($"UI/Scene/{typeof(T).Name}");
         T sceneUI = go.GetOrAddComponent<T>();
 
         this.sceneUI = sceneUI;
@@ -80,49 +68,75 @@ public class UIManager
 
     #region Popup UI
 
-    public T ShowPopupUI<T>(string name = null) where T : UIPopup
+    public T AddPopupUI<T>() where T : UIPopup
     {
-        if (string.IsNullOrEmpty(name))
-        {
-            name = typeof(T).Name;
-        }
-
-        GameObject go = Managers.Resource.Instantiate($"UI/Popup/{name}");
+        GameObject go = Managers.Resource.Instantiate($"UI/Popup/{typeof(T).Name}");
         T popupUI = go.GetOrAddComponent<T>();
 
-        popupUIStack.Push(popupUI);
+        popupUIDIctionary.Add(typeof(T).GetHashCode(), popupUI);
 
         go.transform.SetParent(Root.transform);
+        go.gameObject.SetActive(false);
 
         return popupUI;
     }
 
+    public T OpenPopupUI<T>() where T : UIPopup
+    {
+        int typeID = typeof(T).GetHashCode();
+
+        if (popupUIDIctionary.TryGetValue(typeID, out UIPopup popupUI) == false) return null;
+        
+        popupUIDIctionary.Remove(typeID);
+        popupUIList.Add(popupUI);
+
+        popupUI.gameObject.SetActive(true);
+
+        popupUI.SortingOrder = sortingOrder;
+        sortingOrder++;
+
+        return popupUI as T;
+    }
+
     public void ClosePopupUI()
     {
-        if (popupUIStack.Count == 0) return;
+        if (popupUIList.Count == 0) return;
 
-        UIPopup popupUI = popupUIStack.Pop();
+        UIPopup popupUI = popupUIList[sortingOrder - 1];
 
-        Managers.Resource.Destory(popupUI.gameObject);
+        popupUIList.RemoveAt(sortingOrder - 1);
+        popupUIDIctionary.Add(popupUI.GetType().GetHashCode(), popupUI);
+
+        popupUI.gameObject.SetActive(false);
 
         sortingOrder--;
     }
 
-    public void ClosePopupUI(UIPopup popup)
+    public void ClosePopupUI(UIPopup target)
     {
-        if (popupUIStack.Count == 0) return;
+        if (popupUIList.Count == 0) return;
 
-        if (ReferenceEquals(popupUIStack.Peek(), popup))
+        int index = popupUIList.IndexOf(target);
+        if (index < 0) return;
+
+        UIPopup popupUI = popupUIList[index];
+
+        popupUIList.RemoveAt(index);
+        popupUIDIctionary.Add(popupUI.GetType().GetHashCode(), popupUI);
+
+        popupUI.gameObject.SetActive(false);
+
+        sortingOrder--;
+
+        for (int i = 0; i < sortingOrder; i++)
         {
-            Debug.LogWarning($"Failed to close popup UI {popup.name}.");
+            popupUIList[i].SortingOrder = i + baseSortingOrder;
         }
-
-        ClosePopupUI();
     }
 
     public void CloseAllPopupUI()
     {
-        while (popupUIStack.Count > 0)
+        while (popupUIList.Count > 0)
         {
             ClosePopupUI();
         }

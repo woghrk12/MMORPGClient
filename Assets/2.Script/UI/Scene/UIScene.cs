@@ -1,11 +1,4 @@
-public class UIScene : UIBase
+public abstract class UIScene : UIBase
 {
-    #region Methods
-
-    protected virtual void Init()
-    { 
-        Managers.UI.SetCanvas(gameObject, false);
-    }
-
-    #endregion Methods
+  
 }

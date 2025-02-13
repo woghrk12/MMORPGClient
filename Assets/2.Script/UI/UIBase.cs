@@ -4,13 +4,36 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 [RequireComponent(typeof(UIEventHandler))]
-public class UIBase : MonoBehaviour
+public abstract class UIBase : MonoBehaviour
 {
     #region Variables
+
+    private Canvas canvas = null;
 
     protected Dictionary<Type, UnityEngine.Object[]> objectDictionary = new();
 
     #endregion Variables
+
+    #region Properties
+
+    public int SortingOrder { set { canvas.sortingOrder = value; } get => canvas.sortingOrder; }
+
+    #endregion Properties
+
+    #region Unity Events
+
+    protected virtual void Awake()
+    {
+        canvas = GetComponent<Canvas>();
+
+        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+        canvas.overrideSorting = true;
+        canvas.sortingOrder = 0;
+    }
+
+    #endregion Unity Events
+
+    #region Methods
 
     public static void BindEvent(GameObject go, Action<PointerEventData> action, EUIEvent eventType = EUIEvent.CLICK)
     {
@@ -63,4 +86,6 @@ public class UIBase : MonoBehaviour
 
         return objects[index] as T;
     }
+
+    #endregion Methods
 }
