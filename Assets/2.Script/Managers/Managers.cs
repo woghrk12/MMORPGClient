@@ -14,6 +14,7 @@ public class Managers : SingletonMonobehaviour<Managers>
     private MapManager map = new();
     private ObjectManager obj = new();
     private NetworkManager network = new();
+    private InventoryManager inventory = new();
 
     #endregion Variables
 
@@ -36,6 +37,8 @@ public class Managers : SingletonMonobehaviour<Managers>
     public static ObjectManager Obj => Instance.obj;
 
     public static NetworkManager Network => Instance.network;
+
+    public static InventoryManager Inventory => Instance.inventory;
 
     #endregion Properties
 
