@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 public class InventoryManager
 {
@@ -22,6 +23,8 @@ public class InventoryManager
 
         return item;
     }
+
+    public List<Item> GetAllItems() => itemDictionary.Values.ToList();
 
     public Item FindItem(Func<Item, bool> condition)
     {

@@ -1,7 +1,11 @@
-using UnityEngine;
-
 public class GameScene : BaseScene
 {
+    #region Variables
+
+    private UIGameScene sceneUI = null;
+
+    #endregion Variables
+    
     #region Methods
 
     protected override void Init()
@@ -10,20 +14,8 @@ public class GameScene : BaseScene
 
         SceneType = EScene.GAME;
 
-        /*
-        for (int i = 0; i < 1; i++)
-        {
-            GameObject monster = Managers.Resource.Instantiate("Object/Monster");
-            monster.name = $"Monster_{i}";
-
-            Vector3Int pos = new Vector3Int() { x = 0, y = 5 };
-            MonsterController controller = monster.GetComponent<MonsterController>();
-            controller.CellPos = pos;
-
-            controller.ID = 10;
-            Managers.Obj.Add(10, monster);
-        }
-        */
+        // Set scene ui
+        sceneUI = Managers.UI.OpenSceneUI<UIGameScene>();
 
         Managers.Map.LoadMap(1);
     }
