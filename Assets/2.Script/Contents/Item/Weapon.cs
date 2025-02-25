@@ -17,7 +17,7 @@ public class Weapon : Item
 
     #region Constructor
 
-    public Weapon(int id, int templateID) : base(id, templateID)
+    public Weapon(int id, int templateID, int slot) : base(id, templateID, slot)
     {
         if (Managers.Data.ItemStatDictionary.TryGetValue(templateID, out ItemStat stat) == false) return;
 

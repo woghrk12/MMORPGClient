@@ -18,7 +18,7 @@ public class Consumable : Item
 
     #region Constructor
 
-    public Consumable(int id, int templateID, int count = 1) : base(id, templateID)
+    public Consumable(int id, int templateID, int slot, int count = 1) : base(id, templateID, slot)
     {
         if (Managers.Data.ItemStatDictionary.TryGetValue(templateID, out ItemStat stat) == false) return;
 

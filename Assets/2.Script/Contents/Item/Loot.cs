@@ -15,7 +15,7 @@ public class Loot : Item
 
     #region Constructor
 
-    public Loot(int id, int templateID, int count = 1) : base(id, templateID)
+    public Loot(int id, int templateID, int slot, int count = 1) : base(id, templateID, slot)
     {
         if (Managers.Data.ItemStatDictionary.TryGetValue(templateID, out ItemStat stat) == false) return;
 

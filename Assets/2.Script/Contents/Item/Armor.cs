@@ -17,7 +17,7 @@ public class Armor : Item
 
     #region Constructor
 
-    public Armor(int id, int templateID) : base(id, templateID)
+    public Armor(int id, int templateID, int slot) : base(id, templateID, slot)
     {
         if (Managers.Data.ItemStatDictionary.TryGetValue(templateID, out ItemStat stat) == false) return;
         
