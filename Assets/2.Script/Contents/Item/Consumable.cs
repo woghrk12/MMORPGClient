@@ -5,11 +5,10 @@ public class Consumable : Item
 {
     #region Properties
 
-    public override EItemType Type => EItemType.ItemTypeConsumable;
+    public override EItemType ItemType => EItemType.ItemTypeConsumable;
+    public EConsumableType ConsumableType { private set; get; } = EConsumableType.ConsumableTypeNone;
 
     public override bool IsStackable => MaxCount > 1;
-
-    public EConsumableType ConsumableType { private set; get; } = EConsumableType.ConsumableTypeNone;
 
     public int Value { private set; get; } = 0;
 
@@ -25,8 +24,11 @@ public class Consumable : Item
 
         ConsumableStat consumableStat = stat as ConsumableStat;
 
+        if (ReferenceEquals(consumableStat, null) == true) return;
+        if (consumableStat.ItemType != EItemType.ItemTypeConsumable) return;
+
         Count = count;
-        ConsumableType = consumableStat.Type;
+        ConsumableType = consumableStat.ConsumableType;
         Value = consumableStat.Value;
         MaxCount = consumableStat.MaxCount;
     }

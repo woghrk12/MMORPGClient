@@ -5,11 +5,11 @@ public class Armor : Item
 {
     #region Properties
 
-    public override EItemType Type => EItemType.ItemTypeArmor;
+    public override EItemType ItemType => EItemType.ItemTypeEquipment;
+    public EEquipmentType EquipmentType => EEquipmentType.EquipmentTypeArmor;
+    public EArmorType ArmorType { private set; get; } = EArmorType.ArmorTypeNone;
 
     public override bool IsStackable => false;
-
-    public EArmorType ArmorType { private set; get; } = EArmorType.ArmorTypeNone;
 
     public int Value { private set; get; } = 0;
 
@@ -23,8 +23,12 @@ public class Armor : Item
         
         ArmorStat armorStat = stat as ArmorStat;
 
+        if (ReferenceEquals(armorStat, null) == true) return;
+        if (armorStat.ItemType != EItemType.ItemTypeEquipment) return;
+        if (armorStat.EquipmentType != EEquipmentType.EquipmentTypeArmor) return;
+
         Count = 1;
-        ArmorType = armorStat.Type;
+        ArmorType = armorStat.ArmorType;
         Value = armorStat.Value;
     }
 

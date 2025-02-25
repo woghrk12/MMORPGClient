@@ -7,24 +7,39 @@ namespace Data
         public int TemplateID;
         public string Name;
         public EItemType ItemType;
+        public string IconPath;
     }
 
-    public class WeaponStat : ItemStat
+    public class EquipmentStat : ItemStat
     {
-        public EWeaponType Type;
+        public EEquipmentType EquipmentType;
+    }
+
+    // [UNUSED(1)][ITEM_TYPE(3)][EQUIPMENT_TYPE(4)][WEAPON_TYPE(4)][ID(20)]
+    public class WeaponStat : EquipmentStat
+    {
+        public EWeaponType WeaponType;
         public int Value;
     }
 
-    public class ArmorStat : ItemStat
+    // [UNUSED(1)][ITEM_TYPE(3)][EQUIPMENT_TYPE(4)][ARMOR_TYPE(4)][ID(20)]
+    public class ArmorStat : EquipmentStat
     {
-        public EArmorType Type;
+        public EArmorType ArmorType;
         public int Value;
     }
 
+    // [UNUSED(1)][ITEM_TYPE(3)][CONSUMABLE_TYPE(8)][ID(20)]
     public class ConsumableStat : ItemStat
     {
-        public EConsumableType Type;
+        public EConsumableType ConsumableType;
         public int Value;
+        public int MaxCount;
+    }
+
+    // [UNUSED(1)][ITEM_TYPE(3)][ID(28)]
+    public class LootStat : ItemStat
+    {
         public int MaxCount;
     }
 }
