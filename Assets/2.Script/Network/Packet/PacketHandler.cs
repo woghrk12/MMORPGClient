@@ -72,6 +72,13 @@ public class PacketHandler
         {
             Managers.Obj.AddObject(info);
         }
+
+        foreach (ItemInfo itemInfo in packet.Items)
+        {
+            Item item = Item.MakeItem(itemInfo);
+
+            Managers.Inventory.AddItem(item);
+        }
     }
 
     public static void HandleCharacterEnterGameRoomBroadcast(ServerSession session, IMessage message)
