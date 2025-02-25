@@ -1,4 +1,4 @@
-public abstract class UIScene : UIBase
+public abstract class UIScene : UIPanel
 {
-  
+    
 }

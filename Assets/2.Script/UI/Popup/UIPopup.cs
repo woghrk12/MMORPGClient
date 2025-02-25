@@ -1,4 +1,4 @@
-public abstract class UIPopup : UIBase
+public abstract class UIPopup : UIPanel
 {
     #region Methods
 
