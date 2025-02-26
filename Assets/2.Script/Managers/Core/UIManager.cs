@@ -132,6 +132,27 @@ public class UIManager
         sortingOrder--;
     }
 
+    public void ClosePopupUI<T>() where T : UIPopup
+    {
+        if (popupUIList.Count == 0) return;
+
+        UIPopup popupUI = popupUIList.Find(p => typeof(T).GetHashCode() == p.GetType().GetHashCode());
+
+        if (ReferenceEquals(popupUI, null) == true) return;
+
+        popupUIList.Remove(popupUI);
+        popupUIDIctionary.Add(popupUI.GetType().GetHashCode(), popupUI);
+
+        popupUI.gameObject.SetActive(false);
+
+        sortingOrder--;
+
+        for (int i = 0; i < sortingOrder; i++)
+        {
+            popupUIList[i].SortingOrder = i + baseSortingOrder;
+        }
+    }
+
     public void ClosePopupUI(UIPopup target)
     {
         if (popupUIList.Count == 0) return;
