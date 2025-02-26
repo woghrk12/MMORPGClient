@@ -19,7 +19,6 @@ public abstract class Creature : MMORPG.Object
     private event Action<int> curHpModified = null;
     private event Action<int> maxHpModified = null;
     private event Action<int> attackPowerModified = null;
-    private event Action creatureDead = null;
 
     #endregion Variables
 
@@ -131,8 +130,6 @@ public abstract class Creature : MMORPG.Object
 
     public event Action<int> AttackPowerModified { add { attackPowerModified += value; } remove { attackPowerModified -= value; } }
 
-    public event Action CreatureDead { add { creatureDead += value; } remove { creatureDead -= value; } }
-
     #endregion Properties
 
     #region Unity Events
@@ -236,9 +233,13 @@ public abstract class Creature : MMORPG.Object
     {
         Debug.Log($"{ID} object dies by {attackerID} object!");
 
-        CurState = ECreatureState.Dead;
+        GameObject dieEffect = Managers.Resource.Instantiate("Effect/DieEffect");
+        dieEffect.transform.position = CachedTransform.position;
+        Managers.Push(Managers.Resource.Destory, dieEffect, 1000);
 
-        creatureDead?.Invoke();
+        CurState = ECreatureState.Dead;
+        IsCollidable = false;
+        CachedSpriteRenderer.enabled = false;
     }
 
     private IEnumerator OnDamagedCo()

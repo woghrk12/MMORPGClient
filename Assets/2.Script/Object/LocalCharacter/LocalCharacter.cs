@@ -56,13 +56,6 @@ public class LocalCharacter : Character
 
     #region Methods
 
-    public override void Init(ObjectInfo info)
-    {
-        base.Init(info);
-
-        CreatureDead += () => Managers.Resource.Instantiate("UI/DeadUI");
-    }
-
     private EPlayerInput GetInput()
     {
         EPlayerInput input = EPlayerInput.NONE;
@@ -93,6 +86,20 @@ public class LocalCharacter : Character
         }
 
         return input;
+    }
+
+    public override void OnDead(int attackerID)
+    {
+        base.OnDead(attackerID);
+
+        Managers.UI.OpenPopupUI<UIDead>();
+    }
+
+    public override void OnRevive(ObjectInfo objectInfo)
+    {
+        base.OnRevive(objectInfo);
+
+        Managers.UI.ClosePopupUI<UIDead>();
     }
 
     #endregion Methods

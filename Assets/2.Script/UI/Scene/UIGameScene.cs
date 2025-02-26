@@ -5,5 +5,6 @@ public class UIGameScene : UIScene
         base.Awake();
 
         Managers.UI.AddPopupUI<UIInventory>();
+        Managers.UI.AddPopupUI<UIDead>();
     }
 }
