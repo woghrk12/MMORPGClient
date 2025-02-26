@@ -234,14 +234,14 @@ public class PacketHandler
     {
         CharacterReviveBroadcast packet = message as CharacterReviveBroadcast;
 
-        Debug.Log($"ObjectReviveBroadcast. Object ID : {packet.CharacterID}, Revive Pos : ({packet.RevivePosX}, {packet.RevivePosY})");
+        Debug.Log($"ObjectReviveBroadcast. Object ID : {packet.RevivedCharacter.ObjectID}, Revive Pos : ({packet.RevivedCharacter.PosX}, {packet.RevivedCharacter.PosY})");
 
-        if (Managers.Obj.TryFind(packet.CharacterID, out MMORPG.Object obj) == false) return;
+        if (Managers.Obj.TryFind(packet.RevivedCharacter.ObjectID, out MMORPG.Object obj) == false) return;
 
         Character character = obj as Character;
 
         if (ReferenceEquals(character, null) == true) return;
 
-        character.OnRevive(new Vector2Int(packet.RevivePosX, packet.RevivePosY));
+        character.OnRevive(packet.RevivedCharacter);
     }
 }
