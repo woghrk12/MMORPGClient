@@ -4,7 +4,7 @@ namespace Data
 {
     public class ItemStat
     {
-        public int TemplateID;
+        public int ID;
         public string Name;
         public EItemType ItemType;
         public string IconPath;

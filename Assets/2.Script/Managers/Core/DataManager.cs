@@ -66,7 +66,7 @@ public class DataManager
 
                 foreach (Data.ItemStat stat in itemStatList)
                 {
-                    ItemStatDictionary.Add(stat.TemplateID, stat);
+                    ItemStatDictionary.Add(stat.ID, stat);
                 }
 
                 return;
