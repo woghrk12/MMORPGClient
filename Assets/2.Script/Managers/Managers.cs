@@ -1,8 +1,10 @@
-using UnityEngine;
+using System;
 
 public class Managers : SingletonMonobehaviour<Managers>
 {
     #region Variables
+
+    private TaskQueue taskQueue = new();
 
     private DataManager data = new();
     private PoolManager pool = new();
@@ -54,6 +56,8 @@ public class Managers : SingletonMonobehaviour<Managers>
     private void Update()
     {
         network.Update();
+
+        taskQueue.Flush();
     }
 
     private void OnDestroy()
@@ -79,6 +83,12 @@ public class Managers : SingletonMonobehaviour<Managers>
         UI.Clear();
         Pool.Clear();
     }
+
+    public static void Push(Action action, int afterTick) => Instance.taskQueue.Push(action, afterTick);
+    public static void Push<P1>(Action<P1> action, P1 p1, int afterTick) => Instance.taskQueue.Push(action, p1, afterTick);
+    public static void Push<P1, P2>(Action<P1, P2> action, P1 p1, P2 p2, int afterTick) => Instance.taskQueue.Push(action, p1, p2, afterTick);
+    public static void Push<P1, P2, P3>(Action<P1, P2, P3> action, P1 p1, P2 p2, P3 p3, int afterTick) => Instance.taskQueue.Push(action, p1, p2, p3, afterTick);
+    public static void Push<P1, P2, P3, P4>(Action<P1, P2, P3, P4> action, P1 p1, P2 p2, P3 p3, P4 p4, int afterTick) => Instance.taskQueue.Push(action, p1, p2, p3, p4, afterTick);
 
     #endregion Methods
 }

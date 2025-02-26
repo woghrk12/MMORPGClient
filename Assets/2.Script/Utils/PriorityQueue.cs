@@ -73,5 +73,7 @@ public class PriorityQueue<T> where T : IComparable<T>
         return result;
     }
 
+    public T Top() => heap[0];
+
     #endregion Methods
 }
