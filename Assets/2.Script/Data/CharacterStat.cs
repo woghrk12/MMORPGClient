@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace Data
 {
-    public class ObjectStat
+    public class CharacterStat
     {
         public int ID;
         public string Name;
